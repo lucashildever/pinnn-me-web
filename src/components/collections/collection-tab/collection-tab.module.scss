@@ -1,0 +1,14 @@
+.collection-tab {
+  @include flex("row", "center", "center");
+  @include base-button;
+  @include spacing(margin, 0, 0, 0, 2);
+
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease-in-out;
+
+  &.active {
+    cursor: default;
+    background-color: get-color("soft-grey");
+    box-shadow: 1px 2px 6px rgba(0, 0, 0, 0);
+  }
+}

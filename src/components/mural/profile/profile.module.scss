@@ -1,0 +1,50 @@
+.profile {
+  width: 100%;
+  .profile-img-n-cover {
+    @include spacing(margin, 6, 0, 0, 0);
+    height: 140px;
+    position: relative;
+
+    .profile-cover {
+      overflow: hidden;
+      position: relative;
+      border-radius: $inner-corner;
+      height: 60%;
+      @include spacing(padding, 5, 5, 0, 5);
+
+      .cover-image {
+        z-index: 1;
+        transform: scale(1.1);
+      }
+
+      .cover-buttons {
+        @include flex(row, center, space-between);
+        position: inherit;
+        z-index: 2;
+        button {
+          box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.1);
+        }
+      }
+    }
+
+    .pf-pic-container {
+      @include position(absolute, auto, auto, 0, 50%);
+      @include size(29, 29);
+      z-index: 2;
+      overflow: hidden;
+      border-radius: 50%;
+      transform: translateX(-50%);
+    }
+  }
+
+  .profile-info {
+    @include spacing(padding, 4, 0, 0, 0);
+    @include flex(column, center, center);
+    text-align: center;
+
+    p {
+      width: 67%;
+      font-weight: 500;
+    }
+  }
+}

@@ -1,0 +1,10 @@
+.user-badge {
+  @include flex(row, center, flex-start);
+
+  > div.user-img {
+    @include size(8, 8);
+    @include spacing(margin, 0, 1, 0, 4);
+    border-radius: 50%;
+    overflow: hidden;
+  }
+}

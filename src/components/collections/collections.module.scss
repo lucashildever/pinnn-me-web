@@ -1,0 +1,5 @@
+.tabs {
+  @include flex(row, center, flex-start);
+  @include spacing(margin, 5, 0, 0, 0);
+  width: 100%;
+}
