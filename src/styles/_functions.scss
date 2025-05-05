@@ -1,0 +1,26 @@
+@use "./_variables.scss" as *;
+@use "sass:map";
+@use "sass:meta";
+@use "sass:math";
+
+@function get-font-size($key) {
+  @return map.get($font-size-scale, $key);
+}
+
+@function get-spacing($key) {
+  @return map.get($spacing-scale, $key);
+}
+
+@function get-color($key) {
+  @return map.get($colors, $key);
+}
+
+@function is-special-value($value) {
+  @if meta.type-of($value) == "string" {
+    @return true;
+  }
+  @if meta.type-of($value) == "number" and not math.is-unitless($value) {
+    @return true;
+  }
+  @return false;
+}

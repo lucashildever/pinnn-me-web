@@ -1,0 +1,18 @@
+html {
+  font-size: $base-font-size;
+  color: get-color("dark");
+}
+
+// Font sizes are defined globally in this file for consistency
+// Font weights and other typography styles should be defined in their component-specific files
+p {
+  @include font-size("sm");
+}
+
+h1 {
+  @include font-size("md");
+}
+
+span {
+  @include font-size("sm");
+}
