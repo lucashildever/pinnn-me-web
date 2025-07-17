@@ -1,15 +1,17 @@
 import UsernameWithIcon from "@/components/shared/username-with-icon/UsernameWithIcon";
-import Collections from "@/components/collections/Collections";
 import Image from "next/image";
-import Button from "../../shared/button/Button";
-import { ButtonTypes } from "@/types/buttonTypes";
 
 import coverPic from "@/assets/temp/cp.png";
 import profilePic from "@/assets/temp/pf.png";
 
 import styles from "./profile.module.scss";
 
-export default function Profile({ username }: { username: string }) {
+interface ProfileProps {
+  muralName: string;
+  bio: string;
+}
+
+export default function Profile({ muralName, bio }: ProfileProps) {
   return (
     <div className={styles.profile}>
       {/* transform also this into a header component 
@@ -25,8 +27,13 @@ export default function Profile({ username }: { username: string }) {
         </div>
         <div className={styles["profile-cover"]}>
           <div className={styles["cover-buttons"]}>
-            <Button text="Message" buttonType={ButtonTypes.MESSAGE} />
-            <Button text="Ok" buttonType={ButtonTypes.ONLY_TEXT} />
+            {/* <Button
+              buttonType={ButtonType.PREDEFINED}
+              icon={PredefinedButton.MESSAGE}
+              content={"Message"}
+            /> */}
+            {/* <Button text="Message" buttonType={ButtonType.MESSAGE} />
+            <Button text="Ok" buttonType={ButtonType.ONLY_TEXT} /> */}
           </div>
           <Image
             src={coverPic}
@@ -38,10 +45,9 @@ export default function Profile({ username }: { username: string }) {
         </div>
       </div>
       <div className={styles["profile-info"]}>
-        <UsernameWithIcon username={username} />
-        <p>Product Designer & Web Developer</p>
+        <UsernameWithIcon username={muralName} />
+        <p>{bio}</p>
       </div>
-      <Collections />
     </div>
   );
 }

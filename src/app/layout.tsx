@@ -1,4 +1,8 @@
 import type { Metadata } from "next";
+
+import Providers from "@/components/providers/providers";
+import ReduxHydration from "@/components/redux-hydration/ReduxHydration";
+
 import { DM_Sans } from "next/font/google";
 import "@/styles/reset.css";
 import "@/styles/globals.scss";
@@ -11,8 +15,15 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Pinnn me",
-  description: "Pinnn me app",
+  title: 'Pinnn Me - more than just a "link in bio"',
+  description:
+    "Create your mural, share your work and get paid. It's easy. It's free.",
+  alternates: {
+    canonical: process.env.NEXT_PUBLIC_SITE_URL,
+  },
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
@@ -22,7 +33,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${dmSans.className}`}>{children}</body>
+      <body className={`${dmSans.className}`}>
+        <Providers>
+          <>
+            <ReduxHydration />
+            {children}
+          </>
+        </Providers>
+      </body>
     </html>
   );
 }

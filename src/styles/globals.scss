@@ -1,12 +1,12 @@
 html {
-  font-size: $base-font-size;
+  font-size: clamp($base-font-size / 2, $base-font-size, $base-font-size * 2);
   color: get-color("dark");
 }
-
 // Font sizes are defined globally in this file for consistency
 // Font weights and other typography styles should be defined in their component-specific files
 p {
   @include font-size("sm");
+  font-weight: 500;
 }
 
 h1 {

@@ -1,4 +1,6 @@
-.mural {
-  @include flex(column, center, center);
-  width: 100%;
+.mural-container {
+  @include flex(column, flex-start, center, nowrap, 7);
+  @include spacing(padding, 6, 0, 0, 0);
+  width: 25%;
+  margin: auto;
 }

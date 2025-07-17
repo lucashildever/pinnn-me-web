@@ -1,8 +1,5 @@
+import LandingV1 from "./(landing-pages)/v1";
+
 export default function Home() {
-  return (
-    <>
-      <button>login</button>
-      <h1>home</h1>
-    </>
-  );
+  return <LandingV1 />;
 }

@@ -49,7 +49,6 @@ export default function AuthForm({ authType }: AuthFormProps) {
   const signupMutation = useMutation<FetcherResponse, Error, AuthCredentials>({
     mutationFn: apiClient.auth.signup,
     onSuccess: (result) => {
-      console.log(">>> result:", result);
       localStorage.setItem("token", result.data.access_token);
       dispatch(setToken(result.data.access_token));
 

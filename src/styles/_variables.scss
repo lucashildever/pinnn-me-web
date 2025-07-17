@@ -79,7 +79,9 @@ $spacing-scale: (
   73: 219,
   74: 222,
   75: 225,
-); // font scale
+);
+
+// font scale
 $base-font-size: 18px;
 $font-scale-ratio: 1.125; // major-second
 
@@ -104,7 +106,8 @@ $outer-corner: map.get($spacing-scale, 8) * 1px;
 // create S, M and L sizes for the corners
 
 $colors: (
-  "dark": #171717,
+  "dark": #363636,
   "light": white,
   "soft-grey": #dfdfdf,
+  "orange": #e58f43,
 );

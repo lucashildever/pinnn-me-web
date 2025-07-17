@@ -17,10 +17,13 @@ export default function CreateCollection() {
   const muralId = useAppSelector(selectMuralId);
 
   const [formData, setFormData] = useState<CreateCollectionRequest>({
+    id: "",
     muralId: muralId,
-    iconConfig: { type: "none" },
-    content: "",
     isMain: false,
+    displayElement: {
+      content: "",
+      iconConfig: { type: "none" },
+    },
   });
 
   const handleInputChange = (
@@ -68,7 +71,7 @@ export default function CreateCollection() {
         <input
           id="content"
           name="content"
-          value={formData.content}
+          value={formData.displayElement.content}
           onChange={handleInputChange}
           required
           className={styles.input}
@@ -83,7 +86,7 @@ export default function CreateCollection() {
         <select
           id="iconType"
           name="iconType"
-          value={formData.iconConfig.type}
+          value={formData.displayElement.iconConfig.type}
           onChange={handleInputChange}
           className={styles.select}
         >
@@ -95,7 +98,7 @@ export default function CreateCollection() {
       </div>
 
       {/* predefined icon */}
-      {formData.iconConfig.type === "predefined" && (
+      {formData.displayElement.iconConfig.type === "predefined" && (
         <div className={styles.field}>
           <label htmlFor="icon" className={styles.label}>
             Predefined Icon
@@ -103,7 +106,7 @@ export default function CreateCollection() {
           <select
             id="icon"
             name="icon"
-            value={(formData.iconConfig as any).icon || ""}
+            value={(formData.displayElement.iconConfig as any).icon || ""}
             onChange={(e) =>
               setFormData((prev) => ({
                 ...prev,

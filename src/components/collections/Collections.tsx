@@ -1,28 +1,57 @@
 "use client";
 
-import { useState } from "react";
-import CollectionTab from "./collection-tab/CollectionTab";
-import styles from "./collections.module.scss";
+import { useEffect, useState } from "react";
+import TabsDisplay from "./tabs-display/TabsDisplay";
+import { ICollectionTab } from "./tabs-display/types/collectionTab";
+import PinsDispay from "./pins-display/PinsDisplay";
 
-export default function Collections() {
-  const [activeTab, setActiveTab] = useState(0);
+interface CollectionsProps {
+  collectionTabs: ICollectionTab[];
+  mainCollectionPins?: any;
+  paramCollectionId: string | undefined;
+  badgeName: string;
+}
 
-  const tabsData = [
-    { id: 1, content: "My Links 🔗" },
-    { id: 2, content: "My Art 🏆" },
-  ];
+export default function Collections({
+  collectionTabs,
+  paramCollectionId,
+  mainCollectionPins,
+  badgeName,
+}: CollectionsProps) {
+  const [activeTabId, setActiveTabId] = useState<string>(
+    collectionTabs[0]?.id || ""
+  );
+
+  useEffect(() => {
+    if (paramCollectionId !== undefined) {
+      const tabExists = collectionTabs.some(
+        (tab) => tab.id === paramCollectionId
+      );
+
+      if (tabExists) {
+        setActiveTabId(paramCollectionId);
+      } else {
+        setActiveTabId(collectionTabs[0]?.id || "");
+      }
+    }
+  }, [paramCollectionId, collectionTabs]);
+
+  const handleTabChange = (tabId: string) => {
+    setActiveTabId(tabId);
+  };
+
   return (
-    <div className={styles.tabs}>
-      {tabsData.map((tab, index) => (
-        <CollectionTab
-          key={tab.id}
-          content={tab.content}
-          isActive={activeTab === index}
-          setIsActive={() => {
-            setActiveTab(index);
-          }}
-        />
-      ))}
-    </div>
+    <>
+      <TabsDisplay
+        collectionTabs={collectionTabs}
+        onTabChange={handleTabChange}
+        activeTabId={activeTabId}
+      />
+      <PinsDispay
+        mainCollectionPins={mainCollectionPins}
+        currentCollectionId={activeTabId}
+        badgeName={badgeName}
+      />
+    </>
   );
 }
