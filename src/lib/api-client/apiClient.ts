@@ -4,9 +4,7 @@ import { fetcher } from "./helpers/request";
 
 import { CreateCollectionRequest, CreatePinRequest } from "./types/request";
 import { CreateMuralRequest, MuralRequest } from "./types/request";
-import { FetcherResponse } from "./types/response";
-
-import { IPin } from "@/components/collections/pins-display/pin/types/pin";
+import { FetcherResponse, FetchError } from "./types/response";
 
 export const apiClient = {
   auth: {
@@ -53,7 +51,7 @@ export const apiClient = {
       if (!token) {
         return {
           success: false,
-          error: "UNAUTHORIZED",
+          error: FetchError.UNAUTHORIZED,
           message: "Authentication required",
         };
       }
@@ -74,7 +72,7 @@ export const apiClient = {
       if (!token) {
         return {
           success: false,
-          error: "UNAUTHORIZED",
+          error: FetchError.UNAUTHORIZED,
           message: "Authentication required",
         };
       }
@@ -98,8 +96,5 @@ export const apiClient = {
         },
       });
     },
-  },
-  dashboard: {
-    get: async () => {},
   },
 };
