@@ -1,0 +1,6 @@
+.tabs-display {
+  @include flex(row, flex-start, flex-start, wrap, 2);
+  &.selected {
+    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+  }
+}

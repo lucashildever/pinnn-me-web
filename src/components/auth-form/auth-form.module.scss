@@ -1,0 +1,62 @@
+@use "sass:map";
+
+.form-container {
+  @include flex(column, center, center);
+  height: 100vh;
+  text-align: center;
+
+  .form-elements {
+    @include flex(column, center, center);
+    width: 15%;
+
+    .logo {
+      @include size(auto, 10);
+    }
+
+    p {
+      @include font-size("sm");
+
+      &.form-heading-txt {
+        @include spacing(margin, 6, 0);
+      }
+
+      &.form-footer-txt a {
+        color: map.get($colors, "orange");
+        font-weight: 600;
+      }
+    }
+
+    form {
+      @include flex(column, center, center);
+      width: 100%;
+
+      input {
+        width: 100%;
+        @include input-field;
+        &:first-child {
+          @include spacing(margin-bottom, 5);
+        }
+      }
+
+      button {
+        @include base-button;
+        @include spacing(padding, 3, 6);
+        @include spacing(margin, 6, 0);
+        background-color: map.get($colors, "dark");
+        color: white;
+
+        :global(.btn-arrow-icon) {
+          width: auto;
+          height: 12px;
+          margin-left: 5px;
+          transform: translate(2px, 1px);
+        }
+
+        &:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+      }
+    }
+  }
+}
