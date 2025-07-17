@@ -1,0 +1,13 @@
+#create-mural-form {
+  @include flex(column);
+  input {
+    @include input-field;
+  }
+
+  button {
+    @include base-button;
+    background-color: get-color("dark");
+    color: get-color("light");
+    @include spacing(padding, 4, 5);
+  }
+}
