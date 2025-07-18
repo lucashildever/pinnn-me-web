@@ -34,10 +34,14 @@ export default function AuthForm({ authType }: AuthFormProps) {
   const loginMutation = useMutation<FetcherResponse, Error, AuthCredentials>({
     mutationFn: apiClient.auth.login,
     onSuccess: (result) => {
-      localStorage.setItem("token", result.data.access_token);
-      dispatch(setToken(result.data.access_token));
-
-      router.push("/dashboard");
+      if (result.success) {
+        localStorage.setItem("token", result.data.access_token);
+        dispatch(setToken(result.data.access_token));
+        router.push("/dashboard");
+      } else {
+        // Tratar erro caso necessário
+        alert(`Failed to sign up: ${result.message}`);
+      }
     },
     onError: (error) => {
       // TODO - implement ui update for errors, like incorrect email or server Error
@@ -49,10 +53,14 @@ export default function AuthForm({ authType }: AuthFormProps) {
   const signupMutation = useMutation<FetcherResponse, Error, AuthCredentials>({
     mutationFn: apiClient.auth.signup,
     onSuccess: (result) => {
-      localStorage.setItem("token", result.data.access_token);
-      dispatch(setToken(result.data.access_token));
-
-      router.push("/dashboard");
+      if (result.success) {
+        localStorage.setItem("token", result.data.access_token);
+        dispatch(setToken(result.data.access_token));
+        router.push("/dashboard");
+      } else {
+        // Tratar erro caso necessário
+        alert(`Failed to sign up: ${result.message}`);
+      }
     },
     onError: (error) => {
       // TODO - implement ui update for errors, like incorrect email/password format or server Error
