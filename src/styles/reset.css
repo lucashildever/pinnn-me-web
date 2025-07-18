@@ -30,6 +30,58 @@ button {
  	cursor: pointer;
  	outline: none;
 }
+
+/* inputs resets */
+
+/* CSS Reset para inputs, textareas, selects e buttons */
+input,
+textarea,
+select,
+button {
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  color: inherit;
+  outline: none;
+  box-sizing: border-box;
+  appearance: none; /* Remove estilos nativos em navegadores modernos */
+}
+
+/* Para inputs tipo checkbox e radio */
+input[type="checkbox"],
+input[type="radio"] {
+  appearance: none;
+  width: 1em;
+  height: 1em;
+  border: 1px solid #ccc;
+  border-radius: 0.2em;
+  background-color: #fff;
+}
+
+/* Para inputs tipo file */
+input[type="file"] {
+  appearance: none;
+  font: inherit;
+}
+
+/* Para inputs desabilitados */
+input:disabled,
+textarea:disabled,
+select:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+}
+
+/* Para inputs com foco */
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  box-shadow: none;
+}
+
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure, 
 footer, header, hgroup, menu, nav, section {

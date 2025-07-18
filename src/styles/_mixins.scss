@@ -81,6 +81,8 @@
 }
 
 @mixin base-button {
+  border-radius: $outer-corner;
+  @include font-size("sm");
 }
 
 @mixin pin-card-defs {

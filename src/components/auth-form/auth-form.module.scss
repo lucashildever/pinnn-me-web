@@ -39,7 +39,7 @@
       }
 
       button {
-        //@include base-button;
+        @include base-button;
         @include spacing(padding, 3, 6);
         @include spacing(margin, 6, 0);
         background-color: map.get($colors, "dark");
