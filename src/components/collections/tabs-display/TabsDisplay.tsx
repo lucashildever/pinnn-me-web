@@ -7,7 +7,7 @@ import { ICollectionTab } from "./types/collectionTab";
 import Clickable from "@/components/shared/clickable/Clickable";
 
 interface TabsDisplayProps {
-  onTabChange: (tabId: string) => void;
+  handleTabChange: (tabId: string) => void;
   collectionTabs: ICollectionTab[];
   activeTabId: string;
 }
@@ -15,7 +15,7 @@ interface TabsDisplayProps {
 export default function TabsDisplay({
   collectionTabs,
   activeTabId,
-  onTabChange,
+  handleTabChange,
 }: TabsDisplayProps) {
   return (
     <div className={styles["tabs-display"]}>
@@ -31,7 +31,7 @@ export default function TabsDisplay({
               clickableType: ClickableType.CollectionTab,
               active: activeTabId === col.id,
             }}
-            onClick={() => onTabChange(col.id)}
+            onClick={() => handleTabChange(col.id)}
           />
         );
       })}

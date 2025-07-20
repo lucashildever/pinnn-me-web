@@ -44,7 +44,7 @@ export default function Collections({
     <>
       <TabsDisplay
         collectionTabs={collectionTabs}
-        onTabChange={handleTabChange}
+        handleTabChange={handleTabChange}
         activeTabId={activeTabId}
       />
       <PinsDispay
