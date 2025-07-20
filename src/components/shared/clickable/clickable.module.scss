@@ -1,39 +1,12 @@
-@mixin clickable-defs {
-  @include flex();
-  @include spacing(margin-right, 2);
-  display: inline-block;
-  position: relative;
-  line-height: 0;
-}
-
 .collection-tab-clickable {
   @include base-clickable;
   @include font-size("md");
   @include shadow;
   cursor: pointer;
-  background-color: rgb(163, 163, 163);
+  transition: 0.3s ease;
 
   &.active {
     cursor: default;
-    background-color: rgb(66, 66, 66);
-  }
-}
-
-.emoji-icon {
-  height: 30px;
-  @include clickable-defs;
-  @include size(auto, 7);
-}
-
-.custom-icon {
-  @include size(7, 7);
-  overflow: hidden;
-  border-radius: 20px;
-
-  @include clickable-defs;
-
-  img {
-    object-fit: cover;
-    object-position: center;
+    box-shadow: 1px 3px 11px rgba(0, 0, 0, 0);
   }
 }

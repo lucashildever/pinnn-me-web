@@ -1,6 +1,6 @@
 "use client";
 
-import ConfigureIcon from "./configure-icon/ConfigureIcon";
+import IconRenderer from "./icon-renderer/IconRenderer";
 
 import { CollectionTabConfig, ProfileCtaConfig } from "./types/clickableConfig";
 import { IClickable } from "@/lib/types/clickable";
@@ -27,7 +27,7 @@ export default function Clickable({
           }`}
           onClick={onClick}
         >
-          <ConfigureIcon config={payload.iconConfig} />
+          <IconRenderer config={payload.iconConfig} />
           <p>{payload.content}</p>
         </div>
       );

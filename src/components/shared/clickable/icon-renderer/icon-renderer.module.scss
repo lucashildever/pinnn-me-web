@@ -1,0 +1,30 @@
+@mixin defs {
+  @include size(7, 7);
+  @include spacing(margin-right, 2);
+}
+
+.emoji-txt {
+  @include defs;
+  @include font-size("md");
+  line-height: 1;
+  text-indent: -3px;
+}
+
+.emoji-img {
+  @include defs;
+  img {
+    @include size(100%, 100%);
+  }
+}
+
+.custom-icon {
+  @include defs;
+  overflow: hidden;
+  border-radius: 20px;
+  position: relative;
+
+  img {
+    object-fit: cover;
+    object-position: center;
+  }
+}
