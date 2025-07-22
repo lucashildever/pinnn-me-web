@@ -4,6 +4,7 @@
   @include shadow;
   cursor: pointer;
   transition: 0.3s ease;
+  white-space: nowrap;
 
   &.active {
     cursor: default;
