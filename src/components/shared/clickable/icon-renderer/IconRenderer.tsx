@@ -14,7 +14,6 @@ interface ConfigureIconProps {
 }
 
 export default function IconRenderer({ config }: ConfigureIconProps) {
-  console.log(config);
   switch (config.type) {
     case "predefined":
       return;
