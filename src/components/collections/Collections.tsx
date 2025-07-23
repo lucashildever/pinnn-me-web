@@ -1,9 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
+
 import TabsDisplay from "./tabs-display/TabsDisplay";
-import { ICollectionTab } from "./tabs-display/types/collectionTab";
 import PinsDispay from "./pins-display/PinsDisplay";
+
+import {
+  ActiveTabData,
+  ICollectionTab,
+} from "./tabs-display/types/collectionTab";
 
 interface CollectionsProps {
   collectionTabs: ICollectionTab[];
@@ -18,9 +23,15 @@ export default function Collections({
   mainCollectionPins,
   badgeName,
 }: CollectionsProps) {
-  const [activeTabId, setActiveTabId] = useState<string>(
-    collectionTabs[0]?.id || ""
-  );
+  const [activeTabData, setActiveTabData] = useState<ActiveTabData>({
+    id: collectionTabs[0]?.id || "",
+    displayElement: {
+      content: "",
+      iconConfig: {
+        type: "none",
+      },
+    },
+  });
 
   useEffect(() => {
     if (paramCollectionId !== undefined) {
@@ -29,27 +40,31 @@ export default function Collections({
       );
 
       if (tabExists) {
-        setActiveTabId(paramCollectionId);
+        setActiveTabData((prevState) => ({
+          ...prevState,
+          id: paramCollectionId,
+        }));
       } else {
-        setActiveTabId(collectionTabs[0]?.id || "");
+        setActiveTabData((prevState) => ({
+          ...prevState,
+          id: collectionTabs[0]?.id || "",
+        }));
       }
     }
   }, [paramCollectionId, collectionTabs]);
-
-  const handleTabChange = (tabId: string) => {
-    setActiveTabId(tabId);
-  };
 
   return (
     <>
       <TabsDisplay
         collectionTabs={collectionTabs}
-        handleTabChange={handleTabChange}
-        activeTabId={activeTabId}
+        activeTabData={activeTabData}
+        handleTabChange={(tabData: ActiveTabData) => {
+          setActiveTabData(tabData);
+        }}
       />
       <PinsDispay
         mainCollectionPins={mainCollectionPins}
-        currentCollectionId={activeTabId}
+        currentCollectionId={activeTabData.id}
         badgeName={badgeName}
       />
     </>

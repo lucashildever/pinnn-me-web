@@ -6,3 +6,5 @@ export interface ICollectionTab {
   isMain: boolean;
   displayElement: IClickable;
 }
+
+export type ActiveTabData = Omit<ICollectionTab, "order" | "isMain">;
