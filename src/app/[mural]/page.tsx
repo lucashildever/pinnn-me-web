@@ -4,7 +4,6 @@ import { Metadata } from "next";
 import MuralContainer from "@/components/mural/Mural";
 import Collections from "@/components/collections/Collections";
 import Profile from "@/components/mural/profile/Profile";
-import Divider from "@/components/shared/divider/divider";
 
 import { MuralRequest } from "@/lib/api-client/types/request";
 import { apiClient } from "@/lib/api-client/apiClient";
@@ -66,7 +65,6 @@ export default async function Mural({ params, searchParams }: MuralProps) {
         muralName={result.data.displayName}
         bio={result.data.description}
       />
-      <Divider />
       <Collections
         collectionTabs={result.data.collections}
         paramCollectionId={paramCollectionId}
