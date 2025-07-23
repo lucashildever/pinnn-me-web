@@ -1,13 +1,47 @@
 .tabs-display {
-  @include flex(row, flex-start, flex-start, nowrap, 2);
-  @include spacing(padding, 2, 0);
-  overflow-x: hidden;
-  width: 100%;
-  cursor: grab;
-  touch-action: pan-x;
-  user-select: none;
+  @include size(100%, fit-content);
+  position: relative;
 
-  &.selected {
-    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 8px;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  &::before {
+    left: 0;
+    background: linear-gradient(
+      to right,
+      rgba(255, 255, 255, 1),
+      rgba(255, 255, 255, 0)
+    );
+  }
+
+  &::after {
+    right: 0;
+    background: linear-gradient(
+      to left,
+      rgba(255, 255, 255, 1),
+      rgba(255, 255, 255, 0)
+    );
+  }
+
+  .tabs-container {
+    @include flex(row, flex-start, flex-start, nowrap, 2);
+    @include spacing(padding, 2, 5);
+    overflow-x: hidden;
+    overflow-y: clip;
+    cursor: grab;
+    touch-action: pan-x;
+    user-select: none;
+
+    &.selected {
+      box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+    }
   }
 }

@@ -1,15 +1,19 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
+
 import Clickable from "@/components/shared/clickable/Clickable";
 
+import {
+  OverlayTabDisplayConfig,
+  TabClick,
+} from "@/components/shared/clickable/types/clickableConfig";
 import { ActiveTabData, ICollectionTab } from "./types/collectionTab";
 import { ClickableType } from "@/lib/types/clickable";
-import { TabClick } from "@/components/shared/clickable/types/clickableConfig";
 
 import { useTabsDragger } from "./utils/useTabsDragger";
 
 import styles from "./tabs-display.module.scss";
-import { useEffect, useRef } from "react";
 
 interface TabsDisplayProps {
   handleTabChange: TabClick;
@@ -23,6 +27,11 @@ export default function TabsDisplay({
   handleTabChange,
 }: TabsDisplayProps) {
   const { containerRef, dragEvents, hasMoved } = useTabsDragger();
+  const [overlayTabDisplayConfig, setOverlayTabDisplayConfig] =
+    useState<OverlayTabDisplayConfig>({
+      visible: false,
+      position: "left",
+    });
 
   const activeTabRef = useRef<HTMLDivElement>(null);
 
@@ -31,32 +40,47 @@ export default function TabsDisplay({
 
     const setupObserver = () => {
       if (!containerRef.current || !activeTabRef.current) {
-        console.log("Observer não configurado - elementos não encontrados:", {
+        const missingElements = {
           container: !!containerRef.current,
           activeTab: !!activeTabRef.current,
-        }); // TODO - Lançar um erro aqui ou tratar corretamente
+        };
+
+        console.error(
+          "IntersectionObserver could not be configured. Missing elements:",
+          missingElements
+        );
+
         return;
       }
 
       observer = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
-            // Detects when it starts to go off container and side
+            // Detects when it starts to go off container
             if (entry.intersectionRatio < 1 && entry.isIntersecting) {
               const containerRect =
                 containerRef.current!.getBoundingClientRect();
               const targetRect = entry.target.getBoundingClientRect();
 
               if (targetRect.left < containerRect.left) {
-                console.log("Tab ativa saiu pela esquerda");
+                setOverlayTabDisplayConfig({
+                  visible: true,
+                  position: "left",
+                });
               } else if (targetRect.right > containerRect.right) {
-                console.log("Tab ativa saiu pela direita");
+                setOverlayTabDisplayConfig({
+                  visible: true,
+                  position: "right",
+                });
               }
             }
 
             // Detects when it's 100% visible
             if (entry.intersectionRatio === 1) {
-              console.log("Tab voltou a ficar 100% visível");
+              setOverlayTabDisplayConfig((prevState) => ({
+                ...prevState,
+                visible: false,
+              }));
             }
           });
         },
@@ -92,23 +116,32 @@ export default function TabsDisplay({
   };
 
   return (
-    <div className={styles["tabs-display"]} ref={containerRef} {...dragEvents}>
-      {collectionTabs.map((col, index) => {
-        const isActive = activeTabData.id === col.id;
-        return (
-          <Clickable
-            key={index}
-            payload={col.displayElement}
-            config={{
-              clickableType: ClickableType.CollectionTab,
-              tabId: col.id,
-              active: isActive,
-              tabClick: handleTabClick,
-              ref: isActive ? activeTabRef : undefined,
-            }}
-          />
-        );
-      })}
+    <div className={styles["tabs-display"]} {...dragEvents}>
+      <Clickable
+        payload={activeTabData.displayElement}
+        config={{
+          clickableType: ClickableType.CollectionTabOverlay,
+          displayConfig: overlayTabDisplayConfig,
+        }}
+      />
+      <div className={styles["tabs-container"]} ref={containerRef}>
+        {collectionTabs.map((col, index) => {
+          const isActive = activeTabData.id === col.id;
+          return (
+            <Clickable
+              key={index}
+              payload={col.displayElement}
+              config={{
+                clickableType: ClickableType.CollectionTab,
+                tabId: col.id,
+                active: isActive,
+                tabClick: handleTabClick,
+                ref: isActive ? activeTabRef : undefined,
+              }}
+            />
+          );
+        })}
+      </div>
     </div>
   );
 }

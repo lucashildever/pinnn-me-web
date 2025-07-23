@@ -13,5 +13,6 @@ export type IconConfig =
 
 export enum ClickableType {
   CollectionTab = "collectionTab",
+  CollectionTabOverlay = "collectionTabOverlay",
   ProfileCTA = "profileCTA",
 }

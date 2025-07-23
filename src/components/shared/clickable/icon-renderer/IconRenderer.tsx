@@ -20,7 +20,7 @@ export default function IconRenderer({ config }: ConfigureIconProps) {
     case "custom":
       return (
         <span className={styles["custom-icon"]}>
-          <Image alt="tab icon" src={tempCustomImg} fill />
+          <Image alt="tab icon" src={tempCustomImg} fill draggable={false} />
         </span>
       );
     case "emoji":
@@ -59,6 +59,7 @@ function EmojiRenderer({ unicode }: { unicode: string }) {
           onError={() => setHasError(true)}
           onLoad={() => setImageLoaded(true)}
           unoptimized
+          draggable={false}
         />
       </span>
     </>

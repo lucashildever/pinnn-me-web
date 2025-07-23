@@ -1,13 +1,55 @@
-.collection-tab-clickable {
+@mixin tab-defs {
   @include base-clickable;
   @include font-size("md");
-  @include shadow;
-  cursor: pointer;
-  transition: 0.3s ease;
   white-space: nowrap;
+  user-select: none;
+}
+
+.collection-tab-clickable {
+  @include tab-defs;
+  @include shadow;
+  transition: 0.3s ease;
+  cursor: pointer;
 
   &.active {
     cursor: default;
     box-shadow: 1px 3px 11px rgba(0, 0, 0, 0);
+  }
+}
+
+.selected-coll-tab-overlay {
+  @include tab-defs;
+  @include size(fit-content, 100%);
+  border-radius: 0px;
+  position: absolute;
+  display: none;
+  z-index: 2;
+  padding: 0;
+  background: #ffffff;
+
+  &.visible {
+    display: flex;
+  }
+
+  &.left {
+    @include spacing(padding-right, 7);
+    left: 0px;
+    right: auto;
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 1) 87%,
+      rgba(255, 255, 255, 0) 100%
+    );
+  }
+
+  &.right {
+    @include spacing(padding-left, 7);
+    right: 0px;
+    left: auto;
+    background: linear-gradient(
+      265deg,
+      rgba(255, 255, 255, 1) 87%,
+      rgba(255, 255, 255, 0) 100%
+    );
   }
 }

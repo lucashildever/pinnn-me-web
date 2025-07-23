@@ -1,11 +1,10 @@
 import { ActiveTabData } from "@/components/collections/tabs-display/types/collectionTab";
 import { ClickableType } from "@/lib/types/clickable";
 
-export interface BaseConfig {
-  clickableType: ClickableType;
-}
+export type TabClick = (tabData: ActiveTabData) => void;
 
-export interface CollectionTabConfig extends BaseConfig {
+// Clickable configs
+export interface CollectionTabConfig {
   clickableType: ClickableType.CollectionTab;
   tabId: string;
   active: boolean;
@@ -13,8 +12,21 @@ export interface CollectionTabConfig extends BaseConfig {
   ref?: React.Ref<HTMLDivElement>;
 }
 
-export interface ProfileCtaConfig extends BaseConfig {
+export interface OverlayTabDisplayConfig {
+  visible: boolean;
+  position: "left" | "right";
+}
+
+export interface CollectionTabOverlayConfig {
+  clickableType: ClickableType.CollectionTabOverlay;
+  displayConfig: OverlayTabDisplayConfig;
+}
+
+export interface ProfileCtaConfig {
   clickableType: ClickableType.ProfileCTA;
 }
 
-export type TabClick = (tabData: ActiveTabData) => void;
+export type ClickableConfig =
+  | CollectionTabConfig
+  | CollectionTabOverlayConfig
+  | ProfileCtaConfig;
