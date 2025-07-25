@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { IconType, LinkVariantPayload } from "@/types/cardTypes";
+import { LinkVariantPayload } from "@/types/cardTypes";
 import Image from "next/image";
 
 import darkArrowIcon from "@/assets/icons/dark-arrow-45.svg";
@@ -12,6 +12,8 @@ import darkPinterestIcon from "@/assets/icons/social/dark-pinterest.svg";
 import darkTiktok from "@/assets/icons/social/dark-tiktok.svg";
 
 import styles from "./link-variant.module.scss";
+import { IconType } from "@/lib/types/clickable";
+import { PredefinedIcon } from "@/lib/types/predefinedIcon";
 
 interface LinkProps {
   caption: string;
@@ -43,16 +45,16 @@ export default function LinkVariant({
       setVariantIcon(customIconSrc || darkLinkIcon);
     } else {
       switch (iconType) {
-        case IconType.X:
+        case PredefinedIcon.X:
           setVariantIcon(darkXIcon);
           break;
-        case IconType.Instagram:
+        case PredefinedIcon.INSTAGRAM:
           setVariantIcon(darkInstagramIcon);
           break;
-        case IconType.TikTok:
+        case PredefinedIcon.TIKTOK:
           setVariantIcon(darkTiktok);
           break;
-        case IconType.Pinterest:
+        case PredefinedIcon.PINTEREST:
           setVariantIcon(darkPinterestIcon);
           break;
         default:

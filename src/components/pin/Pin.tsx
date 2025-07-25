@@ -1,11 +1,6 @@
 import PinCard from "../pin-card/PinCard";
 import UserBadge from "../shared/user-badge/UserBadge";
-import {
-  CardData,
-  CardVariant,
-  IconType,
-  VariantPayload,
-} from "@/types/cardTypes";
+import { CardData } from "@/types/cardTypes";
 
 import styles from "./pin.module.scss";
 
