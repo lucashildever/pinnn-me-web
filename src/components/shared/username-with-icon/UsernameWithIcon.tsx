@@ -1,7 +1,7 @@
 import styles from "./username-with-icon.module.scss";
 
 import Image from "next/image";
-import verifiedIcon from "@/assets/icons/verified.svg";
+import verifiedIcon from "/public/assets/icons/verified.svg";
 
 interface UsernameWithIconProps {
   username: string;

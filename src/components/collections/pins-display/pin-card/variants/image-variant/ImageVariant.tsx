@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import pinTempImage from "@/assets/temp/pin-image-dgg.png";
+import pinTempImage from "/public/assets/temp/pin-image-dgg.png";
 
 import styles from "./image-variant.module.scss";
 
