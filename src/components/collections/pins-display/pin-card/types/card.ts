@@ -9,8 +9,8 @@ export interface ICard {
 }
 
 export type CardConfig =
-  | { variant: CardVariant.Image; imageSrc: string }
-  | { variant: CardVariant.Link; icon: CardIconConfig; href: string };
+  | { variant: CardVariant.IMAGE; imageSrc: string }
+  | { variant: CardVariant.LINK; icon: CardIconConfig; href: string };
 
 export type CardIconConfig =
   | { type: "custom"; src: string }

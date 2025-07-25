@@ -31,12 +31,12 @@ const CreatePinForm: React.FC = () => {
     cards: {
       order: "1",
       caption: "",
-      cardConfig: { variant: CardVariant.Image, imageSrc: "" },
+      cardConfig: { variant: CardVariant.IMAGE, imageSrc: "" },
     },
   });
 
   const [cardVariant, setCardVariant] = useState<CardVariant>(
-    CardVariant.Image
+    CardVariant.IMAGE
   );
   const [iconType, setIconType] = useState<"custom" | "predefined">("custom");
 
@@ -98,12 +98,12 @@ const CreatePinForm: React.FC = () => {
   const handleCardVariantChange = (variant: CardVariant) => {
     setCardVariant(variant);
 
-    if (variant === CardVariant.Image) {
+    if (variant === CardVariant.IMAGE) {
       setFormData((prev) => ({
         ...prev,
         cards: {
           ...prev.cards,
-          cardConfig: { variant: CardVariant.Image, imageSrc: "" },
+          cardConfig: { variant: CardVariant.IMAGE, imageSrc: "" },
         },
       }));
     } else {
@@ -112,7 +112,7 @@ const CreatePinForm: React.FC = () => {
         cards: {
           ...prev.cards,
           cardConfig: {
-            variant: CardVariant.Link,
+            variant: CardVariant.LINK,
             icon: { type: "custom", src: "" },
             href: "",
           },
@@ -125,7 +125,7 @@ const CreatePinForm: React.FC = () => {
     setIconType(type);
 
     const currentConfig = formData.cards.cardConfig;
-    if (currentConfig.variant === CardVariant.Link) {
+    if (currentConfig.variant === CardVariant.LINK) {
       setFormData((prev) => ({
         ...prev,
         cards: {
@@ -135,7 +135,7 @@ const CreatePinForm: React.FC = () => {
             icon:
               type === "custom"
                 ? { type: "custom", src: "" }
-                : { type: "predefined", icon: PredefinedIcon.Tiktok },
+                : { type: "predefined", icon: PredefinedIcon.TIKTOK },
           },
         },
       }));
@@ -206,9 +206,9 @@ const CreatePinForm: React.FC = () => {
               type="radio"
               id="image"
               name="cardVariant"
-              value={CardVariant.Image}
-              checked={cardVariant === CardVariant.Image}
-              onChange={() => handleCardVariantChange(CardVariant.Image)}
+              value={CardVariant.IMAGE}
+              checked={cardVariant === CardVariant.IMAGE}
+              onChange={() => handleCardVariantChange(CardVariant.IMAGE)}
             />
             <label htmlFor="image">Imagem</label>
           </div>
@@ -217,16 +217,16 @@ const CreatePinForm: React.FC = () => {
               type="radio"
               id="link"
               name="cardVariant"
-              value={CardVariant.Link}
-              checked={cardVariant === CardVariant.Link}
-              onChange={() => handleCardVariantChange(CardVariant.Link)}
+              value={CardVariant.LINK}
+              checked={cardVariant === CardVariant.LINK}
+              onChange={() => handleCardVariantChange(CardVariant.LINK)}
             />
             <label htmlFor="link">Link</label>
           </div>
         </div>
       </div>
 
-      {cardVariant === CardVariant.Image && (
+      {cardVariant === CardVariant.IMAGE && (
         <div className={styles.formGroup}>
           <label htmlFor="imageSrc" className={styles.label}>
             URL da Imagem *
@@ -243,7 +243,7 @@ const CreatePinForm: React.FC = () => {
         </div>
       )}
 
-      {cardVariant === CardVariant.Link && (
+      {cardVariant === CardVariant.LINK && (
         <>
           <div className={styles.formGroup}>
             <label htmlFor="href" className={styles.label}>
@@ -325,7 +325,7 @@ const CreatePinForm: React.FC = () => {
                 className={styles.select}
                 value={
                   (formData.cards.cardConfig as any).icon?.icon ||
-                  PredefinedIcon.Pinterest
+                  PredefinedIcon.PINTEREST
                 }
                 onChange={(e) => {
                   setFormData((prev) => ({
@@ -344,9 +344,9 @@ const CreatePinForm: React.FC = () => {
                 }}
               >
                 <option value={PredefinedIcon.X}>X</option>
-                <option value={PredefinedIcon.Twitch}>Twitch</option>
-                <option value={PredefinedIcon.Youtube}>Youtube</option>
-                <option value={PredefinedIcon.Pinterest}>Pinterest</option>
+                <option value={PredefinedIcon.TWITCH}>Twitch</option>
+                <option value={PredefinedIcon.YOUTUBE}>Youtube</option>
+                <option value={PredefinedIcon.PINTEREST}>Pinterest</option>
               </select>
             </div>
           )}

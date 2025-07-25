@@ -2,11 +2,11 @@ import ImageVariant from "./variants/image-variant/ImageVariant";
 import LinkVariant from "./variants/link-variant/LinkVariant";
 
 import {
-  CardVariant,
   CardPayload,
   ImageVariantPayload,
   LinkVariantPayload,
 } from "@/types/cardTypes";
+import { CardVariant } from "../collections/pins-display/pin-card/types/cardVariant";
 
 import styles from "./pin-card.module.scss";
 
@@ -20,7 +20,7 @@ export default function PinCard({
   cardPayload: { notFirstCard = false, variantType, variantPayload },
 }: PinCardProps) {
   switch (variantType) {
-    case CardVariant.Image:
+    case CardVariant.IMAGE:
       return (
         <>
           {notFirstCard && <span className={styles["pin-line"]} />}
@@ -30,7 +30,7 @@ export default function PinCard({
           />
         </>
       );
-    case CardVariant.Link:
+    case CardVariant.LINK:
       return (
         <>
           {notFirstCard && <span className={styles["pin-line"]} />}

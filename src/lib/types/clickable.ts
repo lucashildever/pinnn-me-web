@@ -6,13 +6,20 @@ export interface IClickable {
 }
 
 export type IconConfig =
-  | { type: "none" }
-  | { type: "predefined"; icon: PredefinedIcon }
-  | { type: "custom"; url: string }
-  | { type: "emoji"; unicode: string };
+  | { type: IconType.NONE }
+  | { type: IconType.PREDEFINED; icon: PredefinedIcon }
+  | { type: IconType.CUSTOM; url: string }
+  | { type: IconType.EMOJI; unicode: string };
 
 export enum ClickableType {
-  CollectionTab = "collectionTab",
-  CollectionTabOverlay = "collectionTabOverlay",
-  ProfileCTA = "profileCTA",
+  COLLECTION_TAB = "collectionTab",
+  COLLECTION_TAB_OVERLAY = "collectionTabOverlay",
+  PROFILE_CTA = "profileCTA",
+}
+
+export enum IconType {
+  NONE = "none",
+  PREDEFINED = "predefined",
+  CUSTOM = "custom",
+  EMOJI = "emoji",
 }

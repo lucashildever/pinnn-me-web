@@ -19,14 +19,14 @@ export default function PinCard({
   notFirstCard,
 }: CardProps) {
   switch (cardConfig.variant) {
-    case CardVariant.Image:
+    case CardVariant.IMAGE:
       return (
         <>
           {notFirstCard && <span className={styles["pin-line"]} />}
           <ImageVariant caption={caption} />
         </>
       );
-    case CardVariant.Link:
+    case CardVariant.LINK:
       return (
         <>
           {notFirstCard && <span className={styles["pin-line"]} />}

@@ -5,7 +5,7 @@ export type TabClick = (tabData: ActiveTabData) => void;
 
 // Clickable configs
 export interface CollectionTabConfig {
-  clickableType: ClickableType.CollectionTab;
+  clickableType: ClickableType.COLLECTION_TAB;
   tabId: string;
   active: boolean;
   tabClick: TabClick;
@@ -18,12 +18,13 @@ export interface OverlayTabDisplayConfig {
 }
 
 export interface CollectionTabOverlayConfig {
-  clickableType: ClickableType.CollectionTabOverlay;
+  clickableType: ClickableType.COLLECTION_TAB_OVERLAY;
   displayConfig: OverlayTabDisplayConfig;
 }
 
 export interface ProfileCtaConfig {
-  clickableType: ClickableType.ProfileCTA;
+  clickableType: ClickableType.PROFILE_CTA;
+  link: string;
 }
 
 export type ClickableConfig =

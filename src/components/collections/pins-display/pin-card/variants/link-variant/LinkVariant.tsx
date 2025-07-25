@@ -3,12 +3,12 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 
-import darkInstagramIcon from "@/assets/icons/social/dark-instagram.svg";
-import darkPinterestIcon from "@/assets/icons/social/dark-pinterest.svg";
-import darkArrowIcon from "@/assets/icons/dark-arrow-45.svg";
-import darkLinkIcon from "@/assets/icons/dark-link.svg";
-import darkTiktok from "@/assets/icons/social/dark-tiktok.svg";
-import darkXIcon from "@/assets/icons/social/dark-x.svg";
+import darkInstagramIcon from "/public/assets/icons/social/dark-instagram.svg";
+import darkPinterestIcon from "/public/assets/icons/social/dark-pinterest.svg";
+import darkArrowIcon from "/public/assets/icons/dark-arrow-45.svg";
+import darkLinkIcon from "/public/assets/icons/dark-link.svg";
+import darkTiktok from "/public/assets/icons/social/dark-tiktok.svg";
+import darkXIcon from "/public/assets/icons/social/dark-x.svg";
 
 import { PredefinedIcon } from "@/lib/types/predefinedIcon";
 import { CardIconConfig } from "../../types/card";
@@ -46,13 +46,13 @@ export default function LinkVariant({ caption, cardIconConfig }: LinkProps) {
         case PredefinedIcon.X:
           setVariantIcon(darkXIcon);
           break;
-        case PredefinedIcon.Instagram:
+        case PredefinedIcon.INSTAGRAM:
           setVariantIcon(darkInstagramIcon);
           break;
-        case PredefinedIcon.Tiktok:
+        case PredefinedIcon.TIKTOK:
           setVariantIcon(darkTiktok);
           break;
-        case PredefinedIcon.Pinterest:
+        case PredefinedIcon.PINTEREST:
           setVariantIcon(darkPinterestIcon);
           break;
         default:
