@@ -8,11 +8,12 @@ import PinsDispay from "./pins-display/PinsDisplay";
 
 import {
   ActiveTabData,
-  ICollectionTab,
+  CollectionTab,
 } from "./tabs-display/types/collectionTab";
+import { IconType } from "@/lib/types/clickable";
 
 interface CollectionsProps {
-  collectionTabs: ICollectionTab[];
+  collectionTabs: CollectionTab[];
   mainCollectionPins?: any;
   paramCollectionId: string | undefined;
   badgeName: string;
@@ -33,7 +34,7 @@ export default function Collections({
     displayElement: {
       content: "",
       iconConfig: {
-        type: "none",
+        type: IconType.NONE,
       },
     },
   });

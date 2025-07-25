@@ -1,14 +1,14 @@
-import { IPagination } from "@/lib/types/pagination";
-import { ICollectionTab } from "../../collections/tabs-display/types/collectionTab";
-import { IPin } from "../../collections/pins-display/pin/types/pin";
+import { Pagination } from "@/lib/types/pagination";
+import { CollectionTab } from "../../collections/tabs-display/types/collectionTab";
+import { Pin } from "../../collections/pins-display/pin/types/pin";
 
-export interface IMural {
+export interface Mural {
   name: string;
   displayName: string;
   description: string;
-  collectionTabs: ICollectionTab[];
+  collectionTabs: CollectionTab[];
   mainCollectionPins?: {
-    data: IPin[];
-    pagination: IPagination;
+    data: Pin[];
+    pagination: Pagination;
   };
 }

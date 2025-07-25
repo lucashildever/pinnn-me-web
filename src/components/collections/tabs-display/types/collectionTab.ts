@@ -1,10 +1,10 @@
-import { IClickable } from "@/lib/types/clickable";
+import { Clickable } from "@/lib/types/clickable";
 
-export interface ICollectionTab {
+export interface CollectionTab {
   id: string;
   order: string;
   isMain: boolean;
-  displayElement: IClickable;
+  displayElement: Clickable;
 }
 
-export type ActiveTabData = Omit<ICollectionTab, "order" | "isMain">;
+export type ActiveTabData = Omit<CollectionTab, "order" | "isMain">;

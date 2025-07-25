@@ -1,8 +1,8 @@
-import { ICard } from "../../pin-card/types/card";
+import { Card } from "../../pin-card/types/card";
 
-export interface IPin {
+export interface Pin {
   id: string;
   order: string;
   description: string;
-  cards: ICard[];
+  cards: Card[];
 }

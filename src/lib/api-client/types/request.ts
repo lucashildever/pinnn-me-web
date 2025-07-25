@@ -1,6 +1,6 @@
-import { ICollectionTab } from "@/components/collections/tabs-display/types/collectionTab";
-import { ICard } from "@/components/collections/pins-display/pin-card/types/card";
-import { IPin } from "@/components/collections/pins-display/pin/types/pin";
+import { CollectionTab } from "@/components/collections/tabs-display/types/collectionTab";
+import { Card } from "@/components/collections/pins-display/pin-card/types/card";
+import { Pin } from "@/components/collections/pins-display/pin/types/pin";
 
 export interface FetcherOptions {
   method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
@@ -23,13 +23,13 @@ export interface MuralRequest {
 }
 
 // Collections
-export interface CreateCollectionRequest extends Omit<ICollectionTab, "order"> {
+export interface CreateCollectionRequest extends Omit<CollectionTab, "order"> {
   muralId: string;
 }
 
 // Pins
-export interface CreatePinRequest extends Omit<IPin, "id" | "order" | "cards"> {
+export interface CreatePinRequest extends Omit<Pin, "id" | "order" | "cards"> {
   cards: CreateCardRequest;
 }
 
-export interface CreateCardRequest extends Omit<ICard, "id"> {}
+export interface CreateCardRequest extends Omit<Card, "id"> {}

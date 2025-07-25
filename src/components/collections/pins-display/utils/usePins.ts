@@ -1,9 +1,9 @@
 import React from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { apiClient } from "@/lib/api-client/apiClient";
-import { IPin } from "../pin/types/pin";
+import { Pin } from "../pin/types/pin";
 
-export const usePins = (collectionId: string, initialPins?: IPin[] | null) => {
+export const usePins = (collectionId: string, initialPins?: Pin[] | null) => {
   const query = useInfiniteQuery({
     queryKey: ["pins", collectionId, "infinite"],
     queryFn: async ({ pageParam = 1 }) => {

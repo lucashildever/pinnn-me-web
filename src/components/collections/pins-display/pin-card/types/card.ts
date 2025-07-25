@@ -1,7 +1,7 @@
 import { PredefinedIcon } from "@/lib/types/predefinedIcon";
 import { CardVariant } from "./cardVariant";
 
-export interface ICard {
+export interface Card {
   id: string;
   order: string;
   caption: string;

@@ -2,7 +2,7 @@ import React from "react";
 import { usePins } from "./utils/usePins";
 import Divider from "@/components/shared/divider/divider";
 import Pin from "@/components/collections/pins-display/pin/Pin";
-import { IPin } from "./pin/types/pin";
+import { Pin as IPin } from "./pin/types/pin";
 
 interface PinsDisplayProps {
   currentCollectionId: string;

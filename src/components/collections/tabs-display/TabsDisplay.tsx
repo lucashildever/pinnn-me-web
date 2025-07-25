@@ -8,7 +8,7 @@ import {
   OverlayTabDisplayConfig,
   TabClick,
 } from "@/components/shared/clickable/types/clickableConfig";
-import { ActiveTabData, ICollectionTab } from "./types/collectionTab";
+import { ActiveTabData, CollectionTab } from "./types/collectionTab";
 import { ClickableType } from "@/lib/types/clickable";
 
 import { useTabsDragger } from "./utils/useTabsDragger";
@@ -17,7 +17,7 @@ import styles from "./tabs-display.module.scss";
 
 interface TabsDisplayProps {
   handleTabChange: TabClick;
-  collectionTabs: ICollectionTab[];
+  collectionTabs: CollectionTab[];
   activeTabData: ActiveTabData;
 }
 
@@ -132,7 +132,7 @@ export default function TabsDisplay({
               key={index}
               payload={col.displayElement}
               config={{
-                clickableType: ClickableType.CollectionTab,
+                clickableType: ClickableType.COLLECTION_TAB,
                 tabId: col.id,
                 active: isActive,
                 tabClick: handleTabClick,

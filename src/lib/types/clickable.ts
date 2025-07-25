@@ -1,6 +1,6 @@
 import { PredefinedIcon } from "./predefinedIcon";
 
-export interface IClickable {
+export interface Clickable {
   content: string;
   iconConfig: IconConfig;
 }
