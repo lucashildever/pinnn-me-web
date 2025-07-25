@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import TabsDisplay from "./tabs-display/TabsDisplay";
 import PinsDispay from "./pins-display/PinsDisplay";
@@ -23,6 +24,10 @@ export default function Collections({
   mainCollectionPins,
   badgeName,
 }: CollectionsProps) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
   const [activeTabData, setActiveTabData] = useState<ActiveTabData>({
     id: collectionTabs[0]?.id || "",
     displayElement: {
@@ -33,23 +38,39 @@ export default function Collections({
     },
   });
 
+  const handleTabChange = (tabData: ActiveTabData) => {
+    setActiveTabData(tabData);
+
+    const params = new URLSearchParams(searchParams.toString());
+
+    //params.set("coll", tabData.id);
+
+    //router.push(`${pathname}?${params.toString()}`, { scroll: false });
+    // TALVEZ TENHA UM BUG AQUI
+  };
+
+  useEffect(() => {
+    console.log("tabDataaa", activeTabData);
+  }, [activeTabData]);
+
   useEffect(() => {
     if (paramCollectionId !== undefined) {
-      const tabExists = collectionTabs.some(
-        (tab) => tab.id === paramCollectionId
-      );
+      const collection =
+        collectionTabs.find((coll) => (coll.id = paramCollectionId)) ||
+        collectionTabs[0];
 
-      if (tabExists) {
-        setActiveTabData((prevState) => ({
-          ...prevState,
-          id: paramCollectionId,
-        }));
-      } else {
-        setActiveTabData((prevState) => ({
-          ...prevState,
-          id: collectionTabs[0]?.id || "",
-        }));
-      }
+      setActiveTabData({
+        id: collection.id,
+        displayElement: collection.displayElement,
+      });
+    } else {
+      const mainCollection =
+        collectionTabs.find((col) => col.isMain) || collectionTabs[0];
+
+      setActiveTabData({
+        id: mainCollection.id,
+        displayElement: mainCollection.displayElement,
+      });
     }
   }, [paramCollectionId, collectionTabs]);
 
@@ -58,9 +79,7 @@ export default function Collections({
       <TabsDisplay
         collectionTabs={collectionTabs}
         activeTabData={activeTabData}
-        handleTabChange={(tabData: ActiveTabData) => {
-          setActiveTabData(tabData);
-        }}
+        handleTabChange={handleTabChange}
       />
       <PinsDispay
         mainCollectionPins={mainCollectionPins}
