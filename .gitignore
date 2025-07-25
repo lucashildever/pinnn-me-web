@@ -41,4 +41,4 @@ yarn-error.log*
 next-env.d.ts
 
 # temp files
-src/assets/temp/
+public/assets/temp/
