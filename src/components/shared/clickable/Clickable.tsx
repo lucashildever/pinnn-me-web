@@ -3,7 +3,7 @@
 import IconRenderer from "./icon-renderer/IconRenderer";
 
 import { ClickableConfig, CollectionTabConfig } from "./types/clickableConfig";
-import { ClickableType, IClickable } from "@/lib/types/clickable";
+import { ClickableType, Clickable as IClickable } from "@/lib/types/clickable";
 
 import styles from "./clickable.module.scss";
 
@@ -14,7 +14,7 @@ interface ClickableProps {
 
 export default function Clickable({ payload, config }: ClickableProps) {
   switch (config.clickableType) {
-    case ClickableType.CollectionTab:
+    case ClickableType.COLLECTION_TAB:
       return (
         <div
           ref={config.ref}
@@ -35,11 +35,11 @@ export default function Clickable({ payload, config }: ClickableProps) {
           <p>{payload.content}</p>
         </div>
       );
-    case ClickableType.CollectionTabOverlay:
+    case ClickableType.COLLECTION_TAB_OVERLAY:
       return (
         <div
           className={`
-            ${styles["selected-coll-tab-overlay"]} 
+            ${styles["collection-tab-overlay"]} 
             ${styles[config.displayConfig.visible ? "visible" : ""]}
             ${styles[config.displayConfig.position]}
           `}
@@ -48,8 +48,33 @@ export default function Clickable({ payload, config }: ClickableProps) {
           <p>{payload.content}</p>
         </div>
       );
-    case ClickableType.ProfileCTA:
-      return null;
+    case ClickableType.MURAL_CTA:
+      return (
+        <a
+          className={styles["profile-cta"]}
+          href={config.link}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <IconRenderer config={payload.iconConfig} />
+          <p>{payload.content}</p>
+        </a>
+      );
+    case ClickableType.MURAL_OPTIONS:
+      return (
+        <div className={styles[`${config.clickableType}-button-clickable`]}>
+          <IconRenderer config={payload.iconConfig} />
+        </div>
+      );
+    case ClickableType.MURAL_THEME:
+      console.log("payload", payload);
+      console.log("config", config);
+
+      return (
+        <div className={styles[`${config.clickableType}-button-clickable`]}>
+          <IconRenderer config={payload.iconConfig} />
+        </div>
+      );
     default:
       return null;
   }

@@ -3,6 +3,7 @@
   @include font-size("md");
   white-space: nowrap;
   user-select: none;
+  gap: #{get-spacing(2)}px;
 }
 
 .collection-tab-clickable {
@@ -17,7 +18,7 @@
   }
 }
 
-.selected-coll-tab-overlay {
+.collection-tab-overlay {
   @include tab-defs;
   @include size(fit-content, 100%);
   border-radius: 0px;
@@ -52,4 +53,21 @@
       rgba(255, 255, 255, 0) 100%
     );
   }
+}
+
+.profile-cta {
+  @include base-clickable;
+  gap: calc(#{get-spacing(1)}px + 2px);
+}
+
+.mural-options-button-clickable {
+  @include base-clickable;
+  position: relative;
+  padding: calc(#{get-spacing(3)}px + 1px);
+}
+
+.mural-theme-button-clickable {
+  @include base-clickable;
+  position: relative;
+  padding: calc(#{get-spacing(3)}px + 1px);
 }

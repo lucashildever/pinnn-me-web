@@ -50,9 +50,9 @@ export default function Collections({
     // TALVEZ TENHA UM BUG AQUI
   };
 
-  useEffect(() => {
-    console.log("tabDataaa", activeTabData);
-  }, [activeTabData]);
+  // useEffect(() => {
+  //   console.log("tabDataaa", activeTabData);
+  // }, [activeTabData]);
 
   useEffect(() => {
     if (paramCollectionId !== undefined) {
