@@ -4,6 +4,13 @@ import { ClickableType } from "@/lib/types/clickable";
 export type TabClick = (tabData: ActiveTabData) => void;
 
 // Clickable configs
+
+export type ClickableConfig =
+  | CollectionTabConfig
+  | CollectionTabOverlayConfig
+  | UtilityButtonConfig
+  | MuralCtaConfig;
+
 export interface CollectionTabConfig {
   clickableType: ClickableType.COLLECTION_TAB;
   tabId: string;
@@ -22,12 +29,11 @@ export interface CollectionTabOverlayConfig {
   displayConfig: OverlayTabDisplayConfig;
 }
 
-export interface ProfileCtaConfig {
-  clickableType: ClickableType.PROFILE_CTA;
+export interface MuralCtaConfig {
+  clickableType: ClickableType.MURAL_CTA;
   link: string;
 }
 
-export type ClickableConfig =
-  | CollectionTabConfig
-  | CollectionTabOverlayConfig
-  | ProfileCtaConfig;
+export interface UtilityButtonConfig {
+  clickableType: ClickableType.MURAL_OPTIONS | ClickableType.MURAL_THEME;
+}

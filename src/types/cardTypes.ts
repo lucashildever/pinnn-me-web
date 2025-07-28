@@ -1,3 +1,6 @@
+import { CardVariant } from "@/components/collections/pins-display/pin-card/types/cardVariant";
+import { PredefinedIcon } from "@/lib/types/predefinedIcon";
+
 export interface CardPayload {
   variantType: CardVariant;
   notFirstCard?: boolean;
@@ -9,14 +12,9 @@ export interface CardData extends CardPayload {
 }
 
 // card variants
-export enum CardVariant {
-  Image = "image",
-  Link = "link",
-}
-
 export interface LinkVariantPayload {
   customIconSrc?: string;
-  iconType?: IconType;
+  iconType?: PredefinedIcon;
   url: string;
 }
 
@@ -25,15 +23,3 @@ export interface ImageVariantPayload {
 }
 
 export type VariantPayload = LinkVariantPayload | ImageVariantPayload;
-
-//
-export enum IconType {
-  X = "x",
-  TikTok = "tiktok",
-  Twitch = "twitch",
-  Youtube = "youtube",
-  Facebook = "facebook",
-  LinkedIn = "linkedin",
-  Pinterest = "pinterest",
-  Instagram = "instagram",
-}

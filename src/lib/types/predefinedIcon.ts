@@ -3,6 +3,9 @@ export enum PredefinedIcon {
   MESSAGE = "message",
   EMAIL = "email",
   ARROW = "arrow",
+  // utility
+  THEME = "theme",
+  OPTIONS = "options",
   // defaults
   CTA_DEFAULT = "cta-default",
   TAB_DEFAULT = "tab-default",
