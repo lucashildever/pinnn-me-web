@@ -6,20 +6,15 @@
   pointer-events: none;
 }
 
-@mixin defs {
-  @include size(7, 7);
-  @include spacing(margin-right, 2);
-}
-
 .emoji-txt {
-  @include defs;
+  @include size(7, 7);
   @include font-size("md");
   line-height: 1;
   text-indent: -3px;
 }
 
 .emoji-img {
-  @include defs;
+  @include size(7, 7);
   img {
     @include size(100%, 100%);
     @include noDragImg;
@@ -27,7 +22,7 @@
 }
 
 .custom-icon {
-  @include defs;
+  @include size(7, 7);
   overflow: hidden;
   border-radius: 20px;
   position: relative;
@@ -37,4 +32,23 @@
     object-position: center;
     @include noDragImg;
   }
+}
+
+// predefined/utility icons
+.predefined-icon-message {
+  @include size(7, 7);
+  position: relative;
+}
+
+.predefined-icon-options {
+  @include size(6, 6);
+  position: relative;
+  display: block;
+  transform: scale(92%);
+}
+
+.predefined-icon-theme {
+  @include size(6, 6);
+  position: relative;
+  transform: scale(125%);
 }
