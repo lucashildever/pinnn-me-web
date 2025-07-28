@@ -25,6 +25,11 @@
           box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.1);
         }
       }
+
+      .right-buttons {
+        @include flex(row, center, space-between);
+        gap: #{get-spacing(2)}px;
+      }
     }
 
     .pf-pic-container {

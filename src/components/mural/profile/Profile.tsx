@@ -1,10 +1,15 @@
-import UsernameWithIcon from "@/components/shared/username-with-icon/UsernameWithIcon";
 import Image from "next/image";
 
-import coverPic from "@/assets/temp/cp.png";
-import profilePic from "@/assets/temp/pf.png";
+import UsernameWithIcon from "@/components/shared/username-with-icon/UsernameWithIcon";
+import Clickable from "@/components/shared/clickable/Clickable";
+
+import { ClickableType, IconType } from "@/lib/types/clickable";
+import { PredefinedIcon } from "@/lib/types/predefinedIcon";
 
 import styles from "./profile.module.scss";
+
+import profilePic from "/public/assets/temp/pf.png";
+import coverPic from "/public/assets/temp/cp.png";
 
 interface ProfileProps {
   muralName: string;
@@ -14,8 +19,6 @@ interface ProfileProps {
 export default function Profile({ muralName, bio }: ProfileProps) {
   return (
     <div className={styles.profile}>
-      {/* transform also this into a header component 
-      to use as the header of groups/shared murals */}
       <div className={styles["profile-img-n-cover"]}>
         <div className={styles["pf-pic-container"]}>
           <Image
@@ -27,13 +30,39 @@ export default function Profile({ muralName, bio }: ProfileProps) {
         </div>
         <div className={styles["profile-cover"]}>
           <div className={styles["cover-buttons"]}>
-            {/* <Button
-              buttonType={ButtonType.PREDEFINED}
-              icon={PredefinedButton.MESSAGE}
-              content={"Message"}
-            /> */}
-            {/* <Button text="Message" buttonType={ButtonType.MESSAGE} />
-            <Button text="Ok" buttonType={ButtonType.ONLY_TEXT} /> */}
+            <Clickable
+              payload={{
+                content: "Cta name",
+                iconConfig: {
+                  type: IconType.PREDEFINED,
+                  icon: PredefinedIcon.MESSAGE,
+                },
+              }}
+              config={{
+                clickableType: ClickableType.MURAL_CTA,
+                link: "https://www.google.com/",
+              }}
+            />
+            <div className={styles["right-buttons"]}>
+              {/* <Clickable
+                payload={{
+                  iconConfig: {
+                    type: IconType.PREDEFINED,
+                    icon: PredefinedIcon.THEME,
+                  },
+                }}
+                config={{ clickableType: ClickableType.MURAL_THEME }}
+              /> */}
+              <Clickable
+                payload={{
+                  iconConfig: {
+                    type: IconType.PREDEFINED,
+                    icon: PredefinedIcon.OPTIONS,
+                  },
+                }}
+                config={{ clickableType: ClickableType.MURAL_OPTIONS }}
+              />
+            </div>
           </div>
           <Image
             src={coverPic}
