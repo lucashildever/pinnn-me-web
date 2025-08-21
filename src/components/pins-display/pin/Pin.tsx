@@ -1,16 +1,16 @@
 "use client";
 
-import UserBadge from "../../../shared/user-badge/UserBadge";
+import UserBadge from "../../shared/user-badge/UserBadge";
 import PinCard from "../pin-card/PinCard";
 
-import { ICard } from "@/components/collections/pins-display/pin-card/types/card";
+import { Card } from "@/components/pins-display/pin-card/types/card";
 
 import styles from "./pin.module.scss";
 
 interface PinProps {
   username: string;
   description: string;
-  cards: ICard[];
+  cards: Card[];
 }
 
 export default function Pin({ username, description, cards }: PinProps) {

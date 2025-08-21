@@ -19,12 +19,16 @@ interface TabsDisplayProps {
   handleTabChange: TabClick;
   collectionTabs: CollectionTab[];
   activeTabData: ActiveTabData;
+  ref?: React.RefObject<HTMLDivElement | null>;
+  style?: React.CSSProperties;
 }
 
 export default function TabsDisplay({
   collectionTabs,
   activeTabData,
   handleTabChange,
+  ref,
+  style,
 }: TabsDisplayProps) {
   const { containerRef, dragEvents, hasMoved } = useTabsDragger();
   const [overlayTabDisplayConfig, setOverlayTabDisplayConfig] =
@@ -116,7 +120,12 @@ export default function TabsDisplay({
   };
 
   return (
-    <div className={styles["tabs-display"]} {...dragEvents}>
+    <div
+      className={`${styles["tabs-display"]}`}
+      {...dragEvents}
+      ref={ref}
+      style={style}
+    >
       {/* <Clickable
         payload={activeTabData.displayElement}
         config={{

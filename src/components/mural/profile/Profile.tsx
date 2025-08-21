@@ -1,3 +1,6 @@
+"use client";
+
+import { CSSProperties } from "react";
 import Image from "next/image";
 
 import UsernameWithIcon from "@/components/shared/username-with-icon/UsernameWithIcon";
@@ -11,14 +14,59 @@ import styles from "./profile.module.scss";
 import profilePic from "/public/assets/temp/pf.png";
 import coverPic from "/public/assets/temp/cp.png";
 
+// TODO -  atualizar props para receber dados de forma consistente nas variações do profile
 interface ProfileProps {
   muralName: string;
-  bio: string;
+  style?: CSSProperties;
+  bio?: string;
+  minimal?: boolean;
 }
 
-export default function Profile({ muralName, bio }: ProfileProps) {
+export default function Profile({
+  muralName,
+  bio,
+  style,
+  minimal,
+}: ProfileProps) {
+  if (minimal) {
+    return (
+      <div className={styles["minimal-profile"]}>
+        <div className={styles["minimal-pf-info"]}>
+          <div className={styles["minimal-pf-pic-container"]}>
+            <Image
+              src={profilePic}
+              alt="user profile picture"
+              style={{ objectFit: "cover" }}
+              fill
+            />
+          </div>
+          <UsernameWithIcon size="small" username={muralName} />
+        </div>
+        <Clickable
+          payload={{
+            content: "Cta name",
+            iconConfig: {
+              type: IconType.PREDEFINED,
+              icon: PredefinedIcon.MESSAGE,
+            },
+          }}
+          config={{
+            clickableType: ClickableType.MURAL_CTA,
+            link: "https://www.google.com/",
+          }}
+          // estilizar com scss para aproveitar os mixins
+          style={{
+            boxShadow: "1px 2px 6px rgba(0, 0, 0, 0.185)",
+          }}
+        />
+      </div>
+    );
+  }
   return (
-    <div className={styles.profile}>
+    <div
+      className={`${styles["extended-profile"]} ${styles["pf-overlay"]}`}
+      style={style}
+    >
       <div className={styles["profile-img-n-cover"]}>
         <div className={styles["pf-pic-container"]}>
           <Image
@@ -44,15 +92,6 @@ export default function Profile({ muralName, bio }: ProfileProps) {
               }}
             />
             <div className={styles["right-buttons"]}>
-              {/* <Clickable
-                payload={{
-                  iconConfig: {
-                    type: IconType.PREDEFINED,
-                    icon: PredefinedIcon.THEME,
-                  },
-                }}
-                config={{ clickableType: ClickableType.MURAL_THEME }}
-              /> */}
               <Clickable
                 payload={{
                   iconConfig: {
@@ -74,7 +113,7 @@ export default function Profile({ muralName, bio }: ProfileProps) {
         </div>
       </div>
       <div className={styles["profile-info"]}>
-        <UsernameWithIcon username={muralName} />
+        <UsernameWithIcon size="large" username={muralName} />
         <p>{bio}</p>
       </div>
     </div>

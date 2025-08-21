@@ -10,13 +10,15 @@ import styles from "./clickable.module.scss";
 interface ClickableProps {
   payload: IClickable;
   config: ClickableConfig;
+  style?: React.CSSProperties;
 }
 
-export default function Clickable({ payload, config }: ClickableProps) {
+export default function Clickable({ payload, config, style }: ClickableProps) {
   switch (config.clickableType) {
     case ClickableType.COLLECTION_TAB:
       return (
         <div
+          style={style}
           ref={config.ref}
           className={`${styles["collection-tab-clickable"]} ${
             config.active ? styles["active"] : ""
@@ -38,6 +40,7 @@ export default function Clickable({ payload, config }: ClickableProps) {
     case ClickableType.COLLECTION_TAB_OVERLAY:
       return (
         <div
+          style={style}
           className={`
             ${styles["collection-tab-overlay"]} 
             ${styles[config.displayConfig.visible ? "visible" : ""]}
@@ -51,6 +54,7 @@ export default function Clickable({ payload, config }: ClickableProps) {
     case ClickableType.MURAL_CTA:
       return (
         <a
+          style={style}
           className={styles["profile-cta"]}
           href={config.link}
           target="_blank"
@@ -62,7 +66,10 @@ export default function Clickable({ payload, config }: ClickableProps) {
       );
     case ClickableType.MURAL_OPTIONS:
       return (
-        <div className={styles[`${config.clickableType}-button-clickable`]}>
+        <div
+          className={styles[`${config.clickableType}-button-clickable`]}
+          style={style}
+        >
           <IconRenderer config={payload.iconConfig} />
         </div>
       );
@@ -71,7 +78,10 @@ export default function Clickable({ payload, config }: ClickableProps) {
       console.log("config", config);
 
       return (
-        <div className={styles[`${config.clickableType}-button-clickable`]}>
+        <div
+          style={style}
+          className={styles[`${config.clickableType}-button-clickable`]}
+        >
           <IconRenderer config={payload.iconConfig} />
         </div>
       );

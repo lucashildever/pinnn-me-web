@@ -6,7 +6,7 @@ import {
   ImageVariantPayload,
   LinkVariantPayload,
 } from "@/types/cardTypes";
-import { CardVariant } from "../collections/pins-display/pin-card/types/cardVariant";
+import { CardVariant } from "../pins-display/pin-card/types/cardVariant";
 
 import styles from "./pin-card.module.scss";
 

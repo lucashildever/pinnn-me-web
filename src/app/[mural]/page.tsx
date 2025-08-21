@@ -2,7 +2,7 @@ import React from "react";
 import { Metadata } from "next";
 
 import MuralContainer from "@/components/mural/Mural";
-import Collections from "@/components/collections/Collections";
+//import Collections from "@/components/collections/Collections";
 import Profile from "@/components/mural/profile/Profile";
 
 import { MuralRequest } from "@/lib/api-client/types/request";
@@ -60,17 +60,24 @@ export default async function Mural({ params, searchParams }: MuralProps) {
   }
 
   return (
-    <MuralContainer>
-      <Profile
-        muralName={result.data.displayName}
-        bio={result.data.description}
-      />
-      <Collections
-        collectionTabs={result.data.collections}
-        paramCollectionId={paramCollectionId}
-        mainCollectionPins={result.data.mainCollectionPins?.data}
-        badgeName={result.data.displayName}
-      />
-    </MuralContainer>
+    <MuralContainer
+      displayName={result.data.displayName}
+      description={result.data.description}
+      collections={result.data.collections}
+      paramCollectionId={paramCollectionId}
+      mainCollectinoPins={result.data.mainCollectionPins?.data}
+    />
+    // <MuralContainer>
+    //   <Profile
+    //     muralName={result.data.displayName}
+    //     bio={result.data.description}
+    //   />
+    //   <Collections
+    //     collectionTabs={result.data.collections}
+    //     paramCollectionId={paramCollectionId}
+    //     mainCollectionPins={result.data.mainCollectionPins?.data}
+    //     badgeName={result.data.displayName}
+    //   />
+    // </MuralContainer>
   );
 }

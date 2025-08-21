@@ -1,4 +1,4 @@
-import { CardVariant } from "@/components/collections/pins-display/pin-card/types/cardVariant";
+import { CardVariant } from "@/components/pins-display/pin-card/types/cardVariant";
 import { PredefinedIcon } from "@/lib/types/predefinedIcon";
 
 export interface CardPayload {

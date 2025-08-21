@@ -1,25 +1,25 @@
-.bio,
-.badge {
-  @include flex(flex, center, center);
-  gap: #{get-spacing(1)}px;
-}
+// .bio,
+// .badge {
+//   @include flex(flex, center, center);
+//   gap: #{get-spacing(1)}px;
+// }
 
-.bio {
-  h1 {
-    font-weight: bold;
-  }
+// .bio {
+//   h1 {
+//     font-weight: bold;
+//   }
 
-  .icon {
-    @include size(6, 6);
-  }
-}
+//   .icon {
+//     @include size(6, 6);
+//   }
+// }
 
-.badge {
-  span {
-    font-weight: 600;
-  }
+// .badge {
+//   span {
+//     font-weight: 600;
+//   }
 
-  .icon {
-    @include size(5, 5);
-  }
-}
+//   .icon {
+//     @include size(5, 5);
+//   }
+// }

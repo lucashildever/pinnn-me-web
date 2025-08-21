@@ -4,8 +4,8 @@ import React, { useState } from "react";
 import { useParams } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { CardConfig } from "@/components/collections/pins-display/pin-card/types/card";
-import { CardVariant } from "@/components/collections/pins-display/pin-card/types/cardVariant";
+import { CardConfig } from "@/components/pins-display/pin-card/types/card";
+import { CardVariant } from "@/components/pins-display/pin-card/types/cardVariant";
 
 import { CreatePinRequest } from "@/lib/api-client/types/request";
 import { PredefinedIcon } from "@/lib/types/predefinedIcon";

@@ -1,6 +1,6 @@
 import { Pagination } from "@/lib/types/pagination";
-import { CollectionTab } from "../../collections/tabs-display/types/collectionTab";
-import { Pin } from "../../collections/pins-display/pin/types/pin";
+import { CollectionTab } from "../../tabs-display/types/collectionTab";
+import { Pin } from "../../pins-display/pin/types/pin";
 
 export interface Mural {
   name: string;

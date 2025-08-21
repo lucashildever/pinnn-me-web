@@ -1,6 +1,7 @@
 .tabs-display {
   @include size(100%, fit-content);
   position: relative;
+  z-index: 2;
 
   &::before,
   &::after {

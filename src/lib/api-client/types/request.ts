@@ -1,6 +1,6 @@
-import { CollectionTab } from "@/components/collections/tabs-display/types/collectionTab";
-import { Card } from "@/components/collections/pins-display/pin-card/types/card";
-import { Pin } from "@/components/collections/pins-display/pin/types/pin";
+import { CollectionTab } from "@/components/tabs-display/types/collectionTab";
+import { Card } from "@/components/pins-display/pin-card/types/card";
+import { Pin } from "@/components/pins-display/pin/types/pin";
 
 export interface FetcherOptions {
   method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";

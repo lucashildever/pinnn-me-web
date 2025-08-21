@@ -1,6 +1,8 @@
 .mural-container {
-  @include flex(column, flex-start, center, nowrap, 7);
+  @include flex(column, flex-start, center, nowrap, 6);
+  position: relative;
   margin: auto;
+  @include spacing(margin-top, 6);
 }
 
 @media screen and (min-width: 2500px) {
@@ -17,13 +19,7 @@
 
 @media screen and (max-width: 2000px) {
   .mural-container {
-    width: 22%;
-  }
-}
-
-@media screen and (max-width: 1400px) {
-  .mural-container {
-    width: 26%;
+    width: 23%;
   }
 }
 
@@ -35,19 +31,19 @@
 
 @media screen and (max-width: 1200px) {
   .mural-container {
-    width: 38%;
+    width: 35%;
   }
 }
 
 @media screen and (max-width: 992px) {
   .mural-container {
-    width: 50%;
+    width: 45%;
   }
 }
 
 @media screen and (max-width: 768px) {
   .mural-container {
-    width: 60%;
+    width: 55%;
   }
 }
 

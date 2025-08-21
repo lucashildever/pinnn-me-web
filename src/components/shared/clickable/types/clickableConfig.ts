@@ -1,4 +1,4 @@
-import { ActiveTabData } from "@/components/collections/tabs-display/types/collectionTab";
+import { ActiveTabData } from "@/components/tabs-display/types/collectionTab";
 import { ClickableType } from "@/lib/types/clickable";
 
 export type TabClick = (tabData: ActiveTabData) => void;

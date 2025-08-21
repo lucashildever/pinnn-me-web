@@ -7,7 +7,7 @@
   $direction: row,
   $align: center,
   $justify: center,
-  $wrap: nowrap,
+  $wrap: null,
   $gap: null
 ) {
   display: flex;
@@ -51,13 +51,14 @@
 @mixin base-clickable {
   @include spacing(padding, 3, 4);
   @include font-size("sm");
-  @include flex();
+  @include flex(row, center, center, unset);
   width: fit-content;
   height: fit-content;
   border-radius: $outer-corner;
   text-align: center;
   font-weight: 600;
   background-color: get-color("light");
+  white-space: nowrap;
 }
 
 @mixin input-field {
@@ -88,7 +89,6 @@
 
 @mixin pin-card-defs {
   @include spacing(padding, 6);
-  width: calc(100% - #{get-spacing(5) * 2}px);
   border-radius: $outer-corner;
   @include shadow;
   z-index: 1;

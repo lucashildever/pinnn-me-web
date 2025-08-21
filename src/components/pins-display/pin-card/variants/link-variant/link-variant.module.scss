@@ -2,7 +2,6 @@
   display: block;
   @include pin-card-defs;
   @include flex(row, center, space-between);
-  // width: 100%;
 
   .img-and-info {
     @include flex(row, center, flex-start);

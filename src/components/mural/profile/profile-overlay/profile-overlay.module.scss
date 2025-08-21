@@ -1,0 +1,26 @@
+.profile-overlay {
+  @include spacing(padding-top, 6);
+  position: fixed;
+  width: inherit;
+  z-index: 3;
+  top: 0;
+  background-color: get-color("light");
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    width: 5px;
+    height: 100%;
+    background: white;
+  }
+
+  &::before {
+    left: -5px;
+  }
+
+  &::after {
+    right: -5px;
+  }
+}
