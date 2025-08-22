@@ -16,8 +16,8 @@ import Image from "next/image";
 
 import styles from "./auth-form.module.scss";
 
-import logo from "@/assets/logo.svg";
-import arrow from "@/assets/icons/light-arrow.svg";
+import logo from "/public/assets/logo.svg";
+import arrow from "/public/assets/icons/light-arrow.svg";
 
 interface AuthFormProps {
   authType: "login" | "signup";
