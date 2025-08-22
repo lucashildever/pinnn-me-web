@@ -6,6 +6,11 @@ import { CreateCollectionRequest, CreatePinRequest } from "./types/request";
 import { CreateMuralRequest, MuralRequest } from "./types/request";
 import { FetcherResponse, FetchError } from "./types/response";
 
+enum PaymentPeriod {
+  MONTHLY = "monthly",
+  YEARLY = "yearly",
+}
+
 export const apiClient = {
   auth: {
     login: async (credentials: AuthCredentials): Promise<FetcherResponse> => {
@@ -94,6 +99,68 @@ export const apiClient = {
           page: page.toString(),
           limit: limit.toString(),
         },
+      });
+    },
+  },
+  stripe: {
+    fetchClientSecret: async (
+      planType: "pro",
+      period: PaymentPeriod
+    ): Promise<
+      FetcherResponse<{
+        sessionId: string;
+        clientSecret: string;
+        url: string;
+      }>
+    > => {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        return {
+          success: false,
+          error: FetchError.UNAUTHORIZED,
+          message: "Authentication required",
+        };
+      }
+
+      return await fetcher<{
+        sessionId: string;
+        clientSecret: string;
+        url: string;
+      }>("/payments/create-checkout-session", {
+        method: "POST",
+        body: {
+          planType: planType,
+          period: period,
+        },
+        token: token,
+      });
+    },
+
+    getSessionStatus: async (
+      sessionId: string
+    ): Promise<
+      FetcherResponse<{
+        status: string;
+        payment_status: string;
+        customer_email?: string;
+        amount_total: number;
+        currency: string;
+      }>
+    > => {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        return {
+          success: false,
+          error: FetchError.UNAUTHORIZED,
+          message: "Authentication required",
+        };
+      }
+
+      return await fetcher(`/payments/session-status?session_id=${sessionId}`, {
+        method: "GET",
+        token: token,
       });
     },
   },
