@@ -3,7 +3,7 @@
 import { CSSProperties } from "react";
 import Image from "next/image";
 
-import UsernameWithIcon from "@/components/shared/username-with-icon/UsernameWithIcon";
+import AuthorMeta from "@/components/shared/author-meta/AuthorMeta";
 import Clickable from "@/components/shared/clickable/Clickable";
 
 import { ClickableType, IconType } from "@/lib/types/clickable";
@@ -40,7 +40,7 @@ export default function Profile({
               fill
             />
           </div>
-          <UsernameWithIcon size="small" username={muralName} />
+          <AuthorMeta from="minimal-profile" username={muralName} />
         </div>
         <Clickable
           payload={{
@@ -113,7 +113,7 @@ export default function Profile({
         </div>
       </div>
       <div className={styles["profile-info"]}>
-        <UsernameWithIcon size="large" username={muralName} />
+        <AuthorMeta from="profile" username={muralName} />
         <p>{bio}</p>
       </div>
     </div>

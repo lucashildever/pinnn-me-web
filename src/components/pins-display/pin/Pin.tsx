@@ -1,6 +1,6 @@
 "use client";
 
-import UserBadge from "../../shared/user-badge/UserBadge";
+import PinAuthor from "../../shared/pin-author/PinAuthor";
 import PinCard from "../pin-card/PinCard";
 
 import { Card } from "@/components/pins-display/pin-card/types/card";
@@ -16,7 +16,7 @@ interface PinProps {
 export default function Pin({ username, description, cards }: PinProps) {
   return (
     <div className={styles["pin"]}>
-      <UserBadge username={username} />
+      <PinAuthor username={username} />
       <p className={styles["pin-description"]}>{description} </p>
       {cards.map((card, index) => {
         return (
