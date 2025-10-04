@@ -1,4 +1,4 @@
-import { useRef, useCallback } from "react";
+import { useRef, useCallback } from 'react';
 
 interface UseTabsDraggerReturn {
   containerRef: React.RefObject<HTMLDivElement | null>;
@@ -27,7 +27,7 @@ export function useTabsDragger(): UseTabsDraggerReturn {
     hasMoved.current = false;
     startX.current = e.pageX - containerRef.current.offsetLeft;
     scrollLeft.current = containerRef.current.scrollLeft;
-    containerRef.current.style.cursor = "grabbing";
+    containerRef.current.style.cursor = 'grabbing';
   }, []);
 
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
@@ -42,14 +42,14 @@ export function useTabsDragger(): UseTabsDraggerReturn {
   const handleMouseUp = useCallback(() => {
     isDragging.current = false;
     if (containerRef.current) {
-      containerRef.current.style.cursor = "grab";
+      containerRef.current.style.cursor = 'grab';
     }
   }, []);
 
   const handleMouseLeave = useCallback(() => {
     isDragging.current = false;
     if (containerRef.current) {
-      containerRef.current.style.cursor = "grab";
+      containerRef.current.style.cursor = 'grab';
     }
   }, []);
 

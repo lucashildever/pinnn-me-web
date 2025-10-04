@@ -1,9 +1,9 @@
-import { CollectionTab } from "@/components/tabs-display/types/collectionTab";
-import { Card } from "@/components/pins-display/pin-card/types/card";
-import { Pin } from "@/components/pins-display/pin/types/pin";
+import { CollectionTab } from '@/components/tabs-display/types/collectionTab';
+import { Card } from '@/components/pins-display/pin-card/types/card';
+import { Pin } from '@/components/pins-display/pin/types/pin';
 
 export interface FetcherOptions {
-  method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
+  method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
   body?: any;
   headers?: Record<string, string>;
   token?: string;
@@ -23,13 +23,13 @@ export interface MuralRequest {
 }
 
 // Collections
-export interface CreateCollectionRequest extends Omit<CollectionTab, "order"> {
+export interface CreateCollectionRequest extends Omit<CollectionTab, 'order'> {
   muralId: string;
 }
 
 // Pins
-export interface CreatePinRequest extends Omit<Pin, "id" | "order" | "cards"> {
+export interface CreatePinRequest extends Omit<Pin, 'id' | 'order' | 'cards'> {
   cards: CreateCardRequest;
 }
 
-export interface CreateCardRequest extends Omit<Card, "id"> {}
+export interface CreateCardRequest extends Omit<Card, 'id'> {}

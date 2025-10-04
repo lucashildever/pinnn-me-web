@@ -1,4 +1,4 @@
-import { ReactNode, RefObject } from "react";
+import { ReactNode, RefObject } from 'react';
 
 interface ProfileMeasurerProps {
   children: ReactNode;
@@ -14,9 +14,9 @@ export default function ProfileMeasurer({
       ref={ref}
       aria-hidden="true"
       style={{
-        position: "absolute",
-        visibility: "hidden",
-        pointerEvents: "none",
+        position: 'absolute',
+        visibility: 'hidden',
+        pointerEvents: 'none',
         left: 0,
         top: 0,
       }}

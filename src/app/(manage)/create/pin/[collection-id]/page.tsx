@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { useParams } from "next/navigation";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import React, { useState } from 'react';
+import { useParams } from 'next/navigation';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { CardConfig } from "@/components/pins-display/pin-card/types/card";
-import { CardVariant } from "@/components/pins-display/pin-card/types/cardVariant";
+import { CardConfig } from '@/components/pins-display/pin-card/types/card';
+import { CardVariant } from '@/components/pins-display/pin-card/types/cardVariant';
 
-import { CreatePinRequest } from "@/lib/api-client/types/request";
-import { PredefinedIcon } from "@/lib/types/predefinedIcon";
+import { CreatePinRequest } from '@/lib/api-client/types/request';
+import { PredefinedIcon } from '@/lib/types/predefinedIcon';
 
-import { apiClient } from "@/lib/api-client/apiClient";
+import { apiClient } from '@/lib/api-client/apiClient';
 
-import styles from "./create-pin.module.scss";
+import styles from './create-pin.module.scss';
 
 const CreatePinForm: React.FC = () => {
   const router = useParams();
@@ -27,46 +27,46 @@ const CreatePinForm: React.FC = () => {
       cardConfig: CardConfig;
     };
   }>({
-    description: "",
+    description: '',
     cards: {
-      order: "1",
-      caption: "",
-      cardConfig: { variant: CardVariant.IMAGE, imageSrc: "" },
+      order: '1',
+      caption: '',
+      cardConfig: { variant: CardVariant.IMAGE, imageSrc: '' },
     },
   });
 
   const [cardVariant, setCardVariant] = useState<CardVariant>(
-    CardVariant.IMAGE
+    CardVariant.IMAGE,
   );
-  const [iconType, setIconType] = useState<"custom" | "predefined">("custom");
+  const [iconType, setIconType] = useState<'custom' | 'predefined'>('custom');
 
   const createPinMutation = useMutation({
     mutationFn: async (pinData: CreatePinRequest) => {
-      if (!collectionId || typeof collectionId !== "string") {
-        throw new Error("Collection ID is required");
+      if (!collectionId || typeof collectionId !== 'string') {
+        throw new Error('Collection ID is required');
       }
 
       const response = await apiClient.pins.create(collectionId, pinData);
 
       if (!response.success) {
-        throw new Error(response.message || "Failed to create pin");
+        throw new Error(response.message || 'Failed to create pin');
       }
 
       return response;
     },
     onSuccess: (res) => {
-      queryClient.invalidateQueries({ queryKey: ["pins", collectionId] });
-      queryClient.invalidateQueries({ queryKey: ["collections"] });
-      console.log("res de onSuccess:", res);
+      queryClient.invalidateQueries({ queryKey: ['pins', collectionId] });
+      queryClient.invalidateQueries({ queryKey: ['collections'] });
+      console.log('res de onSuccess:', res);
     },
     onError: (error) => {
-      console.error("Error creating pin:", error);
+      console.error('Error creating pin:', error);
     },
   });
 
   const handleInputChange = (field: string, value: string) => {
-    if (field.startsWith("cards.")) {
-      const cardField = field.replace("cards.", "");
+    if (field.startsWith('cards.')) {
+      const cardField = field.replace('cards.', '');
       setFormData((prev) => ({
         ...prev,
         cards: {
@@ -103,7 +103,7 @@ const CreatePinForm: React.FC = () => {
         ...prev,
         cards: {
           ...prev.cards,
-          cardConfig: { variant: CardVariant.IMAGE, imageSrc: "" },
+          cardConfig: { variant: CardVariant.IMAGE, imageSrc: '' },
         },
       }));
     } else {
@@ -113,15 +113,15 @@ const CreatePinForm: React.FC = () => {
           ...prev.cards,
           cardConfig: {
             variant: CardVariant.LINK,
-            icon: { type: "custom", src: "" },
-            href: "",
+            icon: { type: 'custom', src: '' },
+            href: '',
           },
         },
       }));
     }
   };
 
-  const handleIconTypeChange = (type: "custom" | "predefined") => {
+  const handleIconTypeChange = (type: 'custom' | 'predefined') => {
     setIconType(type);
 
     const currentConfig = formData.cards.cardConfig;
@@ -133,9 +133,9 @@ const CreatePinForm: React.FC = () => {
           cardConfig: {
             ...currentConfig,
             icon:
-              type === "custom"
-                ? { type: "custom", src: "" }
-                : { type: "predefined", icon: PredefinedIcon.TIKTOK },
+              type === 'custom'
+                ? { type: 'custom', src: '' }
+                : { type: 'predefined', icon: PredefinedIcon.TIKTOK },
           },
         },
       }));
@@ -163,7 +163,7 @@ const CreatePinForm: React.FC = () => {
           id="description"
           className={styles.textarea}
           value={formData.description}
-          onChange={(e) => handleInputChange("description", e.target.value)}
+          onChange={(e) => handleInputChange('description', e.target.value)}
           required
           placeholder="Digite a descrição do pin..."
         />
@@ -178,7 +178,7 @@ const CreatePinForm: React.FC = () => {
           type="text"
           className={styles.input}
           value={formData.cards.order}
-          onChange={(e) => handleInputChange("cards.order", e.target.value)}
+          onChange={(e) => handleInputChange('cards.order', e.target.value)}
           placeholder="1"
         />
       </div>
@@ -192,7 +192,7 @@ const CreatePinForm: React.FC = () => {
           type="text"
           className={styles.input}
           value={formData.cards.caption}
-          onChange={(e) => handleInputChange("cards.caption", e.target.value)}
+          onChange={(e) => handleInputChange('cards.caption', e.target.value)}
           required
           placeholder="Digite a legenda do card..."
         />
@@ -235,8 +235,8 @@ const CreatePinForm: React.FC = () => {
             id="imageSrc"
             type="url"
             className={styles.input}
-            value={(formData.cards.cardConfig as any).imageSrc || ""}
-            onChange={(e) => handleCardConfigChange("imageSrc", e.target.value)}
+            value={(formData.cards.cardConfig as any).imageSrc || ''}
+            onChange={(e) => handleCardConfigChange('imageSrc', e.target.value)}
             required
             placeholder="https://exemplo.com/imagem.jpg"
           />
@@ -253,8 +253,8 @@ const CreatePinForm: React.FC = () => {
               id="href"
               type="url"
               className={styles.input}
-              value={(formData.cards.cardConfig as any).href || ""}
-              onChange={(e) => handleCardConfigChange("href", e.target.value)}
+              value={(formData.cards.cardConfig as any).href || ''}
+              onChange={(e) => handleCardConfigChange('href', e.target.value)}
               required
               placeholder="https://exemplo.com"
             />
@@ -269,8 +269,8 @@ const CreatePinForm: React.FC = () => {
                   id="custom"
                   name="iconType"
                   value="custom"
-                  checked={iconType === "custom"}
-                  onChange={() => handleIconTypeChange("custom")}
+                  checked={iconType === 'custom'}
+                  onChange={() => handleIconTypeChange('custom')}
                 />
                 <label htmlFor="custom">Personalizado</label>
               </div>
@@ -280,15 +280,15 @@ const CreatePinForm: React.FC = () => {
                   id="predefined"
                   name="iconType"
                   value="predefined"
-                  checked={iconType === "predefined"}
-                  onChange={() => handleIconTypeChange("predefined")}
+                  checked={iconType === 'predefined'}
+                  onChange={() => handleIconTypeChange('predefined')}
                 />
                 <label htmlFor="predefined">Predefinido</label>
               </div>
             </div>
           </div>
 
-          {iconType === "custom" && (
+          {iconType === 'custom' && (
             <div className={styles.formGroup}>
               <label htmlFor="iconSrc" className={styles.label}>
                 URL do Ícone Personalizado
@@ -297,7 +297,7 @@ const CreatePinForm: React.FC = () => {
                 id="iconSrc"
                 type="url"
                 className={styles.input}
-                value={(formData.cards.cardConfig as any).icon?.src || ""}
+                value={(formData.cards.cardConfig as any).icon?.src || ''}
                 onChange={(e) => {
                   setFormData((prev) => ({
                     ...prev,
@@ -305,7 +305,7 @@ const CreatePinForm: React.FC = () => {
                       ...prev.cards,
                       cardConfig: {
                         ...prev.cards.cardConfig,
-                        icon: { type: "custom", src: e.target.value },
+                        icon: { type: 'custom', src: e.target.value },
                       },
                     },
                   }));
@@ -315,7 +315,7 @@ const CreatePinForm: React.FC = () => {
             </div>
           )}
 
-          {iconType === "predefined" && (
+          {iconType === 'predefined' && (
             <div className={styles.formGroup}>
               <label htmlFor="predefinedIcon" className={styles.label}>
                 Ícone Predefinido
@@ -335,7 +335,7 @@ const CreatePinForm: React.FC = () => {
                       cardConfig: {
                         ...prev.cards.cardConfig,
                         icon: {
-                          type: "predefined",
+                          type: 'predefined',
                           icon: e.target.value as PredefinedIcon,
                         },
                       },
@@ -373,7 +373,7 @@ const CreatePinForm: React.FC = () => {
           onClick={handleFormSubmit}
           disabled={createPinMutation.isPending}
         >
-          {createPinMutation.isPending ? "Criando..." : "Criar Pin"}
+          {createPinMutation.isPending ? 'Criando...' : 'Criar Pin'}
         </button>
       </div>
     </div>

@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import { CSSProperties } from "react";
-import Image from "next/image";
+import { CSSProperties } from 'react';
+import Image from 'next/image';
 
-import AuthorMeta from "@/components/shared/author-meta/AuthorMeta";
-import Clickable from "@/components/shared/clickable/Clickable";
+import AuthorMeta from '@/components/shared/author-meta/AuthorMeta';
+import Clickable from '@/components/shared/clickable/Clickable';
 
-import { ClickableType, IconType } from "@/lib/types/clickable";
-import { PredefinedIcon } from "@/lib/types/predefinedIcon";
+import { ClickableType, IconType } from '@/lib/types/clickable';
+import { PredefinedIcon } from '@/lib/types/predefinedIcon';
 
-import styles from "./profile.module.scss";
+import styles from './profile.module.scss';
 
-import profilePic from "/public/assets/temp/pf.png";
-import coverPic from "/public/assets/temp/cp.png";
+import profilePic from '/public/assets/temp/pf.png';
+import coverPic from '/public/assets/temp/cp.png';
 
 // TODO -  atualizar props para receber dados de forma consistente nas variações do profile
 interface ProfileProps {
@@ -30,21 +30,21 @@ export default function Profile({
 }: ProfileProps) {
   if (minimal) {
     return (
-      <div className={styles["minimal-profile"]}>
-        <div className={styles["minimal-pf-info"]}>
-          <div className={styles["minimal-pf-pic-container"]}>
+      <div className={styles['minimal-profile']}>
+        <div className={styles['minimal-pf-info']}>
+          <div className={styles['minimal-pf-pic-container']}>
             <Image
               src={profilePic}
               alt="user profile picture"
-              style={{ objectFit: "cover" }}
+              style={{ objectFit: 'cover' }}
               fill
             />
           </div>
-          <AuthorMeta from="minimal-profile" username={muralName} />
+          <AuthorMeta from="minimal-profile" muralName={muralName} hasBadge />
         </div>
         <Clickable
           payload={{
-            content: "Cta name",
+            content: 'Cta name',
             iconConfig: {
               type: IconType.PREDEFINED,
               icon: PredefinedIcon.MESSAGE,
@@ -52,11 +52,11 @@ export default function Profile({
           }}
           config={{
             clickableType: ClickableType.MURAL_CTA,
-            link: "https://www.google.com/",
+            link: 'https://www.google.com/',
           }}
           // estilizar com scss para aproveitar os mixins
           style={{
-            boxShadow: "1px 2px 6px rgba(0, 0, 0, 0.185)",
+            boxShadow: '1px 2px 6px rgba(0, 0, 0, 0.185)',
           }}
         />
       </div>
@@ -64,23 +64,23 @@ export default function Profile({
   }
   return (
     <div
-      className={`${styles["extended-profile"]} ${styles["pf-overlay"]}`}
+      className={`${styles['extended-profile']} ${styles['pf-overlay']}`}
       style={style}
     >
-      <div className={styles["profile-img-n-cover"]}>
-        <div className={styles["pf-pic-container"]}>
+      <div className={styles['profile-img-n-cover']}>
+        <div className={styles['pf-pic-container']}>
           <Image
             src={profilePic}
             alt="user profile picture"
-            style={{ objectFit: "cover" }}
+            style={{ objectFit: 'cover' }}
             fill
           />
         </div>
-        <div className={styles["profile-cover"]}>
-          <div className={styles["cover-buttons"]}>
+        <div className={styles['profile-cover']}>
+          <div className={styles['cover-buttons']}>
             <Clickable
               payload={{
-                content: "Cta name",
+                content: 'Cta name',
                 iconConfig: {
                   type: IconType.PREDEFINED,
                   icon: PredefinedIcon.MESSAGE,
@@ -88,10 +88,10 @@ export default function Profile({
               }}
               config={{
                 clickableType: ClickableType.MURAL_CTA,
-                link: "https://www.google.com/",
+                link: 'https://www.google.com/',
               }}
             />
-            <div className={styles["right-buttons"]}>
+            <div className={styles['right-buttons']}>
               <Clickable
                 payload={{
                   iconConfig: {
@@ -106,14 +106,14 @@ export default function Profile({
           <Image
             src={coverPic}
             alt="profile cover"
-            className={styles["cover-image"]}
-            style={{ objectFit: "cover" }}
+            className={styles['cover-image']}
+            style={{ objectFit: 'cover' }}
             fill
           />
         </div>
       </div>
-      <div className={styles["profile-info"]}>
-        <AuthorMeta from="profile" username={muralName} />
+      <div className={styles['profile-info']}>
+        <AuthorMeta from="profile" muralName={muralName} hasBadge />
         <p>{bio}</p>
       </div>
     </div>

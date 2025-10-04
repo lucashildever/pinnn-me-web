@@ -1,4 +1,4 @@
-import { Clickable } from "@/lib/types/clickable";
+import { Clickable } from '@/lib/types/clickable';
 
 export interface CollectionTab {
   id: string;
@@ -7,4 +7,4 @@ export interface CollectionTab {
   displayElement: Clickable;
 }
 
-export type ActiveTabData = Omit<CollectionTab, "order" | "isMain">;
+export type ActiveTabData = Omit<CollectionTab, 'order' | 'isMain'>;

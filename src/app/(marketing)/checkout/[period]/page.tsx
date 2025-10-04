@@ -1,22 +1,22 @@
-"use client";
+'use client';
 
-import { useEffect, useState, useCallback } from "react";
-import { useParams } from "next/navigation";
-import { loadStripe } from "@stripe/stripe-js";
+import { useEffect, useState, useCallback } from 'react';
+import { useParams } from 'next/navigation';
+import { loadStripe } from '@stripe/stripe-js';
 import {
   EmbeddedCheckoutProvider,
   EmbeddedCheckout,
-} from "@stripe/react-stripe-js";
-import { apiClient } from "@/lib/api-client/apiClient";
-import styles from "./checkout.module.scss";
+} from '@stripe/react-stripe-js';
+import { apiClient } from '@/lib/api-client/apiClient';
+import styles from './checkout.module.scss';
 
 const stripePromise = loadStripe(
-  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!,
 );
 
 export enum PaymentPeriod {
-  MONTHLY = "monthly",
-  YEARLY = "yearly",
+  MONTHLY = 'monthly',
+  YEARLY = 'yearly',
 }
 
 interface CheckoutState {
@@ -42,7 +42,7 @@ export default function Checkout() {
       setCheckoutState({
         clientSecret: null,
         isLoading: false,
-        error: "Período de pagamento inválido",
+        error: 'Período de pagamento inválido',
       });
       return;
     }
@@ -54,7 +54,7 @@ export default function Checkout() {
         error: null,
       });
 
-      const result = await apiClient.stripe.fetchClientSecret("pro", period);
+      const result = await apiClient.stripe.fetchClientSecret('pro', period);
 
       if (result.success) {
         setCheckoutState({
@@ -73,7 +73,7 @@ export default function Checkout() {
       setCheckoutState({
         clientSecret: null,
         isLoading: false,
-        error: "Erro inesperado ao carregar checkout",
+        error: 'Erro inesperado ao carregar checkout',
       });
     }
   }, [period, isValidPeriod]);
@@ -85,7 +85,7 @@ export default function Checkout() {
   const options = {
     clientSecret: checkoutState.clientSecret,
     onComplete: () => {
-      window.location.href = "/";
+      window.location.href = '/';
     },
   };
 
@@ -132,8 +132,8 @@ export default function Checkout() {
 
   // Mostrar informações do período escolhido
   const periodInfo = {
-    [PaymentPeriod.MONTHLY]: { name: "Mensal", price: "R$ 29,90/mês" },
-    [PaymentPeriod.YEARLY]: { name: "Anual", price: "R$ 299,00/ano" },
+    [PaymentPeriod.MONTHLY]: { name: 'Mensal', price: 'R$ 29,90/mês' },
+    [PaymentPeriod.YEARLY]: { name: 'Anual', price: 'R$ 299,00/ano' },
   };
 
   return (

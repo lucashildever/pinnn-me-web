@@ -1,13 +1,13 @@
-import { useState } from "react";
-import Image from "next/image";
+import { useState } from 'react';
+import Image from 'next/image';
 
-import { IconConfig, IconType } from "@/lib/types/clickable";
+import { IconConfig, IconType } from '@/lib/types/clickable';
 
-import { emojiParser } from "./helpers/emojiParser";
+import { emojiParser } from './helpers/emojiParser';
 
-import styles from "./icon-renderer.module.scss";
+import styles from './icon-renderer.module.scss';
 
-import tempCustomImg from "/public/assets/temp/cp.png";
+import tempCustomImg from '/public/assets/temp/cp.png';
 
 interface ConfigureIconProps {
   config: IconConfig;
@@ -16,7 +16,7 @@ interface ConfigureIconProps {
 export default function IconRenderer({ config }: ConfigureIconProps) {
   switch (config.type) {
     case IconType.PREDEFINED:
-      const icon = `/assets/icons/predefined/${config.icon}-${"light"}.svg`;
+      const icon = `/assets/icons/predefined/${config.icon}-${'light'}.svg`;
       return (
         <span className={styles[`predefined-icon-${config.icon}`]}>
           <Image alt="tab icon" src={icon} fill draggable={false} />
@@ -24,7 +24,7 @@ export default function IconRenderer({ config }: ConfigureIconProps) {
       );
     case IconType.CUSTOM:
       return (
-        <span className={styles["custom-icon"]}>
+        <span className={styles['custom-icon']}>
           <Image alt="tab icon" src={tempCustomImg} fill draggable={false} />
         </span>
       );
@@ -48,14 +48,14 @@ function EmojiRenderer({ unicode }: { unicode: string }) {
   return (
     <>
       <span
-        className={styles["emoji-txt"]}
-        style={{ display: imageLoaded ? "none" : "inline" }}
+        className={styles['emoji-txt']}
+        style={{ display: imageLoaded ? 'none' : 'inline' }}
       >
         {unicode}
       </span>
       <span
-        className={styles["emoji-img"]}
-        style={{ display: imageLoaded ? "inline" : "none" }}
+        className={styles['emoji-img']}
+        style={{ display: imageLoaded ? 'inline' : 'none' }}
       >
         <Image
           src={src}

@@ -1,5 +1,5 @@
-@use "sass:math";
-@use "sass:map";
+@use 'sass:math';
+@use 'sass:map';
 
 // spacing scale
 $spacing-scale: (
@@ -82,20 +82,20 @@ $spacing-scale: (
 );
 
 // font scale
-$base-font-size: 16.8px;
+$base-font-size: 17.5px;
 $font-scale-ratio: 1.125; // major-second
 
 $font-size-scale: (
-  "xs": math.div(1, math.pow($font-scale-ratio, 2)),
-  "sm": math.div(1, $font-scale-ratio),
-  "base": 1,
-  "md": $font-scale-ratio,
-  "lg": math.pow($font-scale-ratio, 2),
-  "xl": math.pow($font-scale-ratio, 3),
-  "2xl": math.pow($font-scale-ratio, 4),
-  "3xl": math.pow($font-scale-ratio, 5),
-  "4xl": math.pow($font-scale-ratio, 6),
-  "5xl": math.pow($font-scale-ratio, 7),
+  'xs': math.div(1, math.pow($font-scale-ratio, 2)),
+  'sm': math.div(1, $font-scale-ratio),
+  'base': 1,
+  'md': $font-scale-ratio,
+  'lg': math.pow($font-scale-ratio, 2),
+  'xl': math.pow($font-scale-ratio, 3),
+  '2xl': math.pow($font-scale-ratio, 4),
+  '3xl': math.pow($font-scale-ratio, 5),
+  '4xl': math.pow($font-scale-ratio, 6),
+  '5xl': math.pow($font-scale-ratio, 7),
 );
 ///
 
@@ -106,8 +106,8 @@ $outer-corner: map.get($spacing-scale, 8) * 1px;
 // create S, M and L sizes for the corners
 
 $colors: (
-  "dark": #363636,
-  "light": white,
-  "soft-grey": #dfdfdf,
-  "orange": #e58f43,
+  'dark': #363636,
+  'light': white,
+  'soft-grey': #dfdfdf,
+  'orange': #e58f43,
 );

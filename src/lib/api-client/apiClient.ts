@@ -1,28 +1,28 @@
-import { AuthCredentials } from "./types/auth";
+import { AuthCredentials } from './types/auth';
 
-import { fetcher } from "./helpers/request";
+import { fetcher } from './helpers/request';
 
-import { CreateCollectionRequest, CreatePinRequest } from "./types/request";
-import { CreateMuralRequest, MuralRequest } from "./types/request";
-import { FetcherResponse, FetchError } from "./types/response";
+import { CreateCollectionRequest, CreatePinRequest } from './types/request';
+import { CreateMuralRequest, MuralRequest } from './types/request';
+import { FetcherResponse, FetchError } from './types/response';
 
 enum PaymentPeriod {
-  MONTHLY = "monthly",
-  YEARLY = "yearly",
+  MONTHLY = 'monthly',
+  YEARLY = 'yearly',
 }
 
 export const apiClient = {
   auth: {
     login: async (credentials: AuthCredentials): Promise<FetcherResponse> => {
-      return await fetcher("/auth/login", {
-        method: "POST",
+      return await fetcher('/auth/login', {
+        method: 'POST',
         body: credentials,
       });
     },
 
     signup: async (credentials: AuthCredentials): Promise<FetcherResponse> => {
-      return await fetcher("/auth/register", {
-        method: "POST",
+      return await fetcher('/auth/register', {
+        method: 'POST',
         body: credentials,
       });
     },
@@ -30,7 +30,7 @@ export const apiClient = {
   collection: {
     create: async (collection: CreateCollectionRequest) => {
       return await fetcher(`collections/create/${collection.muralId}`, {
-        method: "POST",
+        method: 'POST',
         body: {
           isMain: collection.isMain,
           displayElement: collection.displayElement,
@@ -51,18 +51,18 @@ export const apiClient = {
       });
     },
     create: async (mural: CreateMuralRequest): Promise<FetcherResponse> => {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem('token');
 
       if (!token) {
         return {
           success: false,
           error: FetchError.UNAUTHORIZED,
-          message: "Authentication required",
+          message: 'Authentication required',
         };
       }
 
-      return await fetcher("/murals/create", {
-        method: "POST",
+      return await fetcher('/murals/create', {
+        method: 'POST',
         body: mural,
         token: token,
       });
@@ -71,19 +71,19 @@ export const apiClient = {
   pins: {
     create: async (
       collectionId: string,
-      pin: CreatePinRequest
+      pin: CreatePinRequest,
     ): Promise<FetcherResponse> => {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem('token');
       if (!token) {
         return {
           success: false,
           error: FetchError.UNAUTHORIZED,
-          message: "Authentication required",
+          message: 'Authentication required',
         };
       }
 
       return await fetcher(`/pins/create/${collectionId}`, {
-        method: "POST",
+        method: 'POST',
         body: pin,
         token: token,
       });
@@ -91,10 +91,10 @@ export const apiClient = {
     getPaginated: async (
       collectionId: string,
       page: number = 1,
-      limit: number = 5
+      limit: number = 5,
     ): Promise<FetcherResponse> => {
       return await fetcher(`/pins/paginated/${collectionId}`, {
-        method: "GET",
+        method: 'GET',
         queryParams: {
           page: page.toString(),
           limit: limit.toString(),
@@ -104,8 +104,8 @@ export const apiClient = {
   },
   stripe: {
     fetchClientSecret: async (
-      planType: "pro",
-      period: PaymentPeriod
+      planType: 'pro',
+      period: PaymentPeriod,
     ): Promise<
       FetcherResponse<{
         sessionId: string;
@@ -113,13 +113,13 @@ export const apiClient = {
         url: string;
       }>
     > => {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem('token');
 
       if (!token) {
         return {
           success: false,
           error: FetchError.UNAUTHORIZED,
-          message: "Authentication required",
+          message: 'Authentication required',
         };
       }
 
@@ -127,8 +127,8 @@ export const apiClient = {
         sessionId: string;
         clientSecret: string;
         url: string;
-      }>("/payments/create-checkout-session", {
-        method: "POST",
+      }>('/payments/create-checkout-session', {
+        method: 'POST',
         body: {
           planType: planType,
           period: period,
@@ -138,7 +138,7 @@ export const apiClient = {
     },
 
     getSessionStatus: async (
-      sessionId: string
+      sessionId: string,
     ): Promise<
       FetcherResponse<{
         status: string;
@@ -148,18 +148,18 @@ export const apiClient = {
         currency: string;
       }>
     > => {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem('token');
 
       if (!token) {
         return {
           success: false,
           error: FetchError.UNAUTHORIZED,
-          message: "Authentication required",
+          message: 'Authentication required',
         };
       }
 
       return await fetcher(`/payments/session-status?session_id=${sessionId}`, {
-        method: "GET",
+        method: 'GET',
         token: token,
       });
     },

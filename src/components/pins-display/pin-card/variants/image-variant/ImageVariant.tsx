@@ -1,8 +1,8 @@
-import Image from "next/image";
+import Image from 'next/image';
 
-import pinTempImage from "/public/assets/temp/pin-image-dgg.png";
+import pinTempImage from '/public/assets/temp/pin-image-dgg.png';
 
-import styles from "./image-variant.module.scss";
+import styles from './image-variant.module.scss';
 
 interface ImageVariantProps {
   caption: string;
@@ -11,13 +11,13 @@ interface ImageVariantProps {
 
 export default function ImageVariant({ caption }: ImageVariantProps) {
   return (
-    <div className={styles["image-card"]}>
+    <div className={styles['image-card']}>
       <p>{caption}</p>
-      <div className={styles["image-variant-container"]}>
+      <div className={styles['image-variant-container']}>
         <Image
           src={pinTempImage}
           alt="card image"
-          className={styles["image"]}
+          className={styles['image']}
           fill
         />
       </div>

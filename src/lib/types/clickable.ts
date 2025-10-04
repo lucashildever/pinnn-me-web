@@ -1,4 +1,4 @@
-import { PredefinedIcon } from "./predefinedIcon";
+import { PredefinedIcon } from './predefinedIcon';
 
 export interface Clickable {
   content?: string;
@@ -6,11 +6,11 @@ export interface Clickable {
 }
 
 export enum ClickableType {
-  COLLECTION_TAB = "collection-tab",
-  COLLECTION_TAB_OVERLAY = "collectionTab-overlay",
-  MURAL_CTA = "mural-cta",
-  MURAL_OPTIONS = "mural-options",
-  MURAL_THEME = "mural-theme",
+  COLLECTION_TAB = 'collection-tab',
+  COLLECTION_TAB_OVERLAY = 'collectionTab-overlay',
+  MURAL_CTA = 'mural-cta',
+  MURAL_OPTIONS = 'mural-options',
+  MURAL_THEME = 'mural-theme',
 }
 
 export type IconConfig =
@@ -20,8 +20,8 @@ export type IconConfig =
   | { type: IconType.EMOJI; unicode: string };
 
 export enum IconType {
-  NONE = "none",
-  PREDEFINED = "predefined",
-  CUSTOM = "custom",
-  EMOJI = "emoji",
+  NONE = 'none',
+  PREDEFINED = 'predefined',
+  CUSTOM = 'custom',
+  EMOJI = 'emoji',
 }

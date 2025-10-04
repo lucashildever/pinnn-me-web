@@ -1,37 +1,37 @@
-"use client";
+'use client';
 
-import { useState } from "react";
+import { useState } from 'react';
 
-import { CreateCollectionRequest } from "@/lib/api-client/types/request";
+import { CreateCollectionRequest } from '@/lib/api-client/types/request';
 
-import { selectIsAuthenticated } from "@/lib/state/slices/authSlice";
-import { useAppSelector } from "@/lib/state/hooks";
-import { selectMuralId } from "@/lib/state/slices/muralSlice";
+import { selectIsAuthenticated } from '@/lib/state/slices/authSlice';
+import { useAppSelector } from '@/lib/state/hooks';
+import { selectMuralId } from '@/lib/state/slices/muralSlice';
 
-import { PredefinedIcon } from "@/lib/types/predefinedIcon";
+import { PredefinedIcon } from '@/lib/types/predefinedIcon';
 
-import styles from "./create-collection.module.scss";
+import styles from './create-collection.module.scss';
 
 export default function CreateCollection() {
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const muralId = useAppSelector(selectMuralId);
 
   const [formData, setFormData] = useState<CreateCollectionRequest>({
-    id: "",
+    id: '',
     muralId: muralId,
     isMain: false,
     displayElement: {
-      content: "",
-      iconConfig: { type: "none" },
+      content: '',
+      iconConfig: { type: 'none' },
     },
   });
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value, type } = e.target;
 
-    if (type === "checkbox") {
+    if (type === 'checkbox') {
       const checked = (e.target as HTMLInputElement).checked;
       setFormData((prev) => ({
         ...prev,
@@ -49,12 +49,12 @@ export default function CreateCollection() {
     e.preventDefault();
 
     if (isAuthenticated) {
-      console.log("autenticado");
+      console.log('autenticado');
       console.log(formData);
 
       // fazer a requisição
     } else {
-      console.log("não autenticado");
+      console.log('não autenticado');
       // redirecionar para /login
     }
   };
@@ -98,7 +98,7 @@ export default function CreateCollection() {
       </div>
 
       {/* predefined icon */}
-      {formData.displayElement.iconConfig.type === "predefined" && (
+      {formData.displayElement.iconConfig.type === 'predefined' && (
         <div className={styles.field}>
           <label htmlFor="icon" className={styles.label}>
             Predefined Icon
@@ -106,12 +106,12 @@ export default function CreateCollection() {
           <select
             id="icon"
             name="icon"
-            value={(formData.displayElement.iconConfig as any).icon || ""}
+            value={(formData.displayElement.iconConfig as any).icon || ''}
             onChange={(e) =>
               setFormData((prev) => ({
                 ...prev,
                 iconConfig: {
-                  type: "predefined",
+                  type: 'predefined',
                   icon: e.target.value as PredefinedIcon,
                 },
               }))

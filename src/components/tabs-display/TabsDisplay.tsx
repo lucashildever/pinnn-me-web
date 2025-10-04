@@ -1,19 +1,19 @@
-"use client";
+'use client';
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from 'react';
 
-import Clickable from "@/components/shared/clickable/Clickable";
+import Clickable from '@/components/shared/clickable/Clickable';
 
 import {
   OverlayTabDisplayConfig,
   TabClick,
-} from "@/components/shared/clickable/types/clickableConfig";
-import { ActiveTabData, CollectionTab } from "./types/collectionTab";
-import { ClickableType } from "@/lib/types/clickable";
+} from '@/components/shared/clickable/types/clickableConfig';
+import { ActiveTabData, CollectionTab } from './types/collectionTab';
+import { ClickableType } from '@/lib/types/clickable';
 
-import { useTabsDragger } from "./utils/useTabsDragger";
+import { useTabsDragger } from './utils/useTabsDragger';
 
-import styles from "./tabs-display.module.scss";
+import styles from './tabs-display.module.scss';
 
 interface TabsDisplayProps {
   handleTabChange: TabClick;
@@ -34,7 +34,7 @@ export default function TabsDisplay({
   const [overlayTabDisplayConfig, setOverlayTabDisplayConfig] =
     useState<OverlayTabDisplayConfig>({
       visible: false,
-      position: "left",
+      position: 'left',
     });
 
   const activeTabRef = useRef<HTMLDivElement>(null);
@@ -50,8 +50,8 @@ export default function TabsDisplay({
         };
 
         console.error(
-          "IntersectionObserver could not be configured. Missing elements:",
-          missingElements
+          'IntersectionObserver could not be configured. Missing elements:',
+          missingElements,
         );
 
         return;
@@ -69,12 +69,12 @@ export default function TabsDisplay({
               if (targetRect.left < containerRect.left) {
                 setOverlayTabDisplayConfig({
                   visible: true,
-                  position: "left",
+                  position: 'left',
                 });
               } else if (targetRect.right > containerRect.right) {
                 setOverlayTabDisplayConfig({
                   visible: true,
-                  position: "right",
+                  position: 'right',
                 });
               }
             }
@@ -91,8 +91,8 @@ export default function TabsDisplay({
         {
           root: containerRef.current,
           threshold: [0, 1],
-          rootMargin: "0px",
-        }
+          rootMargin: '0px',
+        },
       );
 
       observer.observe(activeTabRef.current);
@@ -121,7 +121,7 @@ export default function TabsDisplay({
 
   return (
     <div
-      className={`${styles["tabs-display"]}`}
+      className={`${styles['tabs-display']}`}
       {...dragEvents}
       ref={ref}
       style={style}
@@ -133,7 +133,7 @@ export default function TabsDisplay({
           displayConfig: overlayTabDisplayConfig,
         }}
       /> */}
-      <div className={styles["tabs-container"]} ref={containerRef}>
+      <div className={styles['tabs-container']} ref={containerRef}>
         {collectionTabs.map((col, index) => {
           const isActive = activeTabData.id === col.id;
           return (

@@ -14,10 +14,10 @@ function emojiToUnicode(emoji: string): string {
     .filter((cp) => cp !== 0xfe0f)
     .map((cp) => cp!.toString(16).toUpperCase());
 
-  return codePoints.length === 1 ? codePoints[0] : codePoints.join("-");
+  return codePoints.length === 1 ? codePoints[0] : codePoints.join('-');
 }
 
 function unicodeToEmoji(unicode: string): string {
-  const codePoints = unicode.split("-").map((cp) => parseInt(cp, 16));
+  const codePoints = unicode.split('-').map((cp) => parseInt(cp, 16));
   return String.fromCodePoint(...codePoints);
 }

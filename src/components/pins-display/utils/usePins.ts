@@ -1,22 +1,22 @@
-import React from "react";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { apiClient } from "@/lib/api-client/apiClient";
-import { Pin } from "../pin/types/pin";
+import React from 'react';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { apiClient } from '@/lib/api-client/apiClient';
+import { Pin } from '../pin/types/pin';
 
 export const usePins = (collectionId: string, initialPins?: Pin[] | null) => {
   const query = useInfiniteQuery({
-    queryKey: ["pins", collectionId, "infinite"],
+    queryKey: ['pins', collectionId, 'infinite'],
     queryFn: async ({ pageParam = 1 }) => {
       const result = await apiClient.pins.getPaginated(
         collectionId,
         pageParam,
-        5
+        5,
       );
       if (!result.success) {
-        throw new Error(result.message || "Failed to fetch pins");
+        throw new Error(result.message || 'Failed to fetch pins');
       }
       if (!result.data) {
-        throw new Error("No data found in response");
+        throw new Error('No data found in response');
       }
       return result;
     },

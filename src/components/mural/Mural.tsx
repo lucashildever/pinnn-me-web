@@ -1,23 +1,23 @@
-"use client";
+'use client';
 
-import { useEffect, useRef, useState } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useRef, useState } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
-import TabsDisplay from "../tabs-display/TabsDisplay";
-import PinsDisplay from "../pins-display/PinsDisplay";
-import Profile from "./profile/Profile";
+import TabsDisplay from '../tabs-display/TabsDisplay';
+import PinsDisplay from '../pins-display/PinsDisplay';
+import Profile from './profile/Profile';
 
 import {
   ActiveTabData,
   CollectionTab,
-} from "../tabs-display/types/collectionTab";
-import { Pin } from "../pins-display/pin/types/pin";
-import { IconType } from "@/lib/types/clickable";
+} from '../tabs-display/types/collectionTab';
+import { Pin } from '../pins-display/pin/types/pin';
+import { IconType } from '@/lib/types/clickable';
 
-import styles from "./mural.module.scss";
-import ProfileMeasurer from "./profile-measurer/ProfileMeasurer";
-import { TabsProps } from "./types/tabs";
-import ProfileOverlay from "./profile/profile-overlay/ProfileOverlay";
+import styles from './mural.module.scss';
+import ProfileMeasurer from './profile-measurer/ProfileMeasurer';
+import { TabsProps } from './types/tabs';
+import ProfileOverlay from './profile/profile-overlay/ProfileOverlay';
 
 interface MuralContainerProps {
   displayName: string;
@@ -40,9 +40,9 @@ export default function MuralContainer({
 
   //// TABS SELECTION
   const [activeTabData, setActiveTabData] = useState<ActiveTabData>({
-    id: collections[0]?.id || "",
+    id: collections[0]?.id || '',
     displayElement: {
-      content: "",
+      content: '',
       iconConfig: {
         type: IconType.NONE,
       },
@@ -97,7 +97,7 @@ export default function MuralContainer({
     const measure = () => {
       // getBoundingClientRect/offsetHeight; arredondamos para evitar floats estranhos
       const h = Math.round(
-        el.getBoundingClientRect().height || el.offsetHeight || 0
+        el.getBoundingClientRect().height || el.offsetHeight || 0,
       );
       if (h && h !== minimalProfileHeight) {
         setMinimalProfileHeight(h);
@@ -108,7 +108,7 @@ export default function MuralContainer({
     requestAnimationFrame(measure);
 
     // Atualiza automaticamente se o tamanho do Profile mudar (ex.: fonts, conteúdo dinâmico)
-    if (typeof ResizeObserver !== "undefined") {
+    if (typeof ResizeObserver !== 'undefined') {
       const ro = new ResizeObserver(() => requestAnimationFrame(measure));
       ro.observe(el);
       return () => ro.disconnect();
@@ -116,8 +116,8 @@ export default function MuralContainer({
 
     // Fallback: recalcula no resize da janela
     const onResize = () => requestAnimationFrame(measure);
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -126,17 +126,17 @@ export default function MuralContainer({
     if (!el) return;
 
     // Fallback: se não há IntersectionObserver (IE antigo), volta ao scroll listener
-    if (typeof IntersectionObserver === "undefined") {
+    if (typeof IntersectionObserver === 'undefined') {
       const onScroll = () => {
         const rect = el.getBoundingClientRect();
         setShowProfileOverlay(rect.top <= minimalProfileHeight);
       };
 
-      window.addEventListener("scroll", onScroll, { passive: true });
+      window.addEventListener('scroll', onScroll, { passive: true });
 
       onScroll();
 
-      return () => window.removeEventListener("scroll", onScroll);
+      return () => window.removeEventListener('scroll', onScroll);
     }
 
     const observer = new IntersectionObserver(
@@ -147,7 +147,7 @@ export default function MuralContainer({
         root: null,
         rootMargin: `-${minimalProfileHeight * 2.5}px 0px 0px 0px`,
         threshold: 0,
-      }
+      },
     );
 
     observer.observe(el);
@@ -161,7 +161,7 @@ export default function MuralContainer({
   };
 
   return (
-    <div className={styles["mural-container"]}>
+    <div className={styles['mural-container']}>
       <Profile muralName={displayName} bio={description} />
 
       <ProfileMeasurer ref={minimalProfileRef}>
@@ -181,7 +181,7 @@ export default function MuralContainer({
       <PinsDisplay
         mainCollectionPins={mainCollectinoPins}
         currentCollectionId={activeTabData.id}
-        badgeName={displayName}
+        muralName={displayName}
       />
     </div>
   );

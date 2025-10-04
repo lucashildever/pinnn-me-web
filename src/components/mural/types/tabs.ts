@@ -1,7 +1,7 @@
 import {
   ActiveTabData,
   CollectionTab,
-} from "@/components/tabs-display/types/collectionTab";
+} from '@/components/tabs-display/types/collectionTab';
 
 export interface TabsProps {
   collectionTabs: CollectionTab[];

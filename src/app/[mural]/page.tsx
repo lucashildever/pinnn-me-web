@@ -1,12 +1,12 @@
-import React from "react";
-import { Metadata } from "next";
+import React from 'react';
+import { Metadata } from 'next';
 
-import MuralContainer from "@/components/mural/Mural";
+import MuralContainer from '@/components/mural/Mural';
 //import Collections from "@/components/collections/Collections";
-import Profile from "@/components/mural/profile/Profile";
+import Profile from '@/components/mural/profile/Profile';
 
-import { MuralRequest } from "@/lib/api-client/types/request";
-import { apiClient } from "@/lib/api-client/apiClient";
+import { MuralRequest } from '@/lib/api-client/types/request';
+import { apiClient } from '@/lib/api-client/apiClient';
 
 interface Params {
   params: {
@@ -16,7 +16,7 @@ interface Params {
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { mural } = await params;
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://localhost:3000"; // update this for production
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://localhost:3000'; // update this for production
   const url = `${baseUrl}/${mural}`;
 
   return {
@@ -52,7 +52,7 @@ export default async function Mural({ params, searchParams }: MuralProps) {
   const result = await apiClient.mural.get(muralRequest);
 
   if (!result.success) {
-    if (result.error === "NOT_FOUND") {
+    if (result.error === 'NOT_FOUND') {
       return <h1>{result.message}</h1>;
     }
 

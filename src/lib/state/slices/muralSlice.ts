@@ -1,16 +1,16 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "../store";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RootState } from '../store';
 
 export interface muralState {
   id: string;
 }
 
 const initialState: muralState = {
-  id: "",
+  id: '',
 };
 
 const muralSlice = createSlice({
-  name: "mural",
+  name: 'mural',
   initialState,
   reducers: {
     setMuralId: (state, action: PayloadAction<string>) => {

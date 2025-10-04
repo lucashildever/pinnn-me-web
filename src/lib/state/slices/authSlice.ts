@@ -1,16 +1,16 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "../store";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RootState } from '../store';
 
 export interface AuthState {
   token: string;
 }
 
 const initialState: AuthState = {
-  token: "",
+  token: '',
 };
 
 export const authSlice = createSlice({
-  name: "auth",
+  name: 'auth',
   initialState,
   reducers: {
     setToken: (state, action: PayloadAction<string>) => {
@@ -23,6 +23,6 @@ export const { setToken } = authSlice.actions;
 
 export const selectToken = (state: RootState): string => state.auth.token;
 export const selectIsAuthenticated = (state: RootState): boolean =>
-  state.auth.token !== "";
+  state.auth.token !== '';
 
 export default authSlice.reducer;

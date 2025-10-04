@@ -3,7 +3,7 @@
   width: 100%;
 
   p.pin-description {
-    @include spacing(padding, 3, 2, 4, 4);
+    @include spacing(padding, 5, 2, 6, 4);
     @include pin-line-defs;
   }
 }

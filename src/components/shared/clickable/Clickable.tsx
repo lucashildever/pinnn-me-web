@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import IconRenderer from "./icon-renderer/IconRenderer";
+import IconRenderer from './icon-renderer/IconRenderer';
 
-import { ClickableConfig, CollectionTabConfig } from "./types/clickableConfig";
-import { ClickableType, Clickable as IClickable } from "@/lib/types/clickable";
+import { ClickableConfig, CollectionTabConfig } from './types/clickableConfig';
+import { ClickableType, Clickable as IClickable } from '@/lib/types/clickable';
 
-import styles from "./clickable.module.scss";
+import styles from './clickable.module.scss';
 
 interface ClickableProps {
   payload: IClickable;
@@ -20,8 +20,8 @@ export default function Clickable({ payload, config, style }: ClickableProps) {
         <div
           style={style}
           ref={config.ref}
-          className={`${styles["collection-tab-clickable"]} ${
-            config.active ? styles["active"] : ""
+          className={`${styles['collection-tab-clickable']} ${
+            config.active ? styles['active'] : ''
           }`}
           onClick={() =>
             config.tabClick({
@@ -42,8 +42,8 @@ export default function Clickable({ payload, config, style }: ClickableProps) {
         <div
           style={style}
           className={`
-            ${styles["collection-tab-overlay"]} 
-            ${styles[config.displayConfig.visible ? "visible" : ""]}
+            ${styles['collection-tab-overlay']} 
+            ${styles[config.displayConfig.visible ? 'visible' : '']}
             ${styles[config.displayConfig.position]}
           `}
         >
@@ -55,7 +55,7 @@ export default function Clickable({ payload, config, style }: ClickableProps) {
       return (
         <a
           style={style}
-          className={styles["profile-cta"]}
+          className={styles['profile-cta']}
           href={config.link}
           target="_blank"
           rel="noopener noreferrer"
@@ -74,8 +74,8 @@ export default function Clickable({ payload, config, style }: ClickableProps) {
         </div>
       );
     case ClickableType.MURAL_THEME:
-      console.log("payload", payload);
-      console.log("config", config);
+      console.log('payload', payload);
+      console.log('config', config);
 
       return (
         <div
@@ -90,7 +90,7 @@ export default function Clickable({ payload, config, style }: ClickableProps) {
   }
 }
 
-interface CollectionTabClickableProps extends Omit<ClickableProps, "config"> {
+interface CollectionTabClickableProps extends Omit<ClickableProps, 'config'> {
   config: CollectionTabConfig;
 }
 
@@ -101,8 +101,8 @@ function CollectionTabClickable({
   return (
     <div
       ref={config.ref}
-      className={`${styles["collection-tab-clickable"]} ${
-        config.active ? styles["active"] : ""
+      className={`${styles['collection-tab-clickable']} ${
+        config.active ? styles['active'] : ''
       }`}
       onClick={() =>
         config.tabClick({

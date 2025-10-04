@@ -1,4 +1,4 @@
-import { Card } from "../../pin-card/types/card";
+import { Card } from '../../pin-card/types/card';
 
 export interface Pin {
   id: string;

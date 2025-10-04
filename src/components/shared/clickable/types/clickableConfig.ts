@@ -1,5 +1,5 @@
-import { ActiveTabData } from "@/components/tabs-display/types/collectionTab";
-import { ClickableType } from "@/lib/types/clickable";
+import { ActiveTabData } from '@/components/tabs-display/types/collectionTab';
+import { ClickableType } from '@/lib/types/clickable';
 
 export type TabClick = (tabData: ActiveTabData) => void;
 
@@ -21,7 +21,7 @@ export interface CollectionTabConfig {
 
 export interface OverlayTabDisplayConfig {
   visible: boolean;
-  position: "left" | "right";
+  position: 'left' | 'right';
 }
 
 export interface CollectionTabOverlayConfig {

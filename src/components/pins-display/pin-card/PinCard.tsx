@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import ImageVariant from "./variants/image-variant/ImageVariant";
-import LinkVariant from "./variants/link-variant/LinkVariant";
+import ImageVariant from './variants/image-variant/ImageVariant';
+import LinkVariant from './variants/link-variant/LinkVariant';
 
-import styles from "./pin-card.module.scss";
-import { CardVariant } from "./types/cardVariant";
-import { CardConfig } from "./types/card";
+import styles from './pin-card.module.scss';
+import { CardVariant } from './types/cardVariant';
+import { CardConfig } from './types/card';
 
 interface CardProps {
   caption: string;
@@ -22,18 +22,18 @@ export default function PinCard({
     case CardVariant.IMAGE:
       return (
         <>
-          {notFirstCard && <span className={styles["pin-line"]} />}
+          {notFirstCard && <span className={styles['pin-line']} />}
           <ImageVariant caption={caption} />
         </>
       );
     case CardVariant.LINK:
       return (
         <>
-          {notFirstCard && <span className={styles["pin-line"]} />}
+          {notFirstCard && <span className={styles['pin-line']} />}
           <LinkVariant
             caption={caption}
             // need refactoring
-            cardIconConfig={{ type: "custom", src: "string" }}
+            cardIconConfig={{ type: 'custom', src: 'string' }}
           />
         </>
       );

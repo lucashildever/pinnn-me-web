@@ -1,31 +1,31 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
+import { useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 
-import { useAppDispatch } from "@/lib/state/hooks";
-import { setToken } from "@/lib/state/slices/authSlice";
+import { useAppDispatch } from '@/lib/state/hooks';
+import { setToken } from '@/lib/state/slices/authSlice';
 
-import { AuthCredentials } from "@/lib/api-client/types/auth";
-import { FetcherResponse } from "@/lib/api-client/types/response";
-import { apiClient } from "@/lib/api-client/apiClient";
+import { AuthCredentials } from '@/lib/api-client/types/auth';
+import { FetcherResponse } from '@/lib/api-client/types/response';
+import { apiClient } from '@/lib/api-client/apiClient';
 
-import Link from "next/link";
-import Image from "next/image";
+import Link from 'next/link';
+import Image from 'next/image';
 
-import styles from "./auth-form.module.scss";
+import styles from './auth-form.module.scss';
 
-import logo from "/public/assets/logo.svg";
-import arrow from "/public/assets/icons/light-arrow.svg";
+import logo from '/public/assets/logo.svg';
+import arrow from '/public/assets/icons/light-arrow.svg';
 
 interface AuthFormProps {
-  authType: "login" | "signup";
+  authType: 'login' | 'signup';
 }
 
 export default function AuthForm({ authType }: AuthFormProps) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const router = useRouter();
 
@@ -35,9 +35,9 @@ export default function AuthForm({ authType }: AuthFormProps) {
     mutationFn: apiClient.auth.login,
     onSuccess: (result) => {
       if (result.success) {
-        localStorage.setItem("token", result.data.access_token);
+        localStorage.setItem('token', result.data.access_token);
         dispatch(setToken(result.data.access_token));
-        router.push("/dashboard");
+        router.push('/dashboard');
       } else {
         // Tratar erro caso necessário
         alert(`Failed to sign up: ${result.message}`);
@@ -54,9 +54,9 @@ export default function AuthForm({ authType }: AuthFormProps) {
     mutationFn: apiClient.auth.signup,
     onSuccess: (result) => {
       if (result.success) {
-        localStorage.setItem("token", result.data.access_token);
+        localStorage.setItem('token', result.data.access_token);
         dispatch(setToken(result.data.access_token));
-        router.push("/dashboard");
+        router.push('/dashboard');
       } else {
         // Tratar erro caso necessário
         alert(`Failed to sign up: ${result.message}`);
@@ -68,7 +68,7 @@ export default function AuthForm({ authType }: AuthFormProps) {
     },
   });
 
-  const mutation = authType === "login" ? loginMutation : signupMutation;
+  const mutation = authType === 'login' ? loginMutation : signupMutation;
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -76,11 +76,11 @@ export default function AuthForm({ authType }: AuthFormProps) {
   };
 
   return (
-    <div className={styles["form-container"]}>
-      <div className={styles["form-elements"]}>
-        <Image className={styles["logo"]} src={logo} alt="logo" />
-        <p className={styles["form-heading-txt"]}>
-          {authType === "login" ? "Access" : "Create"} your Mural
+    <div className={styles['form-container']}>
+      <div className={styles['form-elements']}>
+        <Image className={styles['logo']} src={logo} alt="logo" />
+        <p className={styles['form-heading-txt']}>
+          {authType === 'login' ? 'Access' : 'Create'} your Mural
         </p>
         <form onSubmit={handleSubmit}>
           <input
@@ -98,16 +98,16 @@ export default function AuthForm({ authType }: AuthFormProps) {
             required
           />
           <button type="submit" disabled={mutation.isPending}>
-            {authType === "login" ? "Login" : "Sign Up"}
+            {authType === 'login' ? 'Login' : 'Sign Up'}
             <Image src={arrow} alt="arrow icon" className="btn-arrow-icon" />
           </button>
         </form>
-        <p className={styles["form-footer-txt"]}>
-          {authType === "login" ? (
+        <p className={styles['form-footer-txt']}>
+          {authType === 'login' ? (
             <>
               Don't have an account? <br />
               <Link href="/sign-up" prefetch>
-                {" "}
+                {' '}
                 Sign up!
               </Link>
             </>
@@ -115,7 +115,7 @@ export default function AuthForm({ authType }: AuthFormProps) {
             <>
               Already have an account? <br />
               <Link href="/login" prefetch>
-                {" "}
+                {' '}
                 Login!
               </Link>
             </>
