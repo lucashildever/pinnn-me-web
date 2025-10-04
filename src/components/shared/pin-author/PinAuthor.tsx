@@ -1,20 +1,20 @@
-import AuthorMeta from "../author-meta/AuthorMeta";
-import Image from "next/image";
+import AuthorMeta from '../author-meta/AuthorMeta';
+import Image from 'next/image';
 
-import styles from "./pin-author.module.scss";
-import userPic from "/public/assets/temp/pf.png";
+import styles from './pin-author.module.scss';
+import muralPfPic from '/public/assets/temp/pf.png';
 
-export default function PinAuthor({ username }: { username: string }) {
+export default function PinAuthor({ muralName }: { muralName: string }) {
   return (
-    <div className={styles["user-badge"]}> // mudar classname
-      <div className={styles["user-img"]}>
+    <div className={styles['pin-author']}>
+      <div className={styles['mural-img']}>
         <Image
-          src={userPic}
-          alt="User profile picture"
-          style={{ objectFit: "cover", height: "100%", width: "100%" }}
+          src={muralPfPic}
+          alt="Mural profile picture"
+          style={{ objectFit: 'cover', height: '100%', width: '100%' }}
         />
       </div>
-      <AuthorMeta from='pin' username={username} isBadge />
+      <AuthorMeta from="pin" muralName={muralName} hasBadge />
     </div>
   );
 }

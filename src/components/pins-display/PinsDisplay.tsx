@@ -1,21 +1,21 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from 'react';
 
-import Divider from "@/components/shared/divider/divider";
-import Pin from "@/components/pins-display/pin/Pin";
+import Divider from '@/components/shared/divider/divider';
+import Pin from '@/components/pins-display/pin/Pin';
 
-import { Pin as IPin } from "./pin/types/pin";
-import { usePins } from "./utils/usePins";
+import { Pin as IPin } from './pin/types/pin';
+import { usePins } from './utils/usePins';
 
 interface PinsDisplayProps {
   currentCollectionId: string;
   mainCollectionPins: IPin[] | undefined;
-  badgeName: string;
+  muralName: string;
 }
 
 export default function PinsDisplay({
   currentCollectionId,
   mainCollectionPins,
-  badgeName,
+  muralName,
 }: PinsDisplayProps) {
   const observerRef = useRef<HTMLDivElement>(null);
 
@@ -39,14 +39,14 @@ export default function PinsDisplay({
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
-          console.log("fetch next page");
+          console.log('fetch next page');
           fetchNextPage();
         }
       },
       {
         threshold: 0.1,
-        rootMargin: "100px",
-      }
+        rootMargin: '100px',
+      },
     );
 
     observer.observe(observerRef.current);
@@ -71,7 +71,7 @@ export default function PinsDisplay({
       {pins.map((pin: IPin, index: number) => (
         <React.Fragment key={`${pin.id}-${index}`}>
           <Pin
-            username={badgeName}
+            muralName={muralName}
             description={pin.description}
             cards={pin.cards}
           />
@@ -83,13 +83,13 @@ export default function PinsDisplay({
         <div
           ref={observerRef}
           style={{
-            height: "20px",
-            margin: "16px 0",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            fontSize: "14px",
-            color: "#666",
+            height: '20px',
+            margin: '16px 0',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            fontSize: '14px',
+            color: '#666',
           }}
         >
           {isFetchingNextPage && (
@@ -102,12 +102,12 @@ export default function PinsDisplay({
       ) : (
         <div
           style={{
-            padding: "20px",
-            margin: "16px 0",
-            textAlign: "center",
-            fontSize: "14px",
-            color: "#888",
-            borderTop: "1px solid #eee",
+            padding: '20px',
+            margin: '16px 0',
+            textAlign: 'center',
+            fontSize: '14px',
+            color: '#888',
+            borderTop: '1px solid #eee',
           }}
         >
           🎉 Você chegou ao final! Não há mais pins para mostrar.

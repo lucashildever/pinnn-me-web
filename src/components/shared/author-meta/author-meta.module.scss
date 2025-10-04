@@ -1,25 +1,27 @@
-// .bio,
-// .badge {
-//   @include flex(flex, center, center);
-//   gap: #{get-spacing(1)}px;
-// }
+@mixin defs {
+  @include flex();
 
-// .bio {
-//   h1 {
-//     font-weight: bold;
-//   }
+  .author-name {
+    @include spacing(margin-right, 1);
+    font-weight: bold;
+  }
 
-//   .icon {
-//     @include size(6, 6);
-//   }
-// }
+  .badge-icon {
+    @include size(6, 6);
+  }
+}
 
-// .badge {
-//   span {
-//     font-weight: 600;
-//   }
+.author-meta-pin {
+  @include defs();
+  @include font-size('sm');
+}
 
-//   .icon {
-//     @include size(5, 5);
-//   }
-// }
+.author-meta-profile {
+  @include defs();
+  @include font-size('md');
+}
+
+.author-meta-minimal-profile {
+  @include defs();
+  @include font-size('sm');
+}
