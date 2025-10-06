@@ -3,9 +3,11 @@
 import ImageVariant from './variants/image-variant/ImageVariant';
 import LinkVariant from './variants/link-variant/LinkVariant';
 
-import styles from './pin-card.module.scss';
 import { CardVariant } from './types/cardVariant';
 import { CardConfig } from './types/card';
+import { IconType } from '@/lib/types/clickable';
+
+import styles from './pin-card.module.scss';
 
 interface CardProps {
   caption: string;
@@ -32,8 +34,8 @@ export default function PinCard({
           {notFirstCard && <span className={styles['pin-line']} />}
           <LinkVariant
             caption={caption}
-            // need refactoring
-            cardIconConfig={{ type: 'custom', src: 'string' }}
+            meta="www.google.com" // precisa vir do backend
+            iconConfig={{ type: IconType.CUSTOM, url: 'string' }} // precisa vir do backend
           />
         </>
       );

@@ -1,6 +1,6 @@
 'use client';
 
-import IconRenderer from './icon-renderer/IconRenderer';
+import IconRenderer from '../icon-renderer/IconRenderer';
 
 import { ClickableConfig, CollectionTabConfig } from './types/clickableConfig';
 import { ClickableType, Clickable as IClickable } from '@/lib/types/clickable';
@@ -33,7 +33,7 @@ export default function Clickable({ payload, config, style }: ClickableProps) {
             })
           }
         >
-          <IconRenderer config={payload.iconConfig} />
+          <IconRenderer from="collection-tab" config={payload.iconConfig} />
           <p>{payload.content}</p>
         </div>
       );
@@ -47,7 +47,7 @@ export default function Clickable({ payload, config, style }: ClickableProps) {
             ${styles[config.displayConfig.position]}
           `}
         >
-          <IconRenderer config={payload.iconConfig} />
+          <IconRenderer from="collection-tab" config={payload.iconConfig} />
           <p>{payload.content}</p>
         </div>
       );
@@ -60,7 +60,7 @@ export default function Clickable({ payload, config, style }: ClickableProps) {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <IconRenderer config={payload.iconConfig} />
+          <IconRenderer from="cta-button" config={payload.iconConfig} />
           <p>{payload.content}</p>
         </a>
       );
@@ -70,19 +70,16 @@ export default function Clickable({ payload, config, style }: ClickableProps) {
           className={styles[`${config.clickableType}-button-clickable`]}
           style={style}
         >
-          <IconRenderer config={payload.iconConfig} />
+          <IconRenderer from="cta-button" config={payload.iconConfig} />
         </div>
       );
     case ClickableType.MURAL_THEME:
-      console.log('payload', payload);
-      console.log('config', config);
-
       return (
         <div
           style={style}
           className={styles[`${config.clickableType}-button-clickable`]}
         >
-          <IconRenderer config={payload.iconConfig} />
+          <IconRenderer from="cta-button" config={payload.iconConfig} />
         </div>
       );
     default:
@@ -114,7 +111,7 @@ function CollectionTabClickable({
         })
       }
     >
-      <IconRenderer config={payload.iconConfig} />
+      <IconRenderer from="cta-button" config={payload.iconConfig} />
       <p>{payload.content}</p>
     </div>
   );

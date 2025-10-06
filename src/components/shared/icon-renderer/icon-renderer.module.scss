@@ -7,14 +7,26 @@
 }
 
 .emoji-txt {
-  @include size(7, 7);
-  @include font-size("md");
+  &.small {
+    @include size(7, 7);
+    @include font-size('md');
+  }
+  &.large {
+    @include font-size('lg');
+  }
+
   line-height: 1;
   text-indent: -3px;
 }
 
 .emoji-img {
-  @include size(7, 7);
+  &.small {
+    @include size(7, 7);
+  }
+  &.large {
+    @include size(9, 9);
+  }
+
   img {
     @include size(100%, 100%);
     @include noDragImg;
@@ -22,6 +34,10 @@
 }
 
 .custom-icon {
+  &.small {
+    @include size(3, 3);
+  } // verificar
+
   @include size(7, 7);
   overflow: hidden;
   border-radius: 20px;

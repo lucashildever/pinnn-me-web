@@ -1,5 +1,5 @@
-import { PredefinedIcon } from '@/lib/types/predefinedIcon';
 import { CardVariant } from './cardVariant';
+import { IconConfig } from '@/lib/types/clickable';
 
 export interface Card {
   id: string;
@@ -9,9 +9,7 @@ export interface Card {
 }
 
 export type CardConfig =
+  | { variant: CardVariant.LINK; icon: IconConfig; href: string }
+  | { variant: CardVariant.DOWNLOAD; icon: IconConfig }
   | { variant: CardVariant.IMAGE; imageSrc: string }
-  | { variant: CardVariant.LINK; icon: CardIconConfig; href: string };
-
-export type CardIconConfig =
-  | { type: 'custom'; src: string }
-  | { type: 'predefined'; icon: PredefinedIcon };
+  | { variant: CardVariant.INTEGRATION };
