@@ -1,7 +1,7 @@
 import styles from './author-meta.module.scss';
 
 import Image from 'next/image';
-import verifiedIcon from '/public/assets/icons/verified.svg';
+import verifiedIcon from '/public/assets/icons/grey-verified.svg';
 
 interface AuthorMetaProps {
   muralName: string;

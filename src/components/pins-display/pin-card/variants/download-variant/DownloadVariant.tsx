@@ -1,5 +1,3 @@
-'use client';
-
 import CompactCard from '../common/CompactCard';
 
 import { CardVariant } from '../../types/cardVariant';
@@ -11,14 +9,14 @@ interface LinkVariantProps {
   meta: string;
 }
 
-export default function LinkVariant({
+export default function DownloadVariant({
   iconConfig,
   caption,
   meta,
 }: LinkVariantProps) {
   return (
     <CompactCard
-      variantType={CardVariant.LINK}
+      variantType={CardVariant.DOWNLOAD}
       iconConfig={iconConfig}
       caption={caption}
       meta={meta}

@@ -1,13 +1,14 @@
-import { useState } from 'react';
+'use client';
+
+import { ReactNode, useState } from 'react';
 import Image from 'next/image';
 
 import { IconConfig, IconType } from '@/lib/types/clickable';
 
-import { emojiParser } from './helpers/emojiParser';
-
-import styles from './icon-renderer.module.scss';
+import { emojiParser } from './utils/emojiParser';
 
 import tempCustomImg from '/public/assets/temp/cp.png';
+import styles from './icon-renderer.module.scss';
 
 interface ConfigureIconProps {
   config: IconConfig;
@@ -15,56 +16,66 @@ interface ConfigureIconProps {
 }
 
 export default function IconRenderer({ config, from }: ConfigureIconProps) {
-  let renderedSize = null;
+  let rendererSize = null;
 
   if (from === 'compact-card') {
-    renderedSize = 'large';
+    rendererSize = 'large';
   } else {
-    renderedSize = 'small';
+    rendererSize = 'small';
   }
 
   switch (config.type) {
+    // *escolhe icone do tipo predefined*
+    // 1 - verifica se o icone existe na biblioteca lucide
+    // 2 - se existir, pega. se não existir, seleciona internamente
+    // (verificar melhor forma de selecionar internamente - com arquivos ou sprite? - usar arquivos por enquanto)
+
+    // eu ainda preciso do RendererContainer pois ele define o tamanho da 'caixa' do icone -
+    // o icone/imagem/emoji é renderizado dentro dele.
     case IconType.PREDEFINED:
       const icon = `/assets/icons/predefined/${config.icon}-${'light'}.svg`;
       return (
-        <span
-          className={`
-        ${styles[`predefined-icon-${config.icon}`]}
-        ${styles[renderedSize]}
-        `}
-        >
+        <RendererContainer size={rendererSize}>
           <Image alt="tab icon" src={icon} fill draggable={false} />
-        </span>
+        </RendererContainer>
       );
     case IconType.CUSTOM:
       return (
-        <span
-          className={`
-          ${styles['custom-icon']}
-          ${styles[renderedSize]}
-          `}
-        >
+        <RendererContainer size={rendererSize}>
           <Image alt="tab icon" src={tempCustomImg} fill draggable={false} />
-        </span>
+        </RendererContainer>
       );
     case IconType.EMOJI:
       return (
-        <EmojiRenderer unicode={config.unicode} renderedSize={renderedSize} />
+        <EmojiRenderer unicode={config.unicode} rendererSize={rendererSize} />
       );
     case IconType.NONE:
       return;
   }
 }
 
-interface EmojiRendererProps {
-  unicode: string;
-  renderedSize: string;
+interface RendererContainerProps {
+  children: ReactNode;
+  size: string;
 }
 
-function EmojiRenderer({ unicode, renderedSize }: EmojiRendererProps) {
+function RendererContainer({ children, size }: RendererContainerProps) {
+  return (
+    <span className={`${styles[`renderer-container`]} ${styles[size]}`}>
+      {children}
+    </span>
+  );
+}
+
+interface EmojiRendererProps {
+  unicode: string;
+  rendererSize: string;
+}
+
+function EmojiRenderer({ unicode, rendererSize }: EmojiRendererProps) {
   const [hasError, setHasError] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
-  const src = `/emojis/${emojiParser(unicode)}.svg`;
+  const src = `/assets/emojis/${emojiParser(unicode)}.svg`;
 
   if (hasError) {
     return <span>{unicode}</span>;
@@ -75,7 +86,7 @@ function EmojiRenderer({ unicode, renderedSize }: EmojiRendererProps) {
       <span
         className={`
           ${styles['emoji-txt']}
-          ${styles[renderedSize]}
+          ${styles[rendererSize]}
           `}
         style={{ display: imageLoaded ? 'none' : 'inline' }}
       >
@@ -84,7 +95,7 @@ function EmojiRenderer({ unicode, renderedSize }: EmojiRendererProps) {
       <span
         className={`
           ${styles['emoji-img']}
-          ${styles[renderedSize]}
+          ${styles[rendererSize]}
           `}
         style={{ display: imageLoaded ? 'inline' : 'none' }}
       >

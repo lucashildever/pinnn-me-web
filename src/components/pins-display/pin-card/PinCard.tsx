@@ -5,9 +5,9 @@ import LinkVariant from './variants/link-variant/LinkVariant';
 
 import { CardVariant } from './types/cardVariant';
 import { CardConfig } from './types/card';
-import { IconType } from '@/lib/types/clickable';
 
 import styles from './pin-card.module.scss';
+import DownloadVariant from './variants/download-variant/DownloadVariant';
 
 interface CardProps {
   caption: string;
@@ -20,6 +20,7 @@ export default function PinCard({
   cardConfig,
   notFirstCard,
 }: CardProps) {
+  //console.log('cardConfig do PinCard', cardConfig);
   switch (cardConfig.variant) {
     case CardVariant.IMAGE:
       return (
@@ -35,7 +36,18 @@ export default function PinCard({
           <LinkVariant
             caption={caption}
             meta="www.google.com" // precisa vir do backend
-            iconConfig={{ type: IconType.CUSTOM, url: 'string' }} // precisa vir do backend
+            iconConfig={cardConfig.iconConfig}
+          />
+        </>
+      );
+    case CardVariant.DOWNLOAD:
+      return (
+        <>
+          {notFirstCard && <span className={styles['pin-line']} />}
+          <DownloadVariant
+            caption={caption}
+            meta="nome_do_arquivo.rar" // precisa vir do backend
+            iconConfig={cardConfig.iconConfig}
           />
         </>
       );

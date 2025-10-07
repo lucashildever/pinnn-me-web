@@ -1,2 +1,24 @@
 .compact-card {
+  @include flex(row, center, space-between);
+  position: relative;
+  cursor: pointer;
+  @include pin-card-defs;
+  @include spacing(padding, 6, 7, 6, 7);
+
+  .arrow-icon {
+    width: 28px;
+    height: 28px;
+  }
+  .download-icon {
+    width: 26px;
+    height: 26px;
+  }
+
+  .icon-and-info {
+    @include flex(row, center, space-between);
+
+    .card-info {
+      @include spacing(margin-left, 5);
+    }
+  }
 }

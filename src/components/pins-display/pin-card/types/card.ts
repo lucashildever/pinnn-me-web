@@ -9,7 +9,7 @@ export interface Card {
 }
 
 export type CardConfig =
-  | { variant: CardVariant.LINK; icon: IconConfig; href: string }
-  | { variant: CardVariant.DOWNLOAD; icon: IconConfig }
+  | { variant: CardVariant.LINK; iconConfig: IconConfig; href: string }
+  | { variant: CardVariant.DOWNLOAD; iconConfig: IconConfig }
   | { variant: CardVariant.IMAGE; imageSrc: string }
   | { variant: CardVariant.INTEGRATION };

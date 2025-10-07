@@ -9,6 +9,8 @@ export enum PredefinedIcon {
   // defaults
   CTA_DEFAULT = 'cta-default',
   TAB_DEFAULT = 'tab-default',
+  DOWNLOAD = 'download',
+  LINK = 'link',
   // social
   X = 'x',
   TIKTOK = 'tiktok',

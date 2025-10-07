@@ -6,6 +6,21 @@
   pointer-events: none;
 }
 
+.renderer-container {
+  position: relative;
+  background-color: grey;
+  border-radius: $inner-corner;
+
+  &.small {
+    @include size(7, 7);
+  }
+  &.large {
+    @include size(17, 17);
+  }
+}
+
+///
+
 .emoji-txt {
   &.small {
     @include size(7, 7);
@@ -35,12 +50,18 @@
 
 .custom-icon {
   &.small {
-    @include size(3, 3);
+    //@include size(3, 3);
+    border-radius: 20px;
   } // verificar
 
-  @include size(7, 7);
+  &.large {
+    //border-radius: #{get-spacing(10)}; // ver pq não funciona
+    border-radius: 8px; // temp
+
+    @include size(18, 18);
+  }
+
   overflow: hidden;
-  border-radius: 20px;
   position: relative;
 
   img {
