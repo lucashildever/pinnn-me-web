@@ -7,7 +7,7 @@ import AuthorMeta from '@/components/shared/author-meta/AuthorMeta';
 import Clickable from '@/components/shared/clickable/Clickable';
 
 import { ClickableType, IconType } from '@/lib/types/clickable';
-import { PredefinedIcon } from '@/lib/types/predefinedIcon';
+import { AppIcon } from '@/components/shared/icon-renderer/icon/types/icon';
 
 import styles from './profile.module.scss';
 
@@ -47,7 +47,7 @@ export default function Profile({
             content: 'Cta name',
             iconConfig: {
               type: IconType.PREDEFINED,
-              icon: PredefinedIcon.MESSAGE,
+              icon: 'message',
             },
           }}
           config={{
@@ -83,7 +83,7 @@ export default function Profile({
                 content: 'Cta name',
                 iconConfig: {
                   type: IconType.PREDEFINED,
-                  icon: PredefinedIcon.MESSAGE,
+                  icon: 'message',
                 },
               }}
               config={{
@@ -96,7 +96,7 @@ export default function Profile({
                 payload={{
                   iconConfig: {
                     type: IconType.PREDEFINED,
-                    icon: PredefinedIcon.OPTIONS,
+                    icon: 'options',
                   },
                 }}
                 config={{ clickableType: ClickableType.MURAL_OPTIONS }}

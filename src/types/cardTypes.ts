@@ -1,5 +1,5 @@
 import { CardVariant } from '@/components/pins-display/pin-card/types/cardVariant';
-import { PredefinedIcon } from '@/lib/types/predefinedIcon';
+import { AppIcon } from '@/components/shared/icon-renderer/icon/types/icon';
 
 export interface CardPayload {
   variantType: CardVariant;
@@ -14,7 +14,7 @@ export interface CardData extends CardPayload {
 // card variants
 export interface LinkVariantPayload {
   customIconSrc?: string;
-  iconType?: PredefinedIcon;
+  iconType?: AppIcon;
   url: string;
 }
 

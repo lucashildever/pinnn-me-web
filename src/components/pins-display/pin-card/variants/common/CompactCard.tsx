@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react';
 import IconRenderer from '@/components/shared/icon-renderer/IconRenderer';
 
 import { IconConfig, IconType } from '@/lib/types/clickable';
-import { PredefinedIcon } from '@/lib/types/predefinedIcon';
 import { CardVariant } from '../../types/cardVariant';
 
 import { extractDomain } from '../link-variant/utils/extractDomain';
@@ -29,7 +28,7 @@ export default function CompactCard({
 }: CompactCardProps) {
   const [configuredIcon, setConfiguredIcon] = useState<IconConfig>({
     type: IconType.PREDEFINED,
-    icon: PredefinedIcon.LINK, // mudar isso para um icone pre-load padrão
+    icon: 'link', // mudar isso para um icone pre-load padrão
   });
 
   useEffect(() => {
@@ -39,12 +38,12 @@ export default function CompactCard({
       if (variantType === CardVariant.LINK) {
         setConfiguredIcon({
           type: IconType.PREDEFINED,
-          icon: PredefinedIcon.LINK,
+          icon: 'link',
         });
       } else {
         setConfiguredIcon({
           type: IconType.PREDEFINED,
-          icon: PredefinedIcon.DOWNLOAD,
+          icon: 'download',
         });
       }
     } else {

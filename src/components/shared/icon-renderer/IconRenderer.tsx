@@ -9,6 +9,7 @@ import { emojiParser } from './utils/emojiParser';
 
 import tempCustomImg from '/public/assets/temp/cp.png';
 import styles from './icon-renderer.module.scss';
+import Icon from './icon/Icon';
 
 interface ConfigureIconProps {
   config: IconConfig;
@@ -25,18 +26,19 @@ export default function IconRenderer({ config, from }: ConfigureIconProps) {
   }
 
   switch (config.type) {
-    // *escolhe icone do tipo predefined*
-    // 1 - verifica se o icone existe na biblioteca lucide
-    // 2 - se existir, pega. se não existir, seleciona internamente
-    // (verificar melhor forma de selecionar internamente - com arquivos ou sprite? - usar arquivos por enquanto)
-
-    // eu ainda preciso do RendererContainer pois ele define o tamanho da 'caixa' do icone -
-    // o icone/imagem/emoji é renderizado dentro dele.
     case IconType.PREDEFINED:
+      // *escolhe icone do tipo predefined*
+      // 1 - verifica se o icone existe na biblioteca lucide
+      // 2 - se existir, pega. se não existir, seleciona internamente
+      // (verificar melhor forma de selecionar internamente - com arquivos ou sprite? - usar arquivos por enquanto)
+
+      // eu ainda preciso do RendererContainer pois ele define o tamanho da 'caixa' do icone -
+      // o icone/imagem/emoji é renderizado dentro dele.
+
       const icon = `/assets/icons/predefined/${config.icon}-${'light'}.svg`;
       return (
         <RendererContainer size={rendererSize}>
-          <Image alt="tab icon" src={icon} fill draggable={false} />
+          <Icon iconName={config.icon} />
         </RendererContainer>
       );
     case IconType.CUSTOM:

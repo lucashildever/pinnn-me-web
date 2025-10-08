@@ -1,4 +1,4 @@
-import { PredefinedIcon } from './predefinedIcon';
+import { AppIcon } from '@/components/shared/icon-renderer/icon/types/icon';
 
 export interface Clickable {
   content?: string;
@@ -15,7 +15,7 @@ export enum ClickableType {
 
 export type IconConfig =
   | { type: IconType.NONE }
-  | { type: IconType.PREDEFINED; icon: PredefinedIcon }
+  | { type: IconType.PREDEFINED; icon: AppIcon }
   | { type: IconType.CUSTOM; url: string }
   | { type: IconType.EMOJI; unicode: string };
 

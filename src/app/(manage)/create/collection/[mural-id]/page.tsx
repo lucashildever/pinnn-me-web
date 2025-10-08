@@ -8,8 +8,6 @@ import { selectIsAuthenticated } from '@/lib/state/slices/authSlice';
 import { useAppSelector } from '@/lib/state/hooks';
 import { selectMuralId } from '@/lib/state/slices/muralSlice';
 
-import { PredefinedIcon } from '@/lib/types/predefinedIcon';
-
 import styles from './create-collection.module.scss';
 
 export default function CreateCollection() {
@@ -112,7 +110,7 @@ export default function CreateCollection() {
                 ...prev,
                 iconConfig: {
                   type: 'predefined',
-                  icon: e.target.value as PredefinedIcon,
+                  icon: e.target.value,
                 },
               }))
             }

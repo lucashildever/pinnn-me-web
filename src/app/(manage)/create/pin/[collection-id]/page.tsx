@@ -8,11 +8,11 @@ import { CardConfig } from '@/components/pins-display/pin-card/types/card';
 import { CardVariant } from '@/components/pins-display/pin-card/types/cardVariant';
 
 import { CreatePinRequest } from '@/lib/api-client/types/request';
-import { PredefinedIcon } from '@/lib/types/predefinedIcon';
 
 import { apiClient } from '@/lib/api-client/apiClient';
 
 import styles from './create-pin.module.scss';
+import { AppIcon } from '@/components/shared/icon-renderer/icon/types/icon';
 
 const CreatePinForm: React.FC = () => {
   const router = useParams();
@@ -107,17 +107,17 @@ const CreatePinForm: React.FC = () => {
         },
       }));
     } else {
-      setFormData((prev) => ({
-        ...prev,
-        cards: {
-          ...prev.cards,
-          cardConfig: {
-            variant: CardVariant.LINK,
-            icon: { type: 'custom', src: '' },
-            href: '',
-          },
-        },
-      }));
+      // setFormData((prev) => ({
+      //   ...prev,
+      //   cards: {
+      //     ...prev.cards,
+      //     cardConfig: {
+      //       variant: CardVariant.LINK,
+      //       icon: { type: 'custom', src: '' },
+      //       href: '',
+      //     },
+      //   },
+      // }));
     }
   };
 
@@ -135,7 +135,7 @@ const CreatePinForm: React.FC = () => {
             icon:
               type === 'custom'
                 ? { type: 'custom', src: '' }
-                : { type: 'predefined', icon: PredefinedIcon.TIKTOK },
+                : { type: 'predefined', icon: 'tiktok' },
           },
         },
       }));
@@ -324,8 +324,7 @@ const CreatePinForm: React.FC = () => {
                 id="predefinedIcon"
                 className={styles.select}
                 value={
-                  (formData.cards.cardConfig as any).icon?.icon ||
-                  PredefinedIcon.PINTEREST
+                  (formData.cards.cardConfig as any).icon?.icon || 'pinterest'
                 }
                 onChange={(e) => {
                   setFormData((prev) => ({
@@ -336,17 +335,17 @@ const CreatePinForm: React.FC = () => {
                         ...prev.cards.cardConfig,
                         icon: {
                           type: 'predefined',
-                          icon: e.target.value as PredefinedIcon,
+                          icon: e.target.value as AppIcon,
                         },
                       },
                     },
                   }));
                 }}
               >
-                <option value={PredefinedIcon.X}>X</option>
-                <option value={PredefinedIcon.TWITCH}>Twitch</option>
-                <option value={PredefinedIcon.YOUTUBE}>Youtube</option>
-                <option value={PredefinedIcon.PINTEREST}>Pinterest</option>
+                <option value={'x'}>X</option>
+                <option value={'twitch'}>Twitch</option>
+                <option value={'youtube'}>Youtube</option>
+                <option value={'pinterest'}>Pinterest</option>
               </select>
             </div>
           )}
