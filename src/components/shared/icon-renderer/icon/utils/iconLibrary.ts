@@ -1,8 +1,9 @@
-import { Download, ArrowUpRight, EllipsisVertical, SendHorizonal, Link } from 'lucide-react';
+import { Download, ArrowUpRight, EllipsisVertical, SendHorizonal, Link, File } from 'lucide-react';
 import { siInstagram, siTiktok, siPinterest, siTwitch, siYoutube, siX } from 'simple-icons'
 
-import { IconData } from '../types/icon';
 // usar campo "label" no alt do componente/svg
+import { IconData } from '../types/icon';
+
 export const iconLibrary: Record<string, IconData> = {
   // Arrows
   arrowUpRight: { type: 'lucide', icon: ArrowUpRight, label: 'Arrow Up Right', category: 'arrows' },
@@ -23,8 +24,10 @@ export const iconLibrary: Record<string, IconData> = {
   link: {type: 'lucide', icon: Link, label: 'Link icon', category: 'navigation'},
   
   // Communication
-  message: {type: 'lucide', icon: SendHorizonal, label: 'Message Icon', category: 'communication'}
+  message: {type: 'lucide', icon: SendHorizonal, label: 'Message Icon', category: 'communication'},
   
+  // Documents
+  file: { type: 'lucide', icon: File, label: 'File Icon', category: 'documents' },
   ////
   
   // // Navegação
@@ -61,7 +64,6 @@ export const iconLibrary: Record<string, IconData> = {
   // bookmark: { type: 'lucide', icon: Bookmark, label: 'Favorito', category: 'favorites' },
   
   // // Arquivos
-  // file: { type: 'lucide', icon: File, label: 'Arquivo', category: 'files' },
   // fileText: { type: 'lucide', icon: FileText, label: 'Documento', category: 'files' },
   // folder: { type: 'lucide', icon: Folder, label: 'Pasta', category: 'files' },
   // image: { type: 'lucide', icon: Image, label: 'Imagem', category: 'files' },

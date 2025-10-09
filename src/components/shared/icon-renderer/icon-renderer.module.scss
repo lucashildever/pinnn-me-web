@@ -8,84 +8,53 @@
 
 .renderer-container {
   position: relative;
-  background-color: grey;
   border-radius: $inner-corner;
 
   &.small {
     @include size(7, 7);
   }
-  &.large {
-    @include size(17, 17);
-  }
-}
-
-///
-
-.emoji-txt {
-  &.small {
-    @include size(7, 7);
-    @include font-size('md');
-  }
-  &.large {
-    @include font-size('lg');
-  }
-
-  line-height: 1;
-  text-indent: -3px;
-}
-
-.emoji-img {
-  &.small {
-    @include size(7, 7);
-  }
-  &.large {
-    @include size(9, 9);
-  }
-
-  img {
-    @include size(100%, 100%);
-    @include noDragImg;
-  }
-}
-
-.custom-icon {
-  &.small {
-    //@include size(3, 3);
-    border-radius: 20px;
-  } // verificar
 
   &.large {
-    //border-radius: #{get-spacing(10)}; // ver pq não funciona
-    border-radius: 8px; // temp
-
-    @include size(18, 18);
+    @include size(19, 19);
   }
 
-  overflow: hidden;
-  position: relative;
+  &.predefined {
+    @include flex(row, center, center);
 
-  img {
-    object-fit: cover;
-    object-position: center;
-    @include noDragImg;
+    > svg {
+      @include size(11, 11);
+    }
   }
-}
 
-// predefined/utility icons
-.predefined-icon-message {
-  @include size(7, 7);
-  position: relative;
-}
+  &.custom {
+    overflow: hidden;
 
-.predefined-icon-options {
-  @include size(6, 6);
-  position: relative;
-  display: block;
-  transform: scale(92%);
-}
+    img {
+      object-fit: cover;
+      object-position: center;
+    }
+  }
 
-.predefined-icon-theme {
-  @include size(6, 6);
-  position: relative;
-  transform: scale(125%);
+  &.emoji {
+    @include flex(row, center, center);
+    user-select: none;
+
+    .emoji-renderer {
+      @include flex(row, center, center);
+      .txt-large {
+        @include font-size('3xl');
+        transform: scale(110%);
+      }
+      .txt-small {
+        transform: scale(110%);
+        @include font-size('sm');
+      }
+      .img-large {
+        @include size(11, auto);
+      }
+      .img-small {
+        @include size(6, auto);
+      }
+    }
+  }
 }

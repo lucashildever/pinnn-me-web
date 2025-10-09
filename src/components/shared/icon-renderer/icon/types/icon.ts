@@ -10,6 +10,7 @@ const ICONS: Record<string, string> = {
   Pinterest: 'pinterest',
   Twitch: 'twitch',
   Link: 'link',
+  File: 'file',
 } as const;
 
 export type AppIcon = (typeof ICONS)[keyof typeof ICONS];
@@ -20,6 +21,7 @@ const ICON_CATEGORIES = {
   Action: 'actions',
   Navigation: 'navigation',
   Communication: 'communication',
+  Documents: 'documents',
 } as const;
 
 type IconCategoryType = (typeof ICON_CATEGORIES)[keyof typeof ICON_CATEGORIES];

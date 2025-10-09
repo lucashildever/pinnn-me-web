@@ -1,6 +1,5 @@
 import { AppIcon, IconData } from './types/icon';
 import { iconLibrary } from './utils/iconLibrary';
-import { SimpleIcon } from 'simple-icons';
 
 interface IconProps {
   iconName: AppIcon;
@@ -26,7 +25,6 @@ function SimpleIconComponent({
   iconData,
   size = 24,
 }: SimpleIconComponentProps) {
-  // agora TS sabe que iconData.icon é SimpleIcon
   const { title, path } = iconData.icon;
 
   return (

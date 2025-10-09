@@ -43,7 +43,7 @@ export default function CompactCard({
       } else {
         setConfiguredIcon({
           type: IconType.PREDEFINED,
-          icon: 'download',
+          icon: 'file',
         });
       }
     } else {

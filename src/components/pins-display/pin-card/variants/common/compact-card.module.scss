@@ -3,7 +3,7 @@
   position: relative;
   cursor: pointer;
   @include pin-card-defs;
-  @include spacing(padding, 6, 7, 6, 7);
+  @include spacing(padding, 5, 7, 5, 5);
 
   .arrow-icon {
     width: 28px;
