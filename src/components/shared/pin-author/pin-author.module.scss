@@ -2,8 +2,8 @@
   @include flex(row, center, flex-start);
 
   > div.mural-img {
-    @include size(8, 8);
-    @include spacing(margin, 0, 2, 0, 4);
+    @include size(9, 9);
+    @include spacing(margin, 0, 2, 0, 3);
     border-radius: 50%;
     overflow: hidden;
   }

@@ -2,7 +2,7 @@
   @include pin-card-defs;
 
   .image-variant-container {
-    @include size(100%, 50);
+    @include size(100%, 70);
     @include spacing(margin, 4, 0, 0, 0);
     border-radius: $inner-corner;
     overflow: hidden;

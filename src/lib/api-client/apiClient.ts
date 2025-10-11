@@ -4,12 +4,8 @@ import { fetcher } from './helpers/request';
 
 import { CreateCollectionRequest, CreatePinRequest } from './types/request';
 import { CreateMuralRequest, MuralRequest } from './types/request';
-import { FetcherResponse, FetchError } from './types/response';
-
-enum PaymentPeriod {
-  MONTHLY = 'monthly',
-  YEARLY = 'yearly',
-}
+import { FetcherResponse } from './types/response';
+import { PaymentPeriod } from '@/app/(marketing)/checkout/[period]/page';
 
 export const apiClient = {
   auth: {
@@ -56,7 +52,7 @@ export const apiClient = {
       if (!token) {
         return {
           success: false,
-          error: FetchError.UNAUTHORIZED,
+          error: 'unauthorized',
           message: 'Authentication required',
         };
       }
@@ -77,7 +73,7 @@ export const apiClient = {
       if (!token) {
         return {
           success: false,
-          error: FetchError.UNAUTHORIZED,
+          error: 'unauthorized',
           message: 'Authentication required',
         };
       }
@@ -118,7 +114,7 @@ export const apiClient = {
       if (!token) {
         return {
           success: false,
-          error: FetchError.UNAUTHORIZED,
+          error: 'unauthorized',
           message: 'Authentication required',
         };
       }
@@ -153,7 +149,7 @@ export const apiClient = {
       if (!token) {
         return {
           success: false,
-          error: FetchError.UNAUTHORIZED,
+          error: 'unauthorized',
           message: 'Authentication required',
         };
       }

@@ -1,5 +1,3 @@
-import { LucideIcon } from 'lucide-react';
-
 const ICONS: Record<string, string> = {
   Tiktok: 'tiktok',
   Instagram: 'instagram',
@@ -11,12 +9,13 @@ const ICONS: Record<string, string> = {
   Twitch: 'twitch',
   Link: 'link',
   File: 'file',
+  loading: 'loading',
 } as const;
 
 export type AppIcon = (typeof ICONS)[keyof typeof ICONS];
 
-const ICON_CATEGORIES = {
-  Arrows: 'arrows',
+const ICON_CATEGORIES: Record<string, string> = {
+  Motion: 'motion',
   Social: 'social',
   Action: 'actions',
   Navigation: 'navigation',

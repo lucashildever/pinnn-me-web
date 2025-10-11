@@ -1,6 +1,4 @@
 import CompactCard from '../common/CompactCard';
-
-import { CardVariant } from '../../types/cardVariant';
 import { IconConfig } from '@/lib/types/clickable';
 
 interface LinkVariantProps {
@@ -16,7 +14,7 @@ export default function DownloadVariant({
 }: LinkVariantProps) {
   return (
     <CompactCard
-      variantType={CardVariant.DOWNLOAD}
+      variantType={'download'}
       iconConfig={iconConfig}
       caption={caption}
       meta={meta}

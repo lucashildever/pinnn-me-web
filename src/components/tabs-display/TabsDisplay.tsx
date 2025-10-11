@@ -141,7 +141,7 @@ export default function TabsDisplay({
               key={index}
               payload={col.displayElement}
               config={{
-                clickableType: ClickableType.COLLECTION_TAB,
+                clickableType: 'collection-tab',
                 tabId: col.id,
                 active: isActive,
                 tabClick: handleTabClick,

@@ -44,7 +44,7 @@ export default function MuralContainer({
     displayElement: {
       content: '',
       iconConfig: {
-        type: IconType.NONE,
+        type: 'none',
       },
     },
   });

@@ -3,7 +3,7 @@
 
   .author-name {
     @include spacing(margin-right, 1);
-    font-weight: bold;
+    font-weight: 700;
   }
 
   .badge-icon {
@@ -18,7 +18,8 @@
 
 .author-meta-profile {
   @include defs();
-  @include font-size('md');
+  @include font-size('lg');
+  font-weight: 800;
 }
 
 .author-meta-minimal-profile {

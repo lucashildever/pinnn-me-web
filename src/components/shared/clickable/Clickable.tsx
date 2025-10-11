@@ -3,7 +3,7 @@
 import IconRenderer from '../icon-renderer/IconRenderer';
 
 import { ClickableConfig, CollectionTabConfig } from './types/clickableConfig';
-import { ClickableType, Clickable as IClickable } from '@/lib/types/clickable';
+import { Clickable as IClickable } from '@/lib/types/clickable';
 
 import styles from './clickable.module.scss';
 
@@ -15,7 +15,7 @@ interface ClickableProps {
 
 export default function Clickable({ payload, config, style }: ClickableProps) {
   switch (config.clickableType) {
-    case ClickableType.COLLECTION_TAB:
+    case 'collection-tab':
       return (
         <div
           style={style}
@@ -37,7 +37,7 @@ export default function Clickable({ payload, config, style }: ClickableProps) {
           <p>{payload.content}</p>
         </div>
       );
-    case ClickableType.COLLECTION_TAB_OVERLAY:
+    case 'collection-tab-overlay':
       return (
         <div
           style={style}
@@ -51,7 +51,7 @@ export default function Clickable({ payload, config, style }: ClickableProps) {
           <p>{payload.content}</p>
         </div>
       );
-    case ClickableType.MURAL_CTA:
+    case 'mural-cta':
       return (
         <a
           style={style}
@@ -64,7 +64,7 @@ export default function Clickable({ payload, config, style }: ClickableProps) {
           <p>{payload.content}</p>
         </a>
       );
-    case ClickableType.MURAL_OPTIONS:
+    case 'mural-options':
       return (
         <div
           className={styles[`${config.clickableType}-button-clickable`]}
@@ -73,7 +73,7 @@ export default function Clickable({ payload, config, style }: ClickableProps) {
           <IconRenderer from="cta-button" config={payload.iconConfig} />
         </div>
       );
-    case ClickableType.MURAL_THEME:
+    case 'mural-theme':
       return (
         <div
           style={style}

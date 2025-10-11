@@ -6,13 +6,10 @@ import Image from 'next/image';
 import AuthorMeta from '@/components/shared/author-meta/AuthorMeta';
 import Clickable from '@/components/shared/clickable/Clickable';
 
-import { ClickableType, IconType } from '@/lib/types/clickable';
-import { AppIcon } from '@/components/shared/icon-renderer/icon/types/icon';
-
 import styles from './profile.module.scss';
 
-import profilePic from '/public/assets/temp/pf.png';
-import coverPic from '/public/assets/temp/cp.png';
+import profilePic from '/public/assets/temp/pf.jpg';
+import coverPic from '/public/assets/temp/cp.jpg';
 
 // TODO -  atualizar props para receber dados de forma consistente nas variações do profile
 interface ProfileProps {
@@ -46,12 +43,12 @@ export default function Profile({
           payload={{
             content: 'Cta name',
             iconConfig: {
-              type: IconType.PREDEFINED,
+              type: 'predefined',
               icon: 'message',
             },
           }}
           config={{
-            clickableType: ClickableType.MURAL_CTA,
+            clickableType: 'mural-cta',
             link: 'https://www.google.com/',
           }}
           // estilizar com scss para aproveitar os mixins
@@ -82,12 +79,12 @@ export default function Profile({
               payload={{
                 content: 'Cta name',
                 iconConfig: {
-                  type: IconType.PREDEFINED,
+                  type: 'predefined',
                   icon: 'message',
                 },
               }}
               config={{
-                clickableType: ClickableType.MURAL_CTA,
+                clickableType: 'mural-cta',
                 link: 'https://www.google.com/',
               }}
             />
@@ -95,11 +92,11 @@ export default function Profile({
               <Clickable
                 payload={{
                   iconConfig: {
-                    type: IconType.PREDEFINED,
+                    type: 'predefined',
                     icon: 'options',
                   },
                 }}
-                config={{ clickableType: ClickableType.MURAL_OPTIONS }}
+                config={{ clickableType: 'mural-options' }}
               />
             </div>
           </div>

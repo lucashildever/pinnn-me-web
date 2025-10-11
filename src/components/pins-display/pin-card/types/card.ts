@@ -1,4 +1,3 @@
-import { CardVariant } from './cardVariant';
 import { IconConfig } from '@/lib/types/clickable';
 
 export interface Card {
@@ -9,7 +8,7 @@ export interface Card {
 }
 
 export type CardConfig =
-  | { variant: CardVariant.LINK; iconConfig: IconConfig; href: string }
-  | { variant: CardVariant.DOWNLOAD; iconConfig: IconConfig }
-  | { variant: CardVariant.IMAGE; imageSrc: string }
-  | { variant: CardVariant.INTEGRATION };
+  | { variant: 'link'; iconConfig: IconConfig; href: string }
+  | { variant: 'download'; iconConfig: IconConfig }
+  | { variant: 'image'; imageSrc: string }
+  | { variant: 'integration' };

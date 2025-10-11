@@ -11,9 +11,11 @@ export interface FetcherError {
   message: string;
 }
 
-export enum FetchError {
-  NETWORK_ERROR = 'NETWORK_ERROR',
-  SERVER_ERROR = 'SERVER_ERROR',
-  NOT_FOUND = 'NOT_FOUND',
-  UNAUTHORIZED = 'UNAUTHORIZED',
-}
+const FETCH_TYPES = {
+  networkError: 'network-error',
+  serverError: 'server-error',
+  notFound: 'not-found',
+  unauthorized: 'unauthorized',
+} as const;
+
+export type FetchError = (typeof FETCH_TYPES)[keyof typeof FETCH_TYPES];

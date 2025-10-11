@@ -18,7 +18,7 @@ export default function LinkVariant({
 }: LinkVariantProps) {
   return (
     <CompactCard
-      variantType={CardVariant.LINK}
+      variantType={'link'}
       iconConfig={iconConfig}
       caption={caption}
       meta={meta}

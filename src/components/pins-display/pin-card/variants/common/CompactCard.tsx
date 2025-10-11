@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 import IconRenderer from '@/components/shared/icon-renderer/IconRenderer';
 
-import { IconConfig, IconType } from '@/lib/types/clickable';
+import { IconConfig } from '@/lib/types/clickable';
 import { CardVariant } from '../../types/cardVariant';
 
 import { extractDomain } from '../link-variant/utils/extractDomain';
@@ -27,22 +27,20 @@ export default function CompactCard({
   meta,
 }: CompactCardProps) {
   const [configuredIcon, setConfiguredIcon] = useState<IconConfig>({
-    type: IconType.PREDEFINED,
-    icon: 'link', // mudar isso para um icone pre-load padrão
+    type: 'predefined',
+    icon: 'loading',
   });
 
   useEffect(() => {
-    // TESTAR
-    console.log('iconConfig', iconConfig);
     if (iconConfig.type === 'none') {
-      if (variantType === CardVariant.LINK) {
+      if (variantType === 'link') {
         setConfiguredIcon({
-          type: IconType.PREDEFINED,
+          type: 'predefined',
           icon: 'link',
         });
       } else {
         setConfiguredIcon({
-          type: IconType.PREDEFINED,
+          type: 'predefined',
           icon: 'file',
         });
       }
@@ -52,24 +50,15 @@ export default function CompactCard({
   }, []);
 
   return (
-    <div
-      className={`
-      ${styles['compact-card']}
-      ${styles[variantType]} 
-    `}
-      // o ${styles[variantType]} talvez não seja necessário, avaliar
-    >
+    <div className={styles['compact-card']}>
       <div className={styles['icon-and-info']}>
         <IconRenderer from="compact-card" config={configuredIcon} />
         <div className={styles['card-info']}>
           <p>{caption}</p>
-          {/* Tavez seja necessario adicionar um extractFileName para card tipo download */}
-          <span>
-            {variantType === CardVariant.LINK ? extractDomain(meta) : meta}
-          </span>
+          <span>{variantType === 'link' ? extractDomain(meta) : meta}</span>
         </div>
       </div>
-      {variantType === CardVariant.LINK ? (
+      {variantType === 'link' ? (
         <ArrowUpRight className={styles['arrow-icon']} />
       ) : (
         <Download className={styles['download-icon']} />

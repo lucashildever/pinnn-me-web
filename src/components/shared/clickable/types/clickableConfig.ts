@@ -12,7 +12,7 @@ export type ClickableConfig =
   | MuralCtaConfig;
 
 export interface CollectionTabConfig {
-  clickableType: ClickableType.COLLECTION_TAB;
+  clickableType: 'collection-tab';
   tabId: string;
   active: boolean;
   tabClick: TabClick;
@@ -25,15 +25,15 @@ export interface OverlayTabDisplayConfig {
 }
 
 export interface CollectionTabOverlayConfig {
-  clickableType: ClickableType.COLLECTION_TAB_OVERLAY;
+  clickableType: 'collection-tab-overlay';
   displayConfig: OverlayTabDisplayConfig;
 }
 
 export interface MuralCtaConfig {
-  clickableType: ClickableType.MURAL_CTA;
+  clickableType: 'mural-cta';
   link: string;
 }
 
 export interface UtilityButtonConfig {
-  clickableType: ClickableType.MURAL_OPTIONS | ClickableType.MURAL_THEME;
+  clickableType: 'mural-options' | 'mural-theme';
 }

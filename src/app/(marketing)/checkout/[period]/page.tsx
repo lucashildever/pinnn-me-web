@@ -14,10 +14,13 @@ const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!,
 );
 
-export enum PaymentPeriod {
-  MONTHLY = 'monthly',
-  YEARLY = 'yearly',
-}
+const PAYMENT_PERIODS: Record<string, string> = {
+  Monthly: 'monthly',
+  Yearly: 'yearly',
+} as const;
+
+export type PaymentPeriod =
+  (typeof PAYMENT_PERIODS)[keyof typeof PAYMENT_PERIODS];
 
 interface CheckoutState {
   clientSecret: string | null;
@@ -132,8 +135,8 @@ export default function Checkout() {
 
   // Mostrar informações do período escolhido
   const periodInfo = {
-    [PaymentPeriod.MONTHLY]: { name: 'Mensal', price: 'R$ 29,90/mês' },
-    [PaymentPeriod.YEARLY]: { name: 'Anual', price: 'R$ 299,00/ano' },
+    ['monthly']: { name: 'Mensal', price: 'R$ 29,90/mês' },
+    ['yearly']: { name: 'Anual', price: 'R$ 299,00/ano' },
   };
 
   return (

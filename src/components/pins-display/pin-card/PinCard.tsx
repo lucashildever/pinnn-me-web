@@ -1,13 +1,12 @@
 'use client';
 
+import DownloadVariant from './variants/download-variant/DownloadVariant';
 import ImageVariant from './variants/image-variant/ImageVariant';
 import LinkVariant from './variants/link-variant/LinkVariant';
 
-import { CardVariant } from './types/cardVariant';
 import { CardConfig } from './types/card';
 
 import styles from './pin-card.module.scss';
-import DownloadVariant from './variants/download-variant/DownloadVariant';
 
 interface CardProps {
   caption: string;
@@ -20,16 +19,15 @@ export default function PinCard({
   cardConfig,
   notFirstCard,
 }: CardProps) {
-  //console.log('cardConfig do PinCard', cardConfig);
   switch (cardConfig.variant) {
-    case CardVariant.IMAGE:
+    case 'image':
       return (
         <>
           {notFirstCard && <span className={styles['pin-line']} />}
           <ImageVariant caption={caption} />
         </>
       );
-    case CardVariant.LINK:
+    case 'link':
       return (
         <>
           {notFirstCard && <span className={styles['pin-line']} />}
@@ -40,7 +38,7 @@ export default function PinCard({
           />
         </>
       );
-    case CardVariant.DOWNLOAD:
+    case 'download':
       return (
         <>
           {notFirstCard && <span className={styles['pin-line']} />}

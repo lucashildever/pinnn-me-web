@@ -9,22 +9,22 @@ export default function Icon({ iconName }: IconProps) {
   const iconData: IconData = iconLibrary[iconName];
 
   if (iconData.type === 'simple') {
-    return <SimpleIconComponent iconData={iconData} size={24} />;
+    return <SimpleIconsComponent iconData={iconData} size={24} />;
   } else {
-    const Lucide = iconData.icon; // Lucid already returns a react component
-    return <Lucide />;
+    const LucideComponent = iconData.icon;
+    return <LucideComponent />;
   }
 }
 
-interface SimpleIconComponentProps {
+interface SimpleIconsComponentProps {
   iconData: Extract<IconData, { type: 'simple' }>;
   size?: number;
 }
 
-function SimpleIconComponent({
+function SimpleIconsComponent({
   iconData,
   size = 24,
-}: SimpleIconComponentProps) {
+}: SimpleIconsComponentProps) {
   const { title, path } = iconData.icon;
 
   return (

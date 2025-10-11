@@ -2,7 +2,7 @@ import AuthorMeta from '../author-meta/AuthorMeta';
 import Image from 'next/image';
 
 import styles from './pin-author.module.scss';
-import muralPfPic from '/public/assets/temp/pf.png';
+import muralPfPic from '/public/assets/temp/pf.jpg';
 
 export default function PinAuthor({ muralName }: { muralName: string }) {
   return (

@@ -5,10 +5,10 @@ import Image from 'next/image';
 
 import Icon from './icon/Icon';
 
-import { IconConfig, IconType } from '@/lib/types/clickable';
+import { IconConfig } from '@/lib/types/clickable';
 import { emojiParser } from './utils/emojiParser';
 
-import tempCustomImg from '/public/assets/temp/cp.png';
+import tempCustomImg from '/public/assets/temp/tt.jpg';
 import styles from './icon-renderer.module.scss';
 
 interface ConfigureIconProps {
@@ -26,18 +26,18 @@ export default function IconRenderer({ config, from }: ConfigureIconProps) {
   }
 
   switch (config.type) {
-    case IconType.PREDEFINED:
+    case 'predefined':
       return (
         <RendererContainer
           className={`
-          ${styles['predefined']}
-          ${styles[rendererSize]}
+            ${styles['predefined']}
+            ${styles[rendererSize]} ${config.icon === 'loading' ? styles['animate-spin'] : ''}
         `}
         >
           <Icon iconName={config.icon} />
         </RendererContainer>
       );
-    case IconType.CUSTOM:
+    case 'custom':
       return (
         <RendererContainer
           className={`
@@ -48,7 +48,7 @@ export default function IconRenderer({ config, from }: ConfigureIconProps) {
           <Image alt="tab icon" src={tempCustomImg} fill draggable={false} />
         </RendererContainer>
       );
-    case IconType.EMOJI:
+    case 'emoji':
       return (
         <RendererContainer
           className={`
@@ -59,7 +59,7 @@ export default function IconRenderer({ config, from }: ConfigureIconProps) {
           <EmojiRenderer unicode={config.unicode} rendererSize={rendererSize} />
         </RendererContainer>
       );
-    case IconType.NONE:
+    case 'none':
       return;
   }
 }
@@ -71,14 +71,14 @@ interface RendererContainerProps {
 
 function RendererContainer({ children, className }: RendererContainerProps) {
   return (
-    <span
+    <div
       className={`
         ${styles[`renderer-container`]} 
         ${className ?? ''}
       `}
     >
       {children}
-    </span>
+    </div>
   );
 }
 

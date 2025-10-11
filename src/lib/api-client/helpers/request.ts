@@ -74,7 +74,7 @@ export async function fetcher<T = any>(
   } catch (error) {
     return {
       success: false,
-      error: FetchError.NETWORK_ERROR,
+      error: 'network-error',
       message:
         error instanceof Error ? error.message : 'Network error occurred',
     };

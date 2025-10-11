@@ -5,23 +5,28 @@ export interface Clickable {
   iconConfig: IconConfig;
 }
 
-export enum ClickableType {
-  COLLECTION_TAB = 'collection-tab',
-  COLLECTION_TAB_OVERLAY = 'collectionTab-overlay',
-  MURAL_CTA = 'mural-cta',
-  MURAL_OPTIONS = 'mural-options',
-  MURAL_THEME = 'mural-theme',
-}
+const CLICKABLE_TYPES = {
+  collectionTab: 'collection-tab',
+  collectionTabOverlay: 'collectionTab-overlay',
+  muralCta: 'mural-cta',
+  muralOptions: 'mural-options',
+  muralTheme: 'mural-theme',
+} as const;
+
+export type ClickableType =
+  (typeof CLICKABLE_TYPES)[keyof typeof CLICKABLE_TYPES];
 
 export type IconConfig =
-  | { type: IconType.NONE }
-  | { type: IconType.PREDEFINED; icon: AppIcon }
-  | { type: IconType.CUSTOM; url: string }
-  | { type: IconType.EMOJI; unicode: string };
+  | { type: 'none' }
+  | { type: 'predefined'; icon: AppIcon }
+  | { type: 'custom'; url: string }
+  | { type: 'emoji'; unicode: string };
 
-export enum IconType {
-  NONE = 'none',
-  PREDEFINED = 'predefined',
-  CUSTOM = 'custom',
-  EMOJI = 'emoji',
-}
+const ICON_TYPES = {
+  none: 'none',
+  predefined: 'predefined',
+  custom: 'custom',
+  emoji: 'emoji',
+} as const;
+
+export type IconType = (typeof ICON_TYPES)[keyof typeof ICON_TYPES];
