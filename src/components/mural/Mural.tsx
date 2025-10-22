@@ -12,7 +12,6 @@ import {
   CollectionTab,
 } from '../tabs-display/types/collectionTab';
 import { Pin } from '../pins-display/pin/types/pin';
-import { IconType } from '@/lib/types/clickable';
 
 import styles from './mural.module.scss';
 import ProfileMeasurer from './profile-measurer/ProfileMeasurer';

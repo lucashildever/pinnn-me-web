@@ -7,6 +7,7 @@ import LinkVariant from './variants/link-variant/LinkVariant';
 import { CardConfig } from './types/card';
 
 import styles from './pin-card.module.scss';
+import IntegrationVariant from './variants/integration-variant/IntegrationVariant';
 
 interface CardProps {
   caption: string;
@@ -46,6 +47,16 @@ export default function PinCard({
             caption={caption}
             meta="nome_do_arquivo.rar" // precisa vir do backend
             iconConfig={cardConfig.iconConfig}
+          />
+        </>
+      );
+    case 'integration':
+      return (
+        <>
+          {notFirstCard && <span className={styles['pin-line']} />}
+          <IntegrationVariant
+            caption={caption}
+            embedConfig={cardConfig.embedConfig}
           />
         </>
       );

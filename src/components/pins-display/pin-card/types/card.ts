@@ -1,4 +1,5 @@
 import { IconConfig } from '@/lib/types/clickable';
+import { EmbedConfig } from '../variants/integration-variant/types/embed';
 
 export interface Card {
   id: string;
@@ -11,4 +12,4 @@ export type CardConfig =
   | { variant: 'link'; iconConfig: IconConfig; href: string }
   | { variant: 'download'; iconConfig: IconConfig }
   | { variant: 'image'; imageSrc: string }
-  | { variant: 'integration' };
+  | { variant: 'integration'; embedConfig: EmbedConfig };

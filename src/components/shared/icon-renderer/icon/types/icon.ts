@@ -10,6 +10,7 @@ const ICONS: Record<string, string> = {
   Link: 'link',
   File: 'file',
   loading: 'loading',
+  youtube: 'youtube',
 } as const;
 
 export type AppIcon = (typeof ICONS)[keyof typeof ICONS];

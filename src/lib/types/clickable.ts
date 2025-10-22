@@ -21,12 +21,3 @@ export type IconConfig =
   | { type: 'predefined'; icon: AppIcon }
   | { type: 'custom'; url: string }
   | { type: 'emoji'; unicode: string };
-
-const ICON_TYPES = {
-  none: 'none',
-  predefined: 'predefined',
-  custom: 'custom',
-  emoji: 'emoji',
-} as const;
-
-export type IconType = (typeof ICON_TYPES)[keyof typeof ICON_TYPES];
