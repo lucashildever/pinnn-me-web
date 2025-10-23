@@ -31,14 +31,7 @@ export default function IntegrationVariant({
   return (
     <div className={styles['integration-variant']}>
       <p>{caption}</p>
-      <div
-        className={`
-          ${styles['integrated-app-container']} 
-          ${styles[embedConfig.platform]}
-        `}
-      >
-        <Embed config={embedConfig} />
-      </div>
+      <Embed config={embedConfig} />
     </div>
   );
 }
