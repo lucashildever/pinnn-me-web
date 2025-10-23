@@ -7,7 +7,8 @@ interface EmbedProps {
 
 export default function Embed({ config }: EmbedProps) {
   if (!config.html) {
-    return <div>Embed indisponível</div>;
+    // TODO - create a component for this later
+    return <div>Embed unavailable</div>;
   }
 
   return (
