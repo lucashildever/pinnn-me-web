@@ -1,11 +1,11 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   async rewrites() {
     return [
       {
-        source: "/sign-up",
-        destination: "/signup",
+        source: '/sign-up',
+        destination: '/signup',
       },
     ];
   },
@@ -13,6 +13,9 @@ const nextConfig: NextConfig = {
     prependData: `
       @use "@/styles" as *;
     `,
+  },
+  images: {
+    qualities: [70],
   },
 };
 
