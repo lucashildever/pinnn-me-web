@@ -1,5 +1,5 @@
 @mixin defs {
-  @include flex();
+  @include flex(row, center, center);
 
   .author-name {
     @include spacing(margin-right, 1);
@@ -25,4 +25,9 @@
 .author-meta-minimal-profile {
   @include defs();
   @include font-size('sm');
+}
+
+.author-meta-loading-screen {
+  @include defs();
+  @include font-size('md');
 }

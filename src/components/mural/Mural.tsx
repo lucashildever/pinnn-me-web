@@ -17,6 +17,7 @@ import styles from './mural.module.scss';
 import ProfileMeasurer from './profile-measurer/ProfileMeasurer';
 import { TabsProps } from './types/tabs';
 import ProfileOverlay from './profile/profile-overlay/ProfileOverlay';
+import LoadingScreen from '../loading-screen/LoadingScreen';
 
 interface MuralContainerProps {
   displayName: string;
@@ -159,29 +160,36 @@ export default function MuralContainer({
     handleTabChange: handleTabChange,
   };
 
+  /// REFATORAR ABAIXO
+
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
   return (
-    <div className={styles['mural-container']}>
-      <Profile muralName={displayName} bio={description} />
+    <>
+      <LoadingScreen isLoading={isLoading} />
+      <div className={styles['mural-container']}>
+        <Profile muralName={displayName} bio={description} />
 
-      <ProfileMeasurer ref={minimalProfileRef}>
-        <Profile minimal muralName={displayName} bio={description} />
-      </ProfileMeasurer>
+        <ProfileMeasurer ref={minimalProfileRef}>
+          <Profile minimal muralName={displayName} bio={description} />
+        </ProfileMeasurer>
 
-      {showProfileOverlay && (
-        <ProfileOverlay
-          tabsProps={tabsProps}
-          displayName={displayName}
-          description={description}
+        {showProfileOverlay && (
+          <ProfileOverlay
+            tabsProps={tabsProps}
+            displayName={displayName}
+            description={description}
+          />
+        )}
+
+        <TabsDisplay ref={tabsDisplayRef} {...tabsProps} />
+
+        <PinsDisplay
+          mainCollectionPins={mainCollectinoPins}
+          currentCollectionId={activeTabData.id}
+          muralName={displayName}
         />
-      )}
-
-      <TabsDisplay ref={tabsDisplayRef} {...tabsProps} />
-
-      <PinsDisplay
-        mainCollectionPins={mainCollectinoPins}
-        currentCollectionId={activeTabData.id}
-        muralName={displayName}
-      />
-    </div>
+      </div>
+    </>
   );
 }

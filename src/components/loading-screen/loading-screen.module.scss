@@ -1,0 +1,43 @@
+.loading-screen {
+  z-index: 100;
+  background-color: white;
+  @include size(100vw, 100vh);
+  @include position(absolute, 0, 0);
+  @include flex(column, center, center, null, 4);
+  text-align: center;
+
+  .mural-img-container {
+    position: relative;
+    border-radius: 50px;
+    overflow: hidden;
+    @include size(26, 26);
+    aspect-ratio: 1 / 1;
+
+    img {
+      object-fit: cover;
+    }
+  }
+
+  .loading-info {
+    span {
+      @include font-size('sm');
+      font-weight: 600;
+      opacity: 0.5;
+    }
+  }
+
+  .loading-bar {
+    @include size(38, 3);
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+    @include flex(row, center, flex-start);
+
+    .progress {
+      border-radius: 20px;
+      height: 100%;
+      background-color: #{get-color(dark)};
+      display: block;
+      transform-origin: left;
+    }
+  }
+}

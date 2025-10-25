@@ -6,7 +6,7 @@ import verifiedIcon from '/public/assets/icons/grey-verified.svg';
 interface AuthorMetaProps {
   muralName: string;
   hasBadge: boolean;
-  from: 'profile' | 'pin' | 'minimal-profile';
+  from: 'profile' | 'pin' | 'minimal-profile' | 'loading-screen';
 }
 
 export default function AuthorMeta({
