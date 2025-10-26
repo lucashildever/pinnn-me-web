@@ -17,7 +17,7 @@ import styles from './mural.module.scss';
 import ProfileMeasurer from './profile-measurer/ProfileMeasurer';
 import { TabsProps } from './types/tabs';
 import ProfileOverlay from './profile/profile-overlay/ProfileOverlay';
-import LoadingScreen from '../loading-screen/LoadingScreen';
+import Skeleton from '../skeleton/Skeleton';
 
 interface MuralContainerProps {
   displayName: string;
@@ -160,13 +160,9 @@ export default function MuralContainer({
     handleTabChange: handleTabChange,
   };
 
-  /// REFATORAR ABAIXO
-
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-
   return (
     <>
-      <LoadingScreen isLoading={isLoading} />
+      <Skeleton from={'mural'} />
       <div className={styles['mural-container']}>
         <Profile muralName={displayName} bio={description} />
 

@@ -1,0 +1,23 @@
+.profile-skeleton {
+  width: 100%;
+  height: #{get-spacing(6)};
+  background-color: grey;
+}
+// GLINT
+
+// .progress-glint {
+//   position: absolute;
+//   top: -25%;
+//   bottom: -25%;
+//   width: 6px;
+//   pointer-events: none;
+//   background: linear-gradient(
+//     90deg,
+//     rgba(255, 255, 255, 0.95) 0%,
+//     rgba(255, 255, 255, 1) 50%,
+//     rgba(255, 255, 255, 0.95) 100%
+//   );
+//   filter: blur(6px);
+//   transform: none;
+//   will-change: left, transform;
+// }
