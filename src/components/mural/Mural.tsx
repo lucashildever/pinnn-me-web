@@ -161,31 +161,40 @@ export default function MuralContainer({
   };
 
   return (
-    <>
-      <Skeleton from={'mural'} />
-      <div className={styles['mural-container']}>
+    <div className={styles['mural-container']}>
+      {/* {displayName && description ? (
         <Profile muralName={displayName} bio={description} />
+      ) : (
+        <Skeleton from={'mural'} />
+      )} */}
+      <Skeleton from={'profile'} />
 
-        <ProfileMeasurer ref={minimalProfileRef}>
-          <Profile minimal muralName={displayName} bio={description} />
-        </ProfileMeasurer>
+      <ProfileMeasurer ref={minimalProfileRef}>
+        <Profile minimal muralName={displayName} bio={description} />
+      </ProfileMeasurer>
 
-        {showProfileOverlay && (
-          <ProfileOverlay
-            tabsProps={tabsProps}
-            displayName={displayName}
-            description={description}
-          />
-        )}
-
-        <TabsDisplay ref={tabsDisplayRef} {...tabsProps} />
-
-        <PinsDisplay
-          mainCollectionPins={mainCollectinoPins}
-          currentCollectionId={activeTabData.id}
-          muralName={displayName}
+      {showProfileOverlay && (
+        <ProfileOverlay
+          tabsProps={tabsProps}
+          displayName={displayName}
+          description={description}
         />
-      </div>
-    </>
+      )}
+
+      {/* {tabsProps ? (
+        <TabsDisplay ref={tabsDisplayRef} {...tabsProps} />
+      ) : (
+        <Skeleton from={'tabs'} />
+      )} */}
+      <Skeleton from={'tabs'} />
+
+      {/* // temporario */}
+      <Skeleton from={'pin'} />
+      {/* <PinsDisplay
+        mainCollectionPins={mainCollectinoPins}
+        currentCollectionId={activeTabData.id}
+        muralName={displayName}
+      /> */}
+    </div>
   );
 }

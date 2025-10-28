@@ -5,6 +5,7 @@ import Pin from '@/components/pins-display/pin/Pin';
 
 import { Pin as IPin } from './pin/types/pin';
 import { usePins } from './utils/usePins';
+import Skeleton from '../skeleton/Skeleton';
 
 interface PinsDisplayProps {
   currentCollectionId: string;
@@ -68,16 +69,20 @@ export default function PinsDisplay({
 
   return (
     <>
-      {pins.map((pin: IPin, index: number) => (
-        <React.Fragment key={`${pin.id}-${index}`}>
-          <Pin
-            muralName={muralName}
-            description={pin.description}
-            cards={pin.cards}
-          />
-          <Divider />
-        </React.Fragment>
-      ))}
+      {pins ? (
+        pins.map((pin: IPin, index: number) => (
+          <React.Fragment key={`${pin.id}-${index}`}>
+            <Pin
+              muralName={muralName}
+              description={pin.description}
+              cards={pin.cards}
+            />
+            <Divider />
+          </React.Fragment>
+        ))
+      ) : (
+        <Skeleton from="pin" />
+      )}
 
       {hasNextPage ? (
         <div
@@ -92,12 +97,7 @@ export default function PinsDisplay({
             color: '#666',
           }}
         >
-          {isFetchingNextPage && (
-            <div>
-              {/* TODO - add loading component */}
-              <p>loading more pins</p>
-            </div>
-          )}
+          {isFetchingNextPage && <Skeleton from="pin" />}
         </div>
       ) : (
         <div
