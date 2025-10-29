@@ -109,3 +109,43 @@
 @mixin shadow {
   box-shadow: 1px 2px 6px rgba(0, 0, 0, 0.185);
 }
+
+// skeletons loading glint
+@keyframes glint-sweep {
+  0% {
+    left: -150%;
+  }
+  100% {
+    left: 150%;
+  }
+}
+
+@mixin loading-glint(
+  $duration: 2s,
+  $delay: 0s,
+  $color: rgba(255, 255, 255, 0.95),
+  $blur: 6px,
+  $width: 60px
+) {
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: -25%;
+    bottom: -25%;
+    left: -150%;
+    width: $width;
+    pointer-events: none;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      $color 50%,
+      transparent 100%
+    );
+    filter: blur($blur);
+    animation: glint-sweep $duration $delay infinite ease-in-out;
+    will-change: left;
+  }
+}

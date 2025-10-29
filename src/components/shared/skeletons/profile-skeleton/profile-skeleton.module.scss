@@ -1,0 +1,42 @@
+.profile-skeleton {
+  width: 100%;
+  @include flex(column, center, center);
+
+  .cover-img {
+    @include loading-glint();
+    @include size(100%, 38);
+    @include flex(row, flex-end, center);
+    background-color: #{get-color(soft-grey)};
+    border-radius: $outer-corner;
+  }
+
+  .profile-img {
+    @include loading-glint();
+    @include size(30, 30);
+    background-color: #{get-color(soft-grey)};
+    @include spacing(margin-top, -17);
+    border: solid white 6px;
+    border-radius: 50%;
+  }
+
+  .profile-info {
+    @include size(70%, auto);
+    @include flex(column, center, center, null, 3);
+    @include spacing(margin, 3, 0, 3, 0);
+
+    .mural-name,
+    .mural-desc {
+      border-radius: 5px;
+      background-color: #{get-color(soft-grey)};
+      @include loading-glint();
+    }
+
+    .mural-name {
+      @include size(30%, 7);
+    }
+
+    .mural-desc {
+      @include size(50%, 7);
+    }
+  }
+}

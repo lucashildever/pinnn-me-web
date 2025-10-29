@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import TabsDisplay from '../tabs-display/TabsDisplay';
@@ -12,12 +12,16 @@ import {
   CollectionTab,
 } from '../tabs-display/types/collectionTab';
 import { Pin } from '../pins-display/pin/types/pin';
+import { TabsProps } from './types/tabs';
+
+import ProfileMeasurer from './profile-measurer/ProfileMeasurer';
+import ProfileOverlay from './profile/profile-overlay/ProfileOverlay';
+
+import ProfileSkeleton from '../shared/skeletons/profile-skeleton/ProfileSkeleton';
+import TabsSkeleton from '../shared/skeletons/tabs-skeleton/TabsSkeleton';
+import PinSkeleton from '../shared/skeletons/pin-skeleton/PinSkeleton';
 
 import styles from './mural.module.scss';
-import ProfileMeasurer from './profile-measurer/ProfileMeasurer';
-import { TabsProps } from './types/tabs';
-import ProfileOverlay from './profile/profile-overlay/ProfileOverlay';
-import Skeleton from '../skeleton/Skeleton';
 
 interface MuralContainerProps {
   displayName: string;
@@ -162,16 +166,14 @@ export default function MuralContainer({
 
   return (
     <div className={styles['mural-container']}>
-      {/* {displayName && description ? (
+      <Suspense fallback={<ProfileSkeleton />}>
         <Profile muralName={displayName} bio={description} />
-      ) : (
-        <Skeleton from={'mural'} />
-      )} */}
-      <Skeleton from={'profile'} />
-
-      <ProfileMeasurer ref={minimalProfileRef}>
-        <Profile minimal muralName={displayName} bio={description} />
-      </ProfileMeasurer>
+      </Suspense>
+      {/* <Suspense fallback={<ProfileSkeleton />}>
+        <ProfileMeasurer ref={minimalProfileRef}>
+          <Profile minimal muralName={displayName} bio={description} />
+        </ProfileMeasurer>
+      </Suspense> */}
 
       {showProfileOverlay && (
         <ProfileOverlay
@@ -181,20 +183,17 @@ export default function MuralContainer({
         />
       )}
 
-      {/* {tabsProps ? (
+      <Suspense fallback={<TabsSkeleton />}>
         <TabsDisplay ref={tabsDisplayRef} {...tabsProps} />
-      ) : (
-        <Skeleton from={'tabs'} />
-      )} */}
-      <Skeleton from={'tabs'} />
+      </Suspense>
 
-      {/* // temporario */}
-      <Skeleton from={'pin'} />
-      {/* <PinsDisplay
-        mainCollectionPins={mainCollectinoPins}
-        currentCollectionId={activeTabData.id}
-        muralName={displayName}
-      /> */}
+      <Suspense fallback={<PinSkeleton />}>
+        <PinsDisplay
+          mainCollectionPins={mainCollectinoPins}
+          currentCollectionId={activeTabData.id}
+          muralName={displayName}
+        />
+      </Suspense>
     </div>
   );
 }

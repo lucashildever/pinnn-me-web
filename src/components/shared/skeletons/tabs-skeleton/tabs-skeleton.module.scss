@@ -1,0 +1,13 @@
+.tabs-skeleton {
+  @include size(100%, 11);
+  @include flex(row, center, space-between);
+  gap: #{get-spacing(3)}px;
+
+  .tab {
+    background-color: #{get-color(soft-grey)};
+    @include loading-glint();
+
+    @include size(100%, 100%);
+    border-radius: #{get-spacing(10)}px;
+  }
+}

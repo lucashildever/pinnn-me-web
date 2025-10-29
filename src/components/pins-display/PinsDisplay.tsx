@@ -1,11 +1,12 @@
 import React, { useEffect, useRef } from 'react';
 
+import PinSkeleton from '../shared/skeletons/pin-skeleton/PinSkeleton';
 import Divider from '@/components/shared/divider/divider';
 import Pin from '@/components/pins-display/pin/Pin';
 
 import { Pin as IPin } from './pin/types/pin';
+
 import { usePins } from './utils/usePins';
-import Skeleton from '../skeleton/Skeleton';
 
 interface PinsDisplayProps {
   currentCollectionId: string;
@@ -81,7 +82,7 @@ export default function PinsDisplay({
           </React.Fragment>
         ))
       ) : (
-        <Skeleton from="pin" />
+        <PinSkeleton />
       )}
 
       {hasNextPage ? (
@@ -97,7 +98,7 @@ export default function PinsDisplay({
             color: '#666',
           }}
         >
-          {isFetchingNextPage && <Skeleton from="pin" />}
+          {isFetchingNextPage && <PinSkeleton />}
         </div>
       ) : (
         <div

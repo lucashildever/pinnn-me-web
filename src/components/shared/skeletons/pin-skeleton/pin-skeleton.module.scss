@@ -1,0 +1,45 @@
+.pin-skeleton {
+  width: 100%;
+  margin-top: #{get-spacing(4)}px;
+
+  .author-meta {
+    @include flex(row, center, flex-start);
+
+    .pic {
+      @include size(12, 12);
+      border-radius: 20px;
+      background-color: #{get-color(soft-grey)};
+      @include spacing(margin-right, 3);
+      @include loading-glint();
+    }
+
+    .mural-name {
+      @include size(25, 7);
+      background-color: #{get-color(soft-grey)};
+      border-radius: 5px;
+      @include loading-glint();
+    }
+  }
+
+  .description-container {
+    border-left: 1px solid #{get-color(soft-grey)};
+    margin-left: #{get-spacing(6)}px;
+    @include spacing(padding, 4, 0, 6, 6);
+    @include loading-glint();
+
+    width: 100%;
+
+    .pin-description {
+      background-color: #{get-color(soft-grey)};
+      @include size(55, 7);
+      border-radius: 5px;
+    }
+  }
+
+  .pin-card {
+    @include size(100%, 70);
+    background-color: #{get-color(soft-grey)};
+    border-radius: $outer-corner;
+    @include loading-glint();
+  }
+}
