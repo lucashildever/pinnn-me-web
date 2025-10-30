@@ -158,6 +158,8 @@ export default function MuralContainer({
     return () => observer.disconnect();
   }, [minimalProfileHeight]);
 
+  // Refactor abaixo
+
   const tabsProps: TabsProps = {
     collectionTabs: collections,
     activeTabData: activeTabData,
@@ -169,11 +171,12 @@ export default function MuralContainer({
       <Suspense fallback={<ProfileSkeleton />}>
         <Profile muralName={displayName} bio={description} />
       </Suspense>
+
       {/* <Suspense fallback={<ProfileSkeleton />}>
         <ProfileMeasurer ref={minimalProfileRef}>
           <Profile minimal muralName={displayName} bio={description} />
         </ProfileMeasurer>
-      </Suspense> */}
+      </Suspense>
 
       {showProfileOverlay && (
         <ProfileOverlay
@@ -181,7 +184,7 @@ export default function MuralContainer({
           displayName={displayName}
           description={description}
         />
-      )}
+      )} */}
 
       <Suspense fallback={<TabsSkeleton />}>
         <TabsDisplay ref={tabsDisplayRef} {...tabsProps} />

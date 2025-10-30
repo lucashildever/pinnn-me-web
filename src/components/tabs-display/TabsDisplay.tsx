@@ -126,13 +126,13 @@ export default function TabsDisplay({
       ref={ref}
       style={style}
     >
-      {/* <Clickable
+      <Clickable
         payload={activeTabData.displayElement}
         config={{
-          clickableType: ClickableType.CollectionTabOverlay,
+          clickableType: 'collection-tab-overlay',
           displayConfig: overlayTabDisplayConfig,
         }}
-      /> */}
+      />
       <div className={styles['tabs-container']} ref={containerRef}>
         {collectionTabs.map((col, index) => {
           const isActive = activeTabData.id === col.id;
