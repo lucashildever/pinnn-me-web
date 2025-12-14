@@ -106,7 +106,8 @@ $outer-corner: map.get($spacing-scale, 8) * 1px;
 // create S, M and L sizes for the corners
 
 $colors: (
-  'dark': #363636,
+  'base-dark': #222222,
+  'clearer-dark': #2f2f2f,
   'light': white,
   'soft-grey': #dfdfdf,
   'orange': #e58f43,

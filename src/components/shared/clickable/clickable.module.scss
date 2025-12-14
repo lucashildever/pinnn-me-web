@@ -1,6 +1,6 @@
 @mixin tab-defs {
   @include base-clickable;
-  @include font-size("md");
+  @include font-size('md');
   white-space: nowrap;
   user-select: none;
   gap: #{get-spacing(2)}px;
@@ -14,6 +14,7 @@
 
   &.active {
     cursor: default;
+    background-color: transparent;
     box-shadow: 1px 3px 11px rgba(0, 0, 0, 0);
   }
 }
@@ -26,7 +27,7 @@
   display: none;
   z-index: 2;
   padding: 0;
-  background: #ffffff;
+  background-color: get-color('base-dark');
 
   &.visible {
     display: flex;
@@ -38,8 +39,8 @@
     right: auto;
     background: linear-gradient(
       90deg,
-      rgba(255, 255, 255, 1) 87%,
-      rgba(255, 255, 255, 0) 100%
+      rgba(get-color('base-dark'), 1) 87%,
+      rgba(get-color('base-dark'), 0) 100%
     );
   }
 
@@ -49,8 +50,8 @@
     left: auto;
     background: linear-gradient(
       265deg,
-      rgba(255, 255, 255, 1) 87%,
-      rgba(255, 255, 255, 0) 100%
+      rgba(get-color('base-dark'), 1) 87%,
+      rgba(get-color('base-dark'), 0) 100%
     );
   }
 }

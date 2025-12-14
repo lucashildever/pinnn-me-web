@@ -5,7 +5,7 @@
 
   &::before,
   &::after {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     bottom: 0;
@@ -18,8 +18,8 @@
     left: 0;
     background: linear-gradient(
       to right,
-      rgba(255, 255, 255, 1),
-      rgba(255, 255, 255, 0)
+      rgba(34, 34, 34, 1),
+      rgba(34, 34, 34, 0)
     );
   }
 
@@ -27,8 +27,8 @@
     right: 0;
     background: linear-gradient(
       to left,
-      rgba(255, 255, 255, 1),
-      rgba(255, 255, 255, 0)
+      rgba(34, 34, 34, 1),
+      rgba(34, 34, 34, 0)
     );
   }
 
