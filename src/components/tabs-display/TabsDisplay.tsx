@@ -9,7 +9,6 @@ import {
   TabClick,
 } from '@/components/shared/clickable/types/clickableConfig';
 import { ActiveTabData, CollectionTab } from './types/collectionTab';
-import { ClickableType } from '@/lib/types/clickable';
 
 import { useTabsDragger } from './utils/useTabsDragger';
 
@@ -19,7 +18,6 @@ interface TabsDisplayProps {
   handleTabChange: TabClick;
   collectionTabs: CollectionTab[];
   activeTabData: ActiveTabData;
-  ref?: React.RefObject<HTMLDivElement | null>;
   style?: React.CSSProperties;
 }
 
@@ -27,7 +25,6 @@ export default function TabsDisplay({
   collectionTabs,
   activeTabData,
   handleTabChange,
-  ref,
   style,
 }: TabsDisplayProps) {
   const { containerRef, dragEvents, hasMoved } = useTabsDragger();
@@ -120,12 +117,7 @@ export default function TabsDisplay({
   };
 
   return (
-    <div
-      className={`${styles['tabs-display']}`}
-      {...dragEvents}
-      ref={ref}
-      style={style}
-    >
+    <div className={`${styles['tabs-display']}`} {...dragEvents} style={style}>
       <Clickable
         payload={activeTabData.displayElement}
         config={{

@@ -38,8 +38,8 @@ export const apiClient = {
     get: async (mural: MuralRequest): Promise<FetcherResponse> => {
       const queryParams: Record<string, boolean> = {};
 
-      if (mural.getMainCollectionPins) {
-        queryParams.getMainCollectionPins = true;
+      if (mural.getMainCollectionResources) {
+        queryParams.getMainCollectionResources = true;
       }
 
       return await fetcher<FetcherResponse>(`/murals/${mural.muralName}`, {
@@ -64,7 +64,7 @@ export const apiClient = {
       });
     },
   },
-  pins: {
+  resources: {
     create: async (
       collectionId: string,
       pin: CreatePinRequest,
@@ -84,12 +84,12 @@ export const apiClient = {
         token: token,
       });
     },
-    getPaginated: async (
+    getResources: async (
       collectionId: string,
       page: number = 1,
       limit: number = 5,
     ): Promise<FetcherResponse> => {
-      return await fetcher(`/pins/paginated/${collectionId}`, {
+      return await fetcher(`/resources/collection/${collectionId}`, {
         method: 'GET',
         queryParams: {
           page: page.toString(),

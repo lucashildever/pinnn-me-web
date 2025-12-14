@@ -1,19 +1,25 @@
 import React from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { apiClient } from '@/lib/api-client/apiClient';
-import { Pin } from '../pin/types/pin';
+import { Resource } from '../types/resource';
+import { Pagination } from '@/lib/types/pagination';
 
-export const usePins = (collectionId: string, initialPins?: Pin[] | null) => {
+export interface PaginatedResources {
+  resources: Resource[];
+  pagination: Pagination;
+}
+
+export const useResources = (collectionId: string, initialResources?: any) => {
   const query = useInfiniteQuery({
-    queryKey: ['pins', collectionId, 'infinite'],
+    queryKey: ['resources', collectionId, 'infinite'],
     queryFn: async ({ pageParam = 1 }) => {
-      const result = await apiClient.pins.getPaginated(
+      const result = await apiClient.resources.getResources(
         collectionId,
         pageParam,
         5,
       );
       if (!result.success) {
-        throw new Error(result.message || 'Failed to fetch pins');
+        throw new Error(result.message || 'Failed to fetch resources');
       }
       if (!result.data) {
         throw new Error('No data found in response');
@@ -33,30 +39,31 @@ export const usePins = (collectionId: string, initialPins?: Pin[] | null) => {
       return currentPage < totalPages ? currentPage + 1 : undefined;
     },
     enabled: !!collectionId,
-    staleTime: 0,
+    staleTime:
+      initialResources && initialResources.resources.length > 0
+        ? 5 * 60 * 1000
+        : 0,
     gcTime: 5 * 60 * 1000,
-    placeholderData:
-      initialPins && initialPins.length > 0
-        ? {
-            pages: [
-              {
-                success: true,
-                data: {
-                  data: initialPins,
-                  pagination: {
-                    currentPage: 1,
-                    totalItems: initialPins.length,
-                    itemsPerPage: 5,
-                  },
-                },
+    initialData: () => {
+      if (initialResources && initialResources.resources.length > 0) {
+        return {
+          pages: [
+            {
+              success: true,
+              data: {
+                data: initialResources.resources,
+                pagination: initialResources.pagination,
               },
-            ],
-            pageParams: [1],
-          }
-        : undefined,
+            },
+          ],
+          pageParams: [1],
+        };
+      }
+      return undefined;
+    },
   });
 
-  const allPins = React.useMemo(() => {
+  const allResources = React.useMemo(() => {
     if (!query.data?.pages) {
       return [];
     }
@@ -68,7 +75,7 @@ export const usePins = (collectionId: string, initialPins?: Pin[] | null) => {
 
   return {
     ...query,
-    pins: allPins,
+    resources: allResources,
     hasNextPage: query.hasNextPage,
     fetchNextPage: query.fetchNextPage,
     isFetchingNextPage: query.isFetchingNextPage,

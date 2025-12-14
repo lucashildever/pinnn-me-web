@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import IconRenderer from '@/components/shared/icon-renderer/IconRenderer';
 
 import { IconConfig } from '@/lib/types/clickable';
-import { CardVariant } from '../../types/cardVariant';
+import { CardVariant } from '../../../pin-card/types/cardVariant';
 
 import { extractDomain } from '../link-variant/utils/extractDomain';
 

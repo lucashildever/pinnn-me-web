@@ -1,0 +1,47 @@
+import { PinsData } from '../pin/types/pin';
+import { HistoryEntry } from './history-entry';
+
+export type Resource =
+  | PinResource
+  | SharedPinResource
+  | PinGroupResource
+  | SharedPinGroupResource;
+
+export type ResourceType =
+  | 'pin'
+  | 'shared-pin'
+  | 'pin-group'
+  | 'shared-pin-group';
+
+interface BaseResource {
+  id: string;
+  type: ResourceType;
+  order: string;
+  pins: PinsData;
+}
+
+export interface PinResource extends BaseResource {
+  type: 'pin';
+}
+
+export interface SharedPinResource extends BaseResource {
+  type: 'shared-pin';
+}
+
+export interface PinGroupResource extends BaseResource {
+  type: 'pin-group';
+  meta: ResourceMeta;
+}
+
+export interface SharedPinGroupResource extends BaseResource {
+  type: 'shared-pin-group';
+  meta: ResourceMeta;
+}
+
+export interface ResourceMeta {
+  firstResourceId: string | null;
+  groupName: string;
+  history: HistoryEntry[];
+  inheritedPinsTotal: number;
+  sharedResourceId: string | null;
+}

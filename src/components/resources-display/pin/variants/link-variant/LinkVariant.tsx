@@ -2,7 +2,7 @@
 
 import CompactCard from '../common/CompactCard';
 
-import { CardVariant } from '../../types/cardVariant';
+import { CardVariant } from '../../../pin-card/types/cardVariant';
 import { IconConfig } from '@/lib/types/clickable';
 
 interface LinkVariantProps {

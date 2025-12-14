@@ -2,23 +2,25 @@ import React, { useEffect, useRef } from 'react';
 
 import PinSkeleton from '../shared/skeletons/pin-skeleton/PinSkeleton';
 import Divider from '@/components/shared/divider/divider';
-import Pin from '@/components/pins-display/pin/Pin';
+import Pin from '@/components/resources-display/pin/Pin';
 
-import { Pin as IPin } from './pin/types/pin';
+import { useResources } from './utils/useResources';
+import PinResource from './pin-resource/PinResource';
+import SharedPinResource from './shared-pin-resource/SharedPinResource';
+import SharedPinGroupResource from './shared-pin-group-resource/SharedPinGroupResource';
+import PinGroupResource from './pin-group-resource/PinGroupResource';
 
-import { usePins } from './utils/usePins';
-
-interface PinsDisplayProps {
+interface ResourcesDisplayProps {
   currentCollectionId: string;
-  mainCollectionPins: IPin[] | undefined;
+  mainCollectionResources: any;
   muralName: string;
 }
 
-export default function PinsDisplay({
+export default function ResourcesDisplay({
   currentCollectionId,
-  mainCollectionPins,
+  mainCollectionResources,
   muralName,
-}: PinsDisplayProps) {
+}: ResourcesDisplayProps) {
   const observerRef = useRef<HTMLDivElement>(null);
 
   if (!currentCollectionId) {
@@ -26,14 +28,18 @@ export default function PinsDisplay({
   }
 
   const {
-    pins,
+    resources,
     error,
     isError,
-    isLoading,
     hasNextPage,
     fetchNextPage,
     isFetchingNextPage,
-  } = usePins(currentCollectionId, mainCollectionPins);
+    isLoading,
+  } = useResources(currentCollectionId, mainCollectionResources);
+
+  useEffect(() => {
+    console.log('resources ->', resources);
+  }, [resources]);
 
   useEffect(() => {
     if (!observerRef.current || !hasNextPage || isFetchingNextPage) return;
@@ -57,33 +63,51 @@ export default function PinsDisplay({
   }, [hasNextPage, fetchNextPage, isFetchingNextPage]);
 
   if (isLoading) {
-    return <div>Carregando pins...</div>;
+    return <PinSkeleton />;
   }
 
   if (isError) {
-    return <div>Erro ao carregar pins: {(error as Error).message}</div>;
+    return (
+      <div>Erro ao carregar pins: {error?.message || 'Erro desconhecido'}</div>
+    );
   }
 
-  if (!pins || pins.length === 0) {
+  if (!resources || resources.length === 0) {
     return <p>Nenhum pin encontrado nesta coleção</p>;
   }
 
   return (
     <>
-      {pins ? (
-        pins.map((pin: IPin, index: number) => (
-          <React.Fragment key={`${pin.id}-${index}`}>
-            <Pin
-              muralName={muralName}
-              description={pin.description}
-              cards={pin.cards}
-            />
-            <Divider />
-          </React.Fragment>
-        ))
-      ) : (
-        <PinSkeleton />
-      )}
+      {resources.map((resource: any, index: number) => {
+        switch (resource.type) {
+          case 'pin':
+            return (
+              <React.Fragment key={`${resource.id}-${index}`}>
+                <PinResource />
+              </React.Fragment>
+            );
+          case 'shared-pin':
+            return (
+              <React.Fragment key={`${resource.id}-${index}`}>
+                <SharedPinResource />
+              </React.Fragment>
+            );
+          case 'pin-group':
+            return (
+              <React.Fragment key={`${resource.id}-${index}`}>
+                <PinGroupResource />
+              </React.Fragment>
+            );
+          case 'shared-pin-group':
+            return (
+              <React.Fragment key={`${resource.id}-${index}`}>
+                <SharedPinGroupResource />
+              </React.Fragment>
+            );
+          default:
+            return 'invalid resource type';
+        }
+      })}
 
       {hasNextPage ? (
         <div

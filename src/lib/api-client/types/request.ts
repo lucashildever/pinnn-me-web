@@ -1,6 +1,5 @@
 import { CollectionTab } from '@/components/tabs-display/types/collectionTab';
-import { Card } from '@/components/pins-display/pin-card/types/card';
-import { Pin } from '@/components/pins-display/pin/types/pin';
+import { Pin } from '@/components/resources-display/types/resource';
 
 export interface FetcherOptions {
   method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
@@ -19,7 +18,7 @@ export interface CreateMuralRequest {
 
 export interface MuralRequest {
   muralName: string;
-  getMainCollectionPins: boolean;
+  getMainCollectionResources: boolean;
 }
 
 // Collections
@@ -28,8 +27,4 @@ export interface CreateCollectionRequest extends Omit<CollectionTab, 'order'> {
 }
 
 // Pins
-export interface CreatePinRequest extends Omit<Pin, 'id' | 'order' | 'cards'> {
-  cards: CreateCardRequest;
-}
-
-export interface CreateCardRequest extends Omit<Card, 'id'> {}
+export interface CreatePinRequest extends Omit<Pin, 'id' | 'order' | 'cards'> {}
