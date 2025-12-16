@@ -1,12 +1,12 @@
 'use client';
 
-import IconRenderer from '../icon-renderer/IconRenderer';
-
 import { ClickableConfig } from './types/clickableConfig';
 import { Clickable as IClickable } from '@/components/shared/clickable/types/clickable';
 
 import styles from './clickable.module.scss';
 import { CollectionTab } from './collection-tab/CollectionTab';
+import { CallToAction } from './call-to-action/CallToAction';
+import { MuralOptions } from './mural-options/MuralOptions';
 
 interface ClickableProps {
   payload: IClickable;
@@ -28,27 +28,9 @@ export default function Clickable({ payload, config, style }: ClickableProps) {
         />
       );
     case 'call-to-action':
-      return (
-        <a
-          style={style}
-          className={styles['profile-cta']}
-          href={config.link}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <IconRenderer config={payload.iconConfig} />
-          <p>{payload.content}</p>
-        </a>
-      );
+      return <CallToAction payload={payload} config={config} style={style} />;
     case 'mural-options':
-      return (
-        <div
-          className={styles[`${config.clickableType}-button-clickable`]}
-          style={style}
-        >
-          <IconRenderer config={payload.iconConfig} />
-        </div>
-      );
+      return <MuralOptions payload={payload} config={config} style={style} />;
     default:
       return null;
   }

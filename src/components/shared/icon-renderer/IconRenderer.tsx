@@ -1,15 +1,12 @@
 'use client';
 
 import { ReactNode, useState } from 'react';
-import Image from 'next/image';
-
-import Icon from './icon/Icon';
-
 import { IconConfig } from './icon/types/app-icon';
 import { emojiParser } from './utils/emojiParser';
-
 import tempCustomImg from '/public/assets/temp/tt.jpg';
 import styles from './icon-renderer.module.scss';
+import Image from 'next/image';
+import Icon from './icon/Icon';
 
 interface ConfigureIconProps {
   config: IconConfig;

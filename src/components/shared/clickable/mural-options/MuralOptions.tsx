@@ -1,28 +1,24 @@
 'use client';
 
 import IconRenderer from '../../icon-renderer/IconRenderer';
-import { CallToActionConfig } from '../types/clickableConfig';
+import { UtilityButtonConfig } from '../types/clickableConfig';
 import { Clickable as IClickable } from '@/components/shared/clickable/types/clickable';
 import styles from '../clickable.module.scss';
 import React from 'react';
 
-interface CallToActionProps {
+interface MuralOptionsProps {
   payload: IClickable;
-  config: CallToActionConfig;
+  config: UtilityButtonConfig;
   style?: React.CSSProperties;
 }
 
-export function CallToAction({ payload, config, style }: CallToActionProps) {
+export function MuralOptions({ payload, config, style }: MuralOptionsProps) {
   return (
-    <a
+    <div
+      className={styles[`${config.clickableType}-button-clickable`]}
       style={style}
-      className={styles['profile-cta']}
-      href={config.link}
-      target="_blank"
-      rel="noopener noreferrer"
     >
       <IconRenderer config={payload.iconConfig} />
-      <p>{payload.content}</p>
-    </a>
+    </div>
   );
 }

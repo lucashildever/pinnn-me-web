@@ -33,5 +33,4 @@ export interface CallToActionConfig {
 
 export interface UtilityButtonConfig {
   clickableType: 'mural-options';
-  // I may need to add more properties here in the future
 }
