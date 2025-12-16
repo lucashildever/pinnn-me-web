@@ -12,7 +12,7 @@ import { CreatePinRequest } from '@/lib/api-client/types/request';
 import { apiClient } from '@/lib/api-client/apiClient';
 
 import styles from './create-pin.module.scss';
-import { AppIcon } from '@/components/shared/icon-renderer/icon/types/icon';
+import { AppIcon } from '@/components/shared/icon-renderer/icon/types/app-icon';
 
 const CreatePinForm: React.FC = () => {
   const router = useParams();

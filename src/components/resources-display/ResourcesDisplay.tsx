@@ -1,18 +1,18 @@
 import React, { useEffect, useRef } from 'react';
 
 import PinSkeleton from '../shared/skeletons/pin-skeleton/PinSkeleton';
-import Divider from '@/components/shared/divider/divider';
-import Pin from '@/components/resources-display/pin/Pin';
 
 import { useResources } from './utils/useResources';
-import PinResource from './pin-resource/PinResource';
-import SharedPinResource from './shared-pin-resource/SharedPinResource';
-import SharedPinGroupResource from './shared-pin-group-resource/SharedPinGroupResource';
-import PinGroupResource from './pin-group-resource/PinGroupResource';
+import Pin from './pin/Pin';
+import SharedPin from './shared-pin/SharedPin';
+import SharedPinGroup from './shared-pin-group/SharedPinGroup';
+import PinGroup from './pin-group/PinGroup';
+
+import { Resource } from './types/resource';
 
 interface ResourcesDisplayProps {
   currentCollectionId: string;
-  mainCollectionResources: any;
+  mainCollectionResources: Resource[];
   muralName: string;
 }
 
@@ -78,30 +78,30 @@ export default function ResourcesDisplay({
 
   return (
     <>
-      {resources.map((resource: any, index: number) => {
+      {resources.map((resource: Resource, index: number) => {
         switch (resource.type) {
           case 'pin':
             return (
               <React.Fragment key={`${resource.id}-${index}`}>
-                <PinResource />
+                <Pin variants={resource.pins.data[0].variants} />
               </React.Fragment>
             );
           case 'shared-pin':
             return (
               <React.Fragment key={`${resource.id}-${index}`}>
-                <SharedPinResource />
+                <SharedPin data={resource.pins.data[0]} />
               </React.Fragment>
             );
           case 'pin-group':
             return (
               <React.Fragment key={`${resource.id}-${index}`}>
-                <PinGroupResource />
+                <PinGroup />
               </React.Fragment>
             );
           case 'shared-pin-group':
             return (
               <React.Fragment key={`${resource.id}-${index}`}>
-                <SharedPinGroupResource />
+                <SharedPinGroup />
               </React.Fragment>
             );
           default:

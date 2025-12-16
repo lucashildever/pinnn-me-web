@@ -7,7 +7,7 @@
     @include size(100%, 38);
     @include flex(row, flex-end, center);
     background-color: #{get-color(soft-grey)};
-    border-radius: $outer-corner;
+    border-radius: $large-corner;
   }
 
   .profile-img {

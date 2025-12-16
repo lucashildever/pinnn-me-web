@@ -1,4 +1,4 @@
-import { Clickable } from '@/lib/types/clickable';
+import { Clickable } from '@/components/shared/clickable/types/clickable';
 
 export interface CollectionTab {
   id: string;

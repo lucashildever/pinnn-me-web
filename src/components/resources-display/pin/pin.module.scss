@@ -1,9 +1,0 @@
-.pin {
-  position: relative;
-  width: 100%;
-
-  p.pin-description {
-    @include spacing(padding, 5, 2, 6, 4);
-    @include pin-line-defs;
-  }
-}

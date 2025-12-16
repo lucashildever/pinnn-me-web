@@ -56,7 +56,7 @@
   @include flex(row, center, center, unset);
   width: fit-content;
   height: fit-content;
-  border-radius: $outer-corner;
+  border-radius: $large-corner;
   text-align: center;
   font-weight: 600;
   background-color: get-color('clearer-dark');
@@ -64,7 +64,7 @@
 }
 
 @mixin input-field {
-  border-radius: $inner-corner;
+  border-radius: $small-corner;
   @include spacing(padding, 5, 5);
   background-color: #e1e1e1;
   @include font-size('sm');
@@ -90,15 +90,8 @@
 }
 
 @mixin base-button {
-  border-radius: $outer-corner;
+  border-radius: $large-corner;
   @include font-size('sm');
-}
-
-@mixin pin-card-defs {
-  @include spacing(padding, 5);
-  border-radius: $outer-corner;
-  @include shadow;
-  z-index: 1;
 }
 
 @mixin pin-line-defs {

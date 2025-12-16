@@ -1,15 +1,12 @@
 import { ActiveTabData } from '@/components/tabs-display/types/collectionTab';
-import { ClickableType } from '@/lib/types/clickable';
-
-export type TabClick = (tabData: ActiveTabData) => void;
-
-// Clickable configs
 
 export type ClickableConfig =
   | CollectionTabConfig
   | CollectionTabOverlayConfig
   | UtilityButtonConfig
-  | MuralCtaConfig;
+  | CallToActionConfig;
+
+export type TabClick = (tabData: ActiveTabData) => void;
 
 export interface CollectionTabConfig {
   clickableType: 'collection-tab';
@@ -29,11 +26,12 @@ export interface CollectionTabOverlayConfig {
   displayConfig: OverlayTabDisplayConfig;
 }
 
-export interface MuralCtaConfig {
-  clickableType: 'mural-cta';
+export interface CallToActionConfig {
+  clickableType: 'call-to-action';
   link: string;
 }
 
 export interface UtilityButtonConfig {
-  clickableType: 'mural-options' | 'mural-theme';
+  clickableType: 'mural-options';
+  // I may need to add more properties here in the future
 }

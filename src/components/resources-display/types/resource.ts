@@ -1,4 +1,4 @@
-import { PinsData } from '../pin/types/pin';
+import { PinsData } from '../common/pin-card/types/pin';
 import { HistoryEntry } from './history-entry';
 
 export type Resource =

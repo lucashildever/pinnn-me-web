@@ -40,9 +40,7 @@ export const useResources = (collectionId: string, initialResources?: any) => {
     },
     enabled: !!collectionId,
     staleTime:
-      initialResources && initialResources.resources.length > 0
-        ? 5 * 60 * 1000
-        : 0,
+      initialResources && initialResources.resources.length > 0 ? Infinity : 0,
     gcTime: 5 * 60 * 1000,
     initialData: () => {
       if (initialResources && initialResources.resources.length > 0) {

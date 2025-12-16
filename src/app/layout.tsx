@@ -3,13 +3,12 @@ import type { Metadata } from 'next';
 import Providers from '@/components/providers/providers';
 import ReduxHydration from '@/components/redux-hydration/ReduxHydration';
 
-import { DM_Sans } from 'next/font/google';
+import { Source_Sans_3 } from 'next/font/google';
 import '@/styles/reset.css';
 import '@/styles/globals.scss';
 
-const dmSans = DM_Sans({
-  variable: '--font-dm-sans',
-  weight: ['200', '400', '500', '600', '700'],
+const sourceSans3 = Source_Sans_3({
+  variable: '--font-source-sans-3',
   subsets: ['latin'],
   display: 'swap',
 });
@@ -33,7 +32,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${dmSans.className}`}>
+      <body className={`${sourceSans3.className}`}>
         <Providers>
           <>
             <ReduxHydration />

@@ -1,6 +1,6 @@
 .extended-profile {
   margin: auto;
-  width: 100%;
+  width: 95%;
 
   .profile-img-n-cover {
     height: 155px;
@@ -9,7 +9,7 @@
     .profile-cover {
       overflow: hidden;
       position: relative;
-      border-radius: $inner-corner;
+      border-radius: $small-corner;
       height: 58%;
       @include spacing(padding, 5, 5, 0, 5);
 
@@ -52,7 +52,6 @@
     p {
       @include spacing(margin-top, 2);
       width: 67%;
-      font-weight: 500;
     }
   }
 }

@@ -39,7 +39,7 @@
   .pin-card {
     @include size(100%, 70);
     background-color: #{get-color(soft-grey)};
-    border-radius: $outer-corner;
+    border-radius: $large-corner;
     @include loading-glint();
   }
 }

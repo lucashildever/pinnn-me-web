@@ -1,5 +1,5 @@
 import { CardVariant } from '@/components/pins-display/pin-card/types/cardVariant';
-import { AppIcon } from '@/components/shared/icon-renderer/icon/types/icon';
+import { AppIcon } from '@/components/shared/icon-renderer/icon/types/app-icon';
 
 export interface CardPayload {
   variantType: CardVariant;

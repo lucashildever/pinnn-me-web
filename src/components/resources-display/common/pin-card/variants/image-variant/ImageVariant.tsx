@@ -1,0 +1,27 @@
+import Image from 'next/image';
+
+import pinTempImage from '/public/assets/temp/pin-image-dgg.jpg';
+
+import styles from './image-variant.module.scss';
+
+interface ImageVariantProps {
+  //caption: string;
+  //src: string; - add when implement image hosting
+}
+
+export default function ImageVariant({}: ImageVariantProps) {
+  return (
+    <p>ImageVariant</p>
+    // <div className={styles['image-card']}>
+    //   <p>{caption}</p>
+    //   <div className={styles['image-variant-container']}>
+    //     <Image
+    //       src={pinTempImage}
+    //       alt="card image"
+    //       className={styles['image']}
+    //       fill
+    //     />
+    //   </div>
+    // </div>
+  );
+}

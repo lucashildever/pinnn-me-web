@@ -7,7 +7,7 @@ html {
 // Font weights and other typography styles should be defined in their component-specific files
 p {
   @include font-size('sm');
-  font-weight: 500;
+  font-weight: 400;
 }
 
 span {
