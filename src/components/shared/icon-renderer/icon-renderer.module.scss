@@ -8,7 +8,7 @@
 
 .renderer-container {
   position: relative;
-  border-radius: $inner-corner;
+  border-radius: $small-corner;
 
   &.small {
     @include size(7, 7);

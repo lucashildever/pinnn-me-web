@@ -1,12 +1,26 @@
-import { AppIcon, IconData } from './types/icon';
+import { AppIcon, IconMetadata } from './types/app-icon';
 import { iconLibrary } from './utils/iconLibrary';
 
 interface IconProps {
   iconName: AppIcon;
 }
 
+/**
+ * Renders an icon based on the provided name.
+ * It serves to create a SimpleIcons component (from SVG path) or return an existing Lucide component
+ * from the library.
+ */
 export default function Icon({ iconName }: IconProps) {
-  const iconData: IconData = iconLibrary[iconName];
+  const iconEntry = Object.values(iconLibrary).find(
+    (category) => category[iconName],
+  );
+
+  const iconData: IconMetadata | undefined = iconEntry?.[iconName];
+
+  if (!iconData) {
+    console.warn(`Icon "${iconName}" not found in library.`);
+    return null;
+  }
 
   if (iconData.type === 'simple') {
     return <SimpleIconsComponent iconData={iconData} size={24} />;
@@ -17,7 +31,7 @@ export default function Icon({ iconName }: IconProps) {
 }
 
 interface SimpleIconsComponentProps {
-  iconData: Extract<IconData, { type: 'simple' }>;
+  iconData: Extract<IconMetadata, { type: 'simple' }>;
   size?: number;
 }
 
@@ -33,7 +47,6 @@ function SimpleIconsComponent({
       viewBox="0 0 24 24"
       width={size}
       height={size}
-      fill="#272727"
       style={{ display: 'block' }}
       xmlns="http://www.w3.org/2000/svg"
       aria-label={title}
