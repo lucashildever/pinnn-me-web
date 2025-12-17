@@ -6,10 +6,10 @@ html {
 // Font sizes are defined globally in this file for consistency
 // Font weights and other typography styles should be defined in their component-specific files
 p {
-  @include font-size('sm');
+  @include font-size('base');
   font-weight: 400;
 }
 
 span {
-  @include font-size('sm');
+  @include font-size('base');
 }

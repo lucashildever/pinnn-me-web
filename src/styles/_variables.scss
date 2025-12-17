@@ -82,8 +82,8 @@ $spacing-scale: (
 );
 
 // font scale
-$base-font-size: 17.5px;
-$font-scale-ratio: 1.125; // major-second
+$base-font-size: 16px;
+$font-scale-ratio: 1.16;
 
 $font-size-scale: (
   'xs': math.div(1, math.pow($font-scale-ratio, 2)),
