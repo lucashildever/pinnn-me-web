@@ -61,6 +61,7 @@ export default async function Mural({ params, searchParams }: MuralProps) {
 
   return (
     <MuralContainer
+      muralId={result.data.id}
       displayName={result.data.displayName}
       description={result.data.description}
       collections={result.data.collections}

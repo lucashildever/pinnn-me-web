@@ -3,6 +3,9 @@
 import { Suspense, useEffect, useRef, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
+import { useAppDispatch } from '@/lib/state/hooks';
+import { setMuralId } from '@/lib/state/slices/muralSlice';
+
 import TabsDisplay from '../tabs-display/TabsDisplay';
 import ResourcesDisplay from '../resources-display/ResourcesDisplay';
 import Profile from './profile/Profile';
@@ -16,6 +19,7 @@ import { TabsProps } from './types/tabs';
 import styles from './mural.module.scss';
 
 interface MuralContainerProps {
+  muralId: string;
   displayName: string;
   description: string;
   collections: CollectionTab[];
@@ -25,6 +29,7 @@ interface MuralContainerProps {
 }
 
 export default function MuralContainer({
+  muralId,
   displayName,
   description,
   collections,
@@ -34,6 +39,17 @@ export default function MuralContainer({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const dispatch = useAppDispatch();
+
+  if (!muralId) {
+    throw new Error('MuralId is required');
+  }
+
+  useEffect(() => {
+    if (muralId) {
+      dispatch(setMuralId(muralId));
+    }
+  }, [muralId, dispatch]);
 
   const getTargetTab = (
     paramId: string | undefined,
