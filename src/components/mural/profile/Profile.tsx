@@ -49,7 +49,7 @@ export default function Profile({
             },
           }}
           config={{
-            clickableType: 'mural-cta',
+            clickableType: 'call-to-action',
             link: 'https://www.google.com/',
           }}
           // estilizar com scss para aproveitar os mixins
@@ -85,7 +85,7 @@ export default function Profile({
                 },
               }}
               config={{
-                clickableType: 'mural-cta',
+                clickableType: 'call-to-action',
                 link: 'https://www.google.com/',
               }}
             />

@@ -9,15 +9,23 @@ import ImageVariant from './variants/image-variant/ImageVariant';
 import DownloadVariant from './variants/download-variant/DownloadVariant';
 import IntegrationVariant from './variants/integration-variant/IntegrationVariant';
 import Divider from '@/components/shared/divider/divider';
+import { HistoryEntry } from '../../types/history-entry';
+import ShareHistory from '../share-history/ShareHistory';
 
 interface PinProps {
   variants: Variant[];
   variantsFromSharedPin?: Variant[];
+  shareHistory?: HistoryEntry[];
 }
 
-export default function PinCard({ variants, variantsFromSharedPin }: PinProps) {
+export default function PinCard({
+  variants,
+  variantsFromSharedPin,
+  shareHistory,
+}: PinProps) {
   return (
     <div className={styles['pin-card']}>
+      {shareHistory ? <ShareHistory shareHistory={shareHistory} /> : null}
       <VariantsRenderer variants={variants} />
       {variantsFromSharedPin ? (
         <>

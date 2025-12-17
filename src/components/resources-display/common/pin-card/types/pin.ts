@@ -18,8 +18,8 @@ export interface PinsData {
 }
 
 export interface PinMeta {
-  firstPinId: string | null;
   history: HistoryEntry[];
-  inheritedVariantsTotal: number;
+  firstPinId: string | null;
   sharedPinId: string | null;
+  inheritedVariantsTotal: number | null;
 }

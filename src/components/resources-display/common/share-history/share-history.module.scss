@@ -1,3 +1,36 @@
 .share-history {
-  @include flex(row, center, center);
+  @include flex(row, center, center, null, 2);
+  @include spacing(margin-bottom, 4);
+
+  .source-container {
+    @include size(9, 9);
+    border-radius: 50%;
+    background-color: rgb(85, 85, 85);
+  }
+
+  .share-history-list {
+    @include flex(row, center, center);
+
+    > .source-container {
+      @include spacing(margin-right, -3);
+      border: 2px solid get-color('clearer-dark');
+      position: relative;
+
+      @for $i from 1 through 20 {
+        &:nth-child(#{$i}) {
+          z-index: #{20 - $i};
+        }
+      }
+    }
+
+    .excess-number {
+      @include flex(row, center, center);
+      font-weight: 400;
+      @include spacing(margin-left, 1);
+
+      span {
+        @include font-size('xs');
+      }
+    }
+  }
 }
