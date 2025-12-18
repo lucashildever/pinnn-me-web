@@ -1,5 +1,5 @@
 import { Pagination } from '@/lib/types/pagination';
-import { IntegrationPlatform } from '../../../types/integration-platform';
+import { IntegrationPlatform } from '../../types/integration-platform';
 
 export type VariantType = (typeof VARIANTS)[number];
 

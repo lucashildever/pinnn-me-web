@@ -1,0 +1,13 @@
+.options-button {
+  position: absolute;
+  opacity: 0.15;
+  cursor: pointer;
+  @each $key, $value in $spacing-scale {
+    &.top-#{$key} {
+      @include spacing(top, $key);
+    }
+    &.right-#{$key} {
+      @include spacing(right, $key);
+    }
+  }
+}

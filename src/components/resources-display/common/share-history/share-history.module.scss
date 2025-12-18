@@ -1,11 +1,17 @@
 .share-history {
-  @include flex(row, center, center, null, 2);
-  @include spacing(margin-bottom, 4);
+  @include flex(row, center, flex-start, null, 2);
 
   .source-container {
-    @include size(9, 9);
+    @include size(8, 8);
     border-radius: 50%;
     background-color: rgb(85, 85, 85);
+    position: relative;
+    overflow: hidden;
+
+    &.has-image img {
+      object-fit: cover;
+      object-position: center;
+    }
   }
 
   .share-history-list {

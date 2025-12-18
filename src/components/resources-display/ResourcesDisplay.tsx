@@ -95,13 +95,13 @@ export default function ResourcesDisplay({
           case 'pin-group':
             return (
               <React.Fragment key={`${resource.id}-${index}`}>
-                <PinGroup />
+                <PinGroup data={resource} />
               </React.Fragment>
             );
           case 'shared-pin-group':
             return (
               <React.Fragment key={`${resource.id}-${index}`}>
-                <SharedPinGroup />
+                <SharedPinGroup data={resource} />
               </React.Fragment>
             );
           default:

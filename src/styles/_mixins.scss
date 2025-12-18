@@ -97,6 +97,7 @@
 @mixin pin-line-defs {
   @include spacing(margin, 0, 0, 0, 7);
   border-left: $line;
+  @include spacing(height, 5);
 }
 
 @mixin shadow {

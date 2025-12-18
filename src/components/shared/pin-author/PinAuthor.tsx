@@ -14,7 +14,7 @@ export default function PinAuthor({ muralName }: { muralName: string }) {
           style={{ objectFit: 'cover', height: '100%', width: '100%' }}
         />
       </div>
-      <AuthorMeta from="pin" muralName={muralName} hasBadge />
+      <AuthorMeta size="small" muralName={muralName} hasBadge />
     </div>
   );
 }

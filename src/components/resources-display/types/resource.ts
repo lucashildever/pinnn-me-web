@@ -1,4 +1,5 @@
-import { PinsData } from '../common/pin-card/types/pin';
+import { PinsData } from '../pin/types/pin';
+import { SharedPinsData } from '../shared-pin/types/shared-pin';
 import { HistoryEntry } from './history-entry';
 
 export type Resource =
@@ -17,15 +18,17 @@ interface BaseResource {
   id: string;
   type: ResourceType;
   order: string;
-  pins: PinsData;
+  pins: PinsData | SharedPinsData;
 }
 
 export interface PinResource extends BaseResource {
   type: 'pin';
+  pins: PinsData;
 }
 
 export interface SharedPinResource extends BaseResource {
   type: 'shared-pin';
+  pins: SharedPinsData;
 }
 
 export interface PinGroupResource extends BaseResource {
@@ -36,6 +39,9 @@ export interface PinGroupResource extends BaseResource {
 export interface SharedPinGroupResource extends BaseResource {
   type: 'shared-pin-group';
   meta: ResourceMeta;
+  fromShared: {
+    pins: PinsData | SharedPinsData;
+  };
 }
 
 export interface ResourceMeta {

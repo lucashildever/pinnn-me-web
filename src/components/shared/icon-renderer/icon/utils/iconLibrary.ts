@@ -85,10 +85,10 @@ export const iconLibrary: Record<string, Record<string, IconMetadata>> = {
       icon: Download,
       label: 'Download',
     },
-    repeat: {
+    share: {
       type: 'lucide',
       icon: Repeat,
-      label: 'Repeat',
+      label: 'Share',
     },
   },
   navigation: {

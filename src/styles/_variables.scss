@@ -1,6 +1,14 @@
 @use 'sass:math';
 @use 'sass:map';
 
+$colors: (
+  'base-dark': #222222,
+  'clearer-dark': #2f2f2f,
+  'light': white,
+  'soft-grey': #dfdfdf,
+  'orange': #e58f43,
+);
+
 // spacing scale
 $spacing-scale: (
   0: 0,
@@ -99,17 +107,8 @@ $font-size-scale: (
 );
 ///
 
-$line: 2px solid #00000021;
+$line: 2px solid map.get($colors, 'clearer-dark');
 
 $small-corner: map.get($spacing-scale, 4) * 1.2px;
 $medium-corner: map.get($spacing-scale, 6) * 1px;
 $large-corner: map.get($spacing-scale, 8) * 1px;
-// create S, M and L sizes for the corners
-
-$colors: (
-  'base-dark': #222222,
-  'clearer-dark': #2f2f2f,
-  'light': white,
-  'soft-grey': #dfdfdf,
-  'orange': #e58f43,
-);

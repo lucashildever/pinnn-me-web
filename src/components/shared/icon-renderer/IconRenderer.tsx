@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode, useState } from 'react';
+import { CSSProperties, ReactNode, useState } from 'react';
 import { IconConfig } from './icon/types/app-icon';
 import { emojiParser } from './utils/emojiParser';
 import tempCustomImg from '/public/assets/temp/tt.jpg';
@@ -10,7 +10,14 @@ import Icon from './icon/Icon';
 
 interface ConfigureIconProps {
   config: IconConfig;
-  renderedSize?: 'small' | 'large';
+  /**
+   * Size of the rendered icon.
+   * - 'small': Predefined small size (7 from modular scale)
+   * - 'large': Predefined large size (19 from modular scale)
+   * - number: Custom size from the modular scale (1-20)
+   */
+  renderedSize?: 'small' | 'large' | number;
+  style?: CSSProperties;
 }
 
 /**
@@ -20,15 +27,21 @@ interface ConfigureIconProps {
 export default function IconRenderer({
   config,
   renderedSize = 'small',
+  style,
 }: ConfigureIconProps) {
+  // Determine the size class: predefined ('small'/'large') or dynamic ('size-N')
+  const sizeClass =
+    typeof renderedSize === 'number' ? `size-${renderedSize}` : renderedSize;
+
   switch (config.type) {
     case 'predefined':
       return (
         <RendererContainer
           className={`
             ${styles['predefined']}
-            ${styles[renderedSize]} ${config.icon === 'loading' ? styles['animate-spin'] : ''}
+            ${styles[sizeClass]} ${config.icon === 'loading' ? styles['animate-spin'] : ''}
         `}
+          style={style}
         >
           <Icon iconName={config.icon} />
         </RendererContainer>
@@ -38,8 +51,9 @@ export default function IconRenderer({
         <RendererContainer
           className={`
             ${styles['custom']}
-            ${styles[renderedSize]}
+            ${styles[sizeClass]}
           `}
+          style={style}
         >
           <Image alt="tab icon" src={tempCustomImg} fill draggable={false} />
         </RendererContainer>
@@ -49,8 +63,9 @@ export default function IconRenderer({
         <RendererContainer
           className={`
             ${styles['emoji']}
-            ${styles[renderedSize]}
+            ${styles[sizeClass]}
           `}
+          style={style}
         >
           <EmojiRenderer unicode={config.unicode} renderedSize={renderedSize} />
         </RendererContainer>
@@ -63,15 +78,21 @@ export default function IconRenderer({
 interface RendererContainerProps {
   children: ReactNode;
   className?: string;
+  style?: CSSProperties;
 }
 
-function RendererContainer({ children, className }: RendererContainerProps) {
+function RendererContainer({
+  children,
+  className,
+  style,
+}: RendererContainerProps) {
   return (
     <div
       className={`
         ${styles[`renderer-container`]} 
         ${className ?? ''}
       `}
+      style={style}
     >
       {children}
     </div>
@@ -80,17 +101,19 @@ function RendererContainer({ children, className }: RendererContainerProps) {
 
 interface EmojiRendererProps {
   unicode: string;
-  renderedSize: string;
+  renderedSize: 'small' | 'large' | number;
 }
 
 function EmojiRenderer({ unicode, renderedSize }: EmojiRendererProps) {
   const [hasError, setHasError] = useState(false);
   const src = `/assets/emojis/${emojiParser(unicode)}.svg`;
+  // Emojis only use predefined sizes, default to 'small' if number is passed
+  const sizeClass = typeof renderedSize === 'number' ? 'small' : renderedSize;
 
   if (hasError) {
     return (
       <span className={styles['emoji-renderer']}>
-        <span className={styles[`txt-${renderedSize}`]}>{unicode}</span>
+        <span className={styles[`txt-${sizeClass}`]}>{unicode}</span>
       </span>
     );
   }
@@ -98,7 +121,7 @@ function EmojiRenderer({ unicode, renderedSize }: EmojiRendererProps) {
   return (
     <span className={styles['emoji-renderer']}>
       <Image
-        className={styles[`img-${renderedSize}`]}
+        className={styles[`img-${sizeClass}`]}
         src={src}
         alt={`emoji-${unicode}`}
         width={24}

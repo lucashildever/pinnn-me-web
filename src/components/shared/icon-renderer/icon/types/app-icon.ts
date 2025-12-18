@@ -14,7 +14,7 @@ export const ICONS = {
   Loading: 'loading',
   Youtube: 'youtube',
   X: 'x',
-  Repeat: 'repeat',
+  Share: 'share',
 } as const;
 
 export type AppIcon = (typeof ICONS)[keyof typeof ICONS];

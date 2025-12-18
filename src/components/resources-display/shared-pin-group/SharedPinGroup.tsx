@@ -1,7 +1,10 @@
-export default function SharedPinGroup() {
-  return (
-    <div>
-      <h1>SharedPinGroup</h1>
-    </div>
-  );
+import { SharedPinGroupResource } from '../types/resource';
+import GroupResource from '../common/group-resource/GroupResource';
+
+interface SharedPinGroupProps {
+  data: SharedPinGroupResource;
+}
+
+export default function SharedPinGroup({ data }: SharedPinGroupProps) {
+  return <GroupResource data={data} />;
 }

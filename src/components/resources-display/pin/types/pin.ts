@@ -1,15 +1,12 @@
 import { Pagination } from '@/lib/types/pagination';
-import { HistoryEntry } from '../../../types/history-entry';
-import { Variant } from './variant';
+import { HistoryEntry } from '../../types/history-entry';
+import { PaginatedVariants } from './variant';
 
 export interface Pin {
   id: string;
   meta: PinMeta;
   order: string | null;
-  variants: {
-    data: Variant[];
-    pagination: Pagination;
-  };
+  variants: PaginatedVariants;
 }
 
 export interface PinsData {

@@ -1,6 +1,6 @@
 'use client';
 
-import { Variant } from './types/variant';
+import { Variant } from '../../pin/types/variant';
 import styles from './pin.module.scss';
 import TextVariant from './variants/text-variant/TextVariant';
 import TitleVariant from './variants/title-variant/TitleVariant';
@@ -11,8 +11,9 @@ import IntegrationVariant from './variants/integration-variant/IntegrationVarian
 import Divider from '@/components/shared/divider/divider';
 import { HistoryEntry } from '../../types/history-entry';
 import ShareHistory from '../share-history/ShareHistory';
+import OptionsButton from '../options-button/OptionsButton';
 
-interface PinProps {
+interface PinCardProps {
   variants: Variant[];
   variantsFromSharedPin?: Variant[];
   shareHistory?: HistoryEntry[];
@@ -22,10 +23,18 @@ export default function PinCard({
   variants,
   variantsFromSharedPin,
   shareHistory,
-}: PinProps) {
+}: PinCardProps) {
   return (
     <div className={styles['pin-card']}>
-      {shareHistory ? <ShareHistory shareHistory={shareHistory} /> : null}
+      <OptionsButton top={3} right={3} />
+      {shareHistory ? (
+        <ShareHistory
+          shareHistory={shareHistory}
+          style={{
+            marginBottom: '10px',
+          }}
+        />
+      ) : null}
       <VariantsRenderer variants={variants} />
       {variantsFromSharedPin ? (
         <>

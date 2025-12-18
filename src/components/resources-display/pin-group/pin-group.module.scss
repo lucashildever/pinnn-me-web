@@ -1,0 +1,40 @@
+.pin-group {
+  position: relative;
+  width: 100%;
+
+  .pin-line {
+    @include pin-line-defs;
+  }
+
+  .group-info {
+    @include flex(row, flex-start, flex-start);
+
+    .group-name {
+      @include spacing(margin-bottom, 4);
+      max-width: 80%;
+      word-wrap: break-word;
+      word-break: break-word;
+      white-space: normal;
+    }
+
+    .initial-line {
+      @include flex(column, center, center);
+      @include spacing(margin-right, 4);
+      align-self: stretch;
+
+      .head {
+        @include size(4, 4);
+        border-radius: 50%;
+        background-color: get-color('clearer-dark');
+        transform: translate(93%, 2px);
+        @include spacing(margin-top, 1);
+        flex-shrink: 0;
+      }
+
+      .line {
+        @include pin-line-defs;
+        flex: 1;
+      }
+    }
+  }
+}

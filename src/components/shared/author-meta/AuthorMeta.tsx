@@ -1,21 +1,24 @@
 import styles from './author-meta.module.scss';
 
 import Image from 'next/image';
-import verifiedIcon from '/public/assets/icons/grey-verified.svg';
+import verifiedIcon from '/public/assets/icons/predefined/light-verified.svg';
+import React from 'react';
 
 interface AuthorMetaProps {
   muralName: string;
   hasBadge: boolean;
-  from: 'profile' | 'pin' | 'minimal-profile' | 'loading-screen';
+  size: 'small' | 'large';
+  style?: React.CSSProperties;
 }
 
 export default function AuthorMeta({
   muralName,
   hasBadge,
-  from,
+  size,
+  style,
 }: AuthorMetaProps) {
   return (
-    <div className={styles[`author-meta-${from}`]}>
+    <div className={styles[`author-meta-${size}`]} style={style}>
       <h1 className={styles['author-name']}>{muralName}</h1>
       {hasBadge ? (
         <Image

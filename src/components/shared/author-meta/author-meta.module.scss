@@ -2,32 +2,27 @@
   @include flex(row, center, center);
 
   .author-name {
-    @include spacing(margin-right, 1);
-    font-weight: 600;
+    @include spacing(margin-right, 2);
   }
 
   .badge-icon {
     @include size(6, 6);
+    transform: translateX(-2px);
   }
 }
 
-.author-meta-pin {
+.author-meta-small {
   @include defs();
   @include font-size('sm');
+  font-weight: 500;
+
+  .badge-icon {
+    @include size(5, 5);
+  }
 }
 
-.author-meta-profile {
+.author-meta-large {
   @include defs();
   @include font-size('xl');
   font-weight: 600;
-}
-
-.author-meta-minimal-profile {
-  @include defs();
-  @include font-size('sm');
-}
-
-.author-meta-loading-screen {
-  @include defs();
-  @include font-size('md');
 }

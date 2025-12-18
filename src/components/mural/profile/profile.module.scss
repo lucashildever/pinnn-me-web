@@ -1,6 +1,6 @@
-.extended-profile {
+.profile {
   margin: auto;
-  width: 95%;
+  width: 100%;
 
   .profile-img-n-cover {
     height: 155px;
@@ -45,34 +45,13 @@
   }
 
   .profile-info {
-    @include spacing(padding, 4, 0, 0, 0);
+    @include spacing(padding, 2, 0, 0, 0);
     @include flex(column, center, center);
     text-align: center;
 
     p {
-      @include spacing(margin-top, 2);
+      @include spacing(margin-top, 1);
       width: 67%;
-    }
-  }
-}
-
-.minimal-profile {
-  @include flex(row, center, space-between);
-  @include spacing(margin, 4, 3, 6, 5);
-  width: auto;
-
-  div.minimal-pf-info {
-    width: 100%;
-    height: 100%;
-    @include flex(row, center, flex-start);
-
-    div.minimal-pf-pic-container {
-      @include size(13, 13);
-      @include spacing(margin, 0, 2);
-      position: relative;
-      z-index: 2;
-      overflow: hidden;
-      border-radius: 50%;
     }
   }
 }

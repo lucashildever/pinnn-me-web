@@ -1,5 +1,5 @@
 import PinCard from '../common/pin-card/PinCard';
-import { PaginatedVariants } from '../common/pin-card/types/variant';
+import { PaginatedVariants } from './types/variant';
 
 interface PinProps {
   variants: PaginatedVariants;

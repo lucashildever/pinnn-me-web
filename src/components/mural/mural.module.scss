@@ -1,5 +1,5 @@
 .mural-container {
-  @include flex(column, flex-start, center, nowrap, 6);
+  @include flex(column, flex-start, center, nowrap, 7);
   position: relative;
   margin: auto;
   @include spacing(margin-top, 6);

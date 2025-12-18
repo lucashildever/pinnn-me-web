@@ -1,19 +1,11 @@
 import PinCard from '../common/pin-card/PinCard';
-import { PinMeta } from '../common/pin-card/types/pin';
-import { PaginatedVariants } from '../common/pin-card/types/variant';
+import { SharedPin as SharedPinType } from './types/shared-pin';
 
 interface SharedPinProps {
-  data: {
-    variants: PaginatedVariants;
-    fromShared: {
-      variants: PaginatedVariants;
-    };
-    meta: PinMeta;
-  };
+  data: SharedPinType;
 }
 
 export default function SharedPin({ data }: SharedPinProps) {
-  console.log('data sharedPin ->', data);
   return (
     <PinCard
       variants={data.variants.data || []}

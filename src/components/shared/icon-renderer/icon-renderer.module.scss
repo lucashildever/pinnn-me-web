@@ -18,6 +18,13 @@
     @include size(19, 19);
   }
 
+  // Dynamic size classes using modular scale (generates .size-1 through .size-20)
+  @for $i from 1 through 20 {
+    &.size-#{$i} {
+      @include size($i, auto);
+    }
+  }
+
   &.predefined {
     @include flex(row, center, center);
 
