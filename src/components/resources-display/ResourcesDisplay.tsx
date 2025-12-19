@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 
 import PinSkeleton from '../shared/skeletons/pin-skeleton/PinSkeleton';
 
-import { useResources } from './utils/useResources';
+import { useResources, PaginatedResources } from './utils/useResources';
 import Pin from './pin/Pin';
 import SharedPin from './shared-pin/SharedPin';
 import SharedPinGroup from './shared-pin-group/SharedPinGroup';
@@ -12,14 +12,12 @@ import { Resource } from './types/resource';
 
 interface ResourcesDisplayProps {
   currentCollectionId: string;
-  mainCollectionResources: Resource[];
-  muralName: string;
+  mainCollectionResources?: PaginatedResources;
 }
 
 export default function ResourcesDisplay({
   currentCollectionId,
   mainCollectionResources,
-  muralName,
 }: ResourcesDisplayProps) {
   const observerRef = useRef<HTMLDivElement>(null);
 

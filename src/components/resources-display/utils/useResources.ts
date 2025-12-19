@@ -9,7 +9,39 @@ export interface PaginatedResources {
   pagination: Pagination;
 }
 
-export const useResources = (collectionId: string, initialResources?: any) => {
+export const useResources = (
+  collectionId: string,
+  initialResources?: PaginatedResources,
+) => {
+  // Compute initial data outside the query config for stable reference
+  // Handle both possible API structures: { resources: [...] } or { data: [...] }
+  const computedInitialData = React.useMemo(() => {
+    if (!initialResources) return undefined;
+
+    // Support both { resources: [...] } and { data: [...] } structures
+    const resourcesArray =
+      (initialResources as any).resources || (initialResources as any).data;
+    const pagination = initialResources.pagination;
+
+    if (resourcesArray && resourcesArray.length > 0) {
+      return {
+        pages: [
+          {
+            success: true,
+            data: {
+              data: resourcesArray,
+              pagination: pagination,
+            },
+          },
+        ],
+        pageParams: [1],
+      };
+    }
+    return undefined;
+  }, [initialResources]);
+
+  const hasInitialData = !!computedInitialData;
+
   const query = useInfiniteQuery({
     queryKey: ['resources', collectionId, 'infinite'],
     queryFn: async ({ pageParam = 1 }) => {
@@ -26,7 +58,7 @@ export const useResources = (collectionId: string, initialResources?: any) => {
       }
       return result;
     },
-    initialPageParam: 1,
+    initialPageParam: hasInitialData ? 2 : 1, // Start from page 2 if we have initial data
     getNextPageParam: (lastPage) => {
       if (!lastPage.success || !lastPage.data?.pagination) {
         return undefined;
@@ -39,26 +71,9 @@ export const useResources = (collectionId: string, initialResources?: any) => {
       return currentPage < totalPages ? currentPage + 1 : undefined;
     },
     enabled: !!collectionId,
-    staleTime:
-      initialResources && initialResources.resources.length > 0 ? Infinity : 0,
+    staleTime: hasInitialData ? Infinity : 0,
     gcTime: 5 * 60 * 1000,
-    initialData: () => {
-      if (initialResources && initialResources.resources.length > 0) {
-        return {
-          pages: [
-            {
-              success: true,
-              data: {
-                data: initialResources.resources,
-                pagination: initialResources.pagination,
-              },
-            },
-          ],
-          pageParams: [1],
-        };
-      }
-      return undefined;
-    },
+    initialData: computedInitialData,
   });
 
   const allResources = React.useMemo(() => {
@@ -67,8 +82,15 @@ export const useResources = (collectionId: string, initialResources?: any) => {
     }
 
     return query.data.pages
-      .filter((page) => page.success && page.data?.data)
-      .flatMap((page) => page.data.data);
+      .filter((page: any) => {
+        const hasData =
+          page.success && (page.data?.data || page.data?.resources);
+        return hasData;
+      })
+      .flatMap((page: any) => {
+        const resources = page.data.data || page.data.resources || [];
+        return resources as Resource[];
+      });
   }, [query.data?.pages]);
 
   return {

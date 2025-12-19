@@ -76,9 +76,19 @@ export default function MuralContainer({
     setActiveTabData(tabData);
 
     const params = new URLSearchParams(searchParams.toString());
-    params.set('coll', tabData.id);
+    const mainCollection = collections.find((c) => c.isMain);
 
-    router.push(`${pathname}?${params.toString()}`, { scroll: false });
+    if (mainCollection && tabData.id === mainCollection.id) {
+      // Remove coll param when switching to main collection
+      params.delete('coll');
+    } else {
+      params.set('coll', tabData.id);
+    }
+
+    const queryString = params.toString();
+    router.push(queryString ? `${pathname}?${queryString}` : pathname, {
+      scroll: false,
+    });
   };
 
   useEffect(() => {
@@ -97,13 +107,13 @@ export default function MuralContainer({
       <Profile muralName={displayName} bio={description} />
       <TabsDisplay {...tabsProps} />
       <ResourcesDisplay
+        key={activeTabData.id}
         mainCollectionResources={
           activeTabData.id === collections.find((c) => c.isMain)?.id
             ? mainCollectionResources
             : undefined
         }
         currentCollectionId={activeTabData.id}
-        muralName={displayName}
       />
     </div>
   );
