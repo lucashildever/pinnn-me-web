@@ -1,29 +1,18 @@
-'use client';
-
-import CompactCard from '../common/CompactCard';
-
-import { IconConfig } from '@/components/shared/clickable/types/clickable';
+import { IconConfig } from '@/components/shared/icon-renderer/icon/types/app-icon';
+import CompactVariant from '../common/CompactVariant';
 
 interface LinkVariantProps {
-  // iconConfig: IconConfig;
-  // caption: string;
-  // meta: string;
+  iconConfig: IconConfig;
+  content: string;
 }
 
-export default function LinkVariant(
-  {
-    // iconConfig,
-    // caption,
-    // meta,
-  }: LinkVariantProps,
-) {
+export default function LinkVariant({ content, iconConfig }: LinkVariantProps) {
   return (
-    // <CompactCard
-    //   variantType={'link'}
-    //   iconConfig={iconConfig}
-    //   caption={caption}
-    //   meta={meta}
-    // />
-    <p>LinkVariant</p>
+    <CompactVariant
+      content={content}
+      srcMeta="link.com"
+      variantType="link"
+      iconConfig={iconConfig}
+    />
   );
 }

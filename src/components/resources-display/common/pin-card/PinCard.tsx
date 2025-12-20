@@ -1,7 +1,7 @@
 'use client';
 
 import { Variant } from '../../pin/types/variant';
-import styles from './pin.module.scss';
+import styles from './pin-card.module.scss';
 import TextVariant from './variants/text-variant/TextVariant';
 import TitleVariant from './variants/title-variant/TitleVariant';
 import LinkVariant from './variants/link-variant/LinkVariant';
@@ -12,6 +12,7 @@ import Divider from '@/components/shared/divider/divider';
 import { HistoryEntry } from '../../types/history-entry';
 import ShareHistory from '../share-history/ShareHistory';
 import OptionsButton from '../options-button/OptionsButton';
+import VideoVariant from './variants/video-variant/VideoVariant';
 
 interface PinCardProps {
   variants: Variant[];
@@ -26,7 +27,7 @@ export default function PinCard({
 }: PinCardProps) {
   return (
     <div className={styles['pin-card']}>
-      <OptionsButton top={3} right={3} />
+      <OptionsButton top={5} right={5} />
       {shareHistory ? (
         <ShareHistory
           shareHistory={shareHistory}
@@ -36,7 +37,7 @@ export default function PinCard({
         />
       ) : null}
       <VariantsRenderer variants={variants} />
-      {variantsFromSharedPin ? (
+      {variantsFromSharedPin && variantsFromSharedPin.length > 0 ? (
         <>
           <Divider />
           <VariantsRenderer variants={variantsFromSharedPin} />
@@ -59,11 +60,25 @@ function VariantsRenderer({ variants }: VariantsRendererProps) {
         case 'title':
           return <TitleVariant key={index} content={variant.config.content} />;
         case 'link':
-          return <LinkVariant key={index} />;
-        case 'image':
-          return <ImageVariant key={index} />;
+          return (
+            <LinkVariant
+              key={index}
+              content={variant.config.content}
+              iconConfig={variant.config.iconConfig}
+            />
+          );
         case 'download':
-          return <DownloadVariant key={index} />;
+          return (
+            <DownloadVariant
+              key={index}
+              content={variant.config.content}
+              iconConfig={variant.config.iconConfig}
+            />
+          );
+        case 'image':
+          return <ImageVariant key={index} src={variant.config.src} />;
+        case 'video':
+          return <VideoVariant key={index} src={variant.config.src} />;
         case 'integration':
           return <IntegrationVariant key={index} />;
         default:

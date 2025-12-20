@@ -1,20 +1,22 @@
-import CompactCard from '../common/CompactCard';
-import { IconConfig } from '@/components/shared/clickable/types/clickable';
+import { IconConfig } from '@/components/shared/icon-renderer/icon/types/app-icon';
+import CompactVariant from '../common/CompactVariant';
 
 interface DownloadVariantProps {
-  // iconConfig: IconConfig;
-  // caption: string;
-  // meta: string;
+  iconConfig: IconConfig;
+  content: string;
+  //srcMeta: string;
 }
 
-export default function DownloadVariant({}: DownloadVariantProps) {
+export default function DownloadVariant({
+  content,
+  iconConfig,
+}: DownloadVariantProps) {
   return (
-    <p>DownloadVariant</p>
-    // <CompactCard
-    //   variantType={'download'}
-    //   iconConfig={iconConfig}
-    //   caption={caption}
-    //   meta={meta}
-    // />
+    <CompactVariant
+      content={content}
+      srcMeta="file_name.ext"
+      variantType="download"
+      iconConfig={iconConfig}
+    />
   );
 }

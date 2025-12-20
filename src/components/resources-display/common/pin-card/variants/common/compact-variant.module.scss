@@ -1,0 +1,23 @@
+.compact-variant {
+  @include flex(row, center, space-between);
+  @include size(100%, 23);
+  box-sizing: border-box;
+  cursor: pointer;
+
+  .preview {
+    @include size(auto, 100%);
+    aspect-ratio: 1 / 1;
+    border-radius: $small-corner;
+    @include flex(row, center, center);
+  }
+
+  .info {
+    width: 100%;
+    @include spacing(padding-left, 4);
+
+    span {
+      opacity: 0.5;
+      font-weight: 400;
+    }
+  }
+}

@@ -11,6 +11,8 @@ export const ICONS = {
   Twitch: 'twitch',
   Link: 'link',
   File: 'file',
+  Forward: 'forward',
+  FileDown: 'fileDown',
   Loading: 'loading',
   Youtube: 'youtube',
   X: 'x',
