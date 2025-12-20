@@ -23,30 +23,26 @@ export default function Icon({ iconName }: IconProps) {
   }
 
   if (iconData.type === 'simple') {
-    return <SimpleIconsComponent iconData={iconData} size={24} />;
+    return <SimpleIconsComponent iconData={iconData} />;
   } else {
     const LucideComponent = iconData.icon;
-    return <LucideComponent />;
+    return <LucideComponent size="100%" />;
   }
 }
 
 interface SimpleIconsComponentProps {
   iconData: Extract<IconMetadata, { type: 'simple' }>;
-  size?: number;
 }
 
-function SimpleIconsComponent({
-  iconData,
-  size = 24,
-}: SimpleIconsComponentProps) {
+function SimpleIconsComponent({ iconData }: SimpleIconsComponentProps) {
   const { title, path } = iconData.icon;
 
   return (
     <svg
       role="img"
       viewBox="0 0 24 24"
-      width={size}
-      height={size}
+      width="100%"
+      height="100%"
       style={{ display: 'block' }}
       xmlns="http://www.w3.org/2000/svg"
       aria-label={title}

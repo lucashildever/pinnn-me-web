@@ -3,6 +3,8 @@ import {
   Download,
   EllipsisVertical,
   File,
+  FileDown,
+  Forward,
   Link,
   LoaderCircle,
   Repeat,
@@ -90,6 +92,11 @@ export const iconLibrary: Record<string, Record<string, IconMetadata>> = {
       icon: Repeat,
       label: 'Share',
     },
+    forward: {
+      type: 'lucide',
+      icon: Forward,
+      label: 'Forward',
+    },
   },
   navigation: {
     options: {
@@ -115,6 +122,11 @@ export const iconLibrary: Record<string, Record<string, IconMetadata>> = {
       type: 'lucide',
       icon: File,
       label: 'File',
+    },
+    fileDown: {
+      type: 'lucide',
+      icon: FileDown,
+      label: 'File Down',
     },
   },
 };

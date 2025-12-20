@@ -21,7 +21,7 @@ export function CallToAction({ payload, config, style }: CallToActionProps) {
       target="_blank"
       rel="noopener noreferrer"
     >
-      <IconRenderer config={payload.iconConfig} />
+      <IconRenderer config={payload.iconConfig} renderedSize={6} />
       <p>{payload.content}</p>
     </a>
   );

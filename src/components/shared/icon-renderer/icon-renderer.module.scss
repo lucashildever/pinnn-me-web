@@ -10,18 +10,11 @@
   position: relative;
   border-radius: $small-corner;
 
-  &.small {
-    @include size(7, 7);
-  }
-
-  &.large {
-    @include size(19, 19);
-  }
-
-  // Dynamic size classes using modular scale (generates .size-1 through .size-20)
-  @for $i from 1 through 20 {
+  // Dynamic size classes using modular scale (generates .size-1 through .size-75)
+  // 75 is the maximum in modula-scale defined in _variables.scss
+  @for $i from 1 through 75 {
     &.size-#{$i} {
-      @include size($i, auto);
+      @include size($i, $i);
     }
   }
 
@@ -29,7 +22,7 @@
     @include flex(row, center, center);
 
     > svg {
-      @include size(11, 11);
+      @include size(100%, 100%);
     }
 
     &.animate-spin {
@@ -61,19 +54,9 @@
 
     .emoji-renderer {
       @include flex(row, center, center);
-      .txt-large {
-        @include font-size('3xl');
-        transform: scale(110%);
-      }
-      .txt-small {
-        transform: scale(110%);
-        @include font-size('sm');
-      }
-      .img-large {
-        @include size(11, auto);
-      }
-      .img-small {
-        @include size(6, auto);
+
+      .txt-fallback {
+        line-height: 1;
       }
     }
   }

@@ -1,5 +1,6 @@
 import { Pagination } from '@/lib/types/pagination';
 import { IntegrationPlatform } from '../../types/integration-platform';
+import { IconConfig } from '@/components/shared/icon-renderer/icon/types/app-icon';
 
 export type VariantType = (typeof VARIANTS)[number];
 
@@ -8,6 +9,7 @@ export const VARIANTS = [
   'text',
   'title',
   'image',
+  'video',
   'download',
   'integration',
 ] as const;
@@ -28,6 +30,7 @@ export type VariantConfig =
   | TitleConfig
   | LinkConfig
   | ImageConfig
+  | VideoConfig
   | DownloadConfig
   | IntegrationConfig;
 
@@ -38,6 +41,11 @@ interface BaseConfig {
 // Variant configs
 export interface ImageConfig extends BaseConfig {
   type: 'image';
+  src: string;
+}
+
+export interface VideoConfig extends BaseConfig {
+  type: 'video';
   src: string;
 }
 
@@ -58,22 +66,19 @@ export interface TitleConfig extends TextBasedConfig {
 export interface LinkConfig extends BaseConfig {
   type: 'link';
   href: string;
-  icon: IconConfig;
+  iconConfig: IconConfig;
+  content: string;
 }
 
 export interface DownloadConfig extends BaseConfig {
   type: 'download';
   src: string;
-  icon: IconConfig;
+  iconConfig: IconConfig;
+  content: string;
 }
 
 // Shared configs
 export interface TextBasedConfig extends BaseConfig {
   type: 'text' | 'title';
   content: string;
-}
-
-export interface IconConfig {
-  type: string;
-  src?: string;
 }

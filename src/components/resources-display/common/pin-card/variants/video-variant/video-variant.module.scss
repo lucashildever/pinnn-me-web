@@ -1,15 +1,13 @@
-.img-variant-container {
+.container {
   border-radius: $small-corner;
   overflow: hidden;
   width: 100%;
   height: auto;
   display: flex;
-  position: relative;
 
-  .image {
+  .video {
     width: 100%;
     height: auto;
     object-fit: cover;
-    display: block;
   }
 }

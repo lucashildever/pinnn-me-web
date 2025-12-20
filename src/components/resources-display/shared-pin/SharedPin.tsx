@@ -9,7 +9,7 @@ export default function SharedPin({ data }: SharedPinProps) {
   return (
     <PinCard
       variants={data.variants.data || []}
-      variantsFromSharedPin={data.fromShared.variants.data || []}
+      variantsFromSharedPin={data.fromShared?.variants?.data || []}
       shareHistory={data.meta.history || []}
     />
   );

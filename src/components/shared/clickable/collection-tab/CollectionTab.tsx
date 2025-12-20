@@ -31,7 +31,10 @@ export function CollectionTab({
           ${styles[overlayConfig.displayConfig.position]}
         `}
       >
-        <IconRenderer config={payload.iconConfig} />
+        <IconRenderer
+          config={payload.iconConfig}
+          renderedSize={payload.iconConfig.type === 'custom' ? 6 : 4}
+        />
         <p>{payload.content}</p>
       </div>
     );
@@ -55,7 +58,10 @@ export function CollectionTab({
         })
       }
     >
-      <IconRenderer config={payload.iconConfig} />
+      <IconRenderer
+        config={payload.iconConfig}
+        renderedSize={payload.iconConfig.type === 'custom' ? 6 : 4}
+      />
       <p>{payload.content}</p>
     </div>
   );

@@ -10,13 +10,7 @@ import Icon from './icon/Icon';
 
 interface ConfigureIconProps {
   config: IconConfig;
-  /**
-   * Size of the rendered icon.
-   * - 'small': Predefined small size (7 from modular scale)
-   * - 'large': Predefined large size (19 from modular scale)
-   * - number: Custom size from the modular scale (1-20)
-   */
-  renderedSize?: 'small' | 'large' | number;
+  renderedSize?: number;
   style?: CSSProperties;
 }
 
@@ -26,12 +20,10 @@ interface ConfigureIconProps {
  */
 export default function IconRenderer({
   config,
-  renderedSize = 'small',
+  renderedSize = 5,
   style,
 }: ConfigureIconProps) {
-  // Determine the size class: predefined ('small'/'large') or dynamic ('size-N')
-  const sizeClass =
-    typeof renderedSize === 'number' ? `size-${renderedSize}` : renderedSize;
+  const sizeClass = `size-${renderedSize}`;
 
   switch (config.type) {
     case 'predefined':
@@ -101,19 +93,22 @@ function RendererContainer({
 
 interface EmojiRendererProps {
   unicode: string;
-  renderedSize: 'small' | 'large' | number;
+  renderedSize: number;
 }
 
 function EmojiRenderer({ unicode, renderedSize }: EmojiRendererProps) {
   const [hasError, setHasError] = useState(false);
   const src = `/assets/emojis/${emojiParser(unicode)}.svg`;
-  // Emojis only use predefined sizes, default to 'small' if number is passed
-  const sizeClass = typeof renderedSize === 'number' ? 'small' : renderedSize;
 
   if (hasError) {
     return (
       <span className={styles['emoji-renderer']}>
-        <span className={styles[`txt-${sizeClass}`]}>{unicode}</span>
+        <span
+          className={styles['txt-fallback']}
+          style={{ fontSize: `${renderedSize * 4}px` }}
+        >
+          {unicode}
+        </span>
       </span>
     );
   }
@@ -121,11 +116,10 @@ function EmojiRenderer({ unicode, renderedSize }: EmojiRendererProps) {
   return (
     <span className={styles['emoji-renderer']}>
       <Image
-        className={styles[`img-${sizeClass}`]}
         src={src}
         alt={`emoji-${unicode}`}
-        width={24}
-        height={24}
+        width={renderedSize * 4} // Approximation or we can use styling. Since we use size classes on container, this might be fine or we might want to fit container.
+        height={renderedSize * 4}
         onError={() => setHasError(true)}
         unoptimized
         draggable={false}
