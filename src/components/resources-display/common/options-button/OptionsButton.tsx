@@ -21,7 +21,7 @@ export default function OptionsButton({
   return (
     <div className={classes}>
       <IconRenderer
-        config={{ type: 'predefined', icon: 'options' }}
+        config={{ type: 'predefined', icon: 'forward' }}
         renderedSize={7}
       />
     </div>

@@ -1,6 +1,6 @@
 .options-button {
   position: absolute;
-  opacity: 0.15;
+  opacity: 0.4;
   cursor: pointer;
   @each $key, $value in $spacing-scale {
     &.top-#{$key} {
