@@ -15,9 +15,15 @@
   @include defs();
   @include font-size('sm');
   font-weight: 500;
+  transform: translate(4px, 2px) scale(1.08);
 
   .badge-icon {
     @include size(5, 5);
+    transform: translate(-3px, -1px);
+  }
+
+  .author-name {
+    font-weight: 500;
   }
 }
 

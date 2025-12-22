@@ -1,0 +1,16 @@
+.instagram-container {
+  width: 100%;
+  min-height: 400px;
+  max-height: 600px;
+  border-radius: $small-corner;
+  overflow: hidden;
+}
+
+.instagram-embed {
+  width: 100%;
+  min-height: 400px;
+  max-height: 600px;
+  height: auto;
+  border: none;
+  transform: scale(1.018);
+}

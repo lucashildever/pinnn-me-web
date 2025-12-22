@@ -1,0 +1,16 @@
+.twitter-container {
+  width: 100%;
+  min-height: 200px;
+  max-height: 500px;
+  border-radius: $small-corner;
+  overflow: hidden;
+}
+
+.twitter-embed {
+  width: 100%;
+  min-height: 200px;
+  max-height: 500px;
+  height: auto;
+  border: none;
+  transform: scale(1.04);
+}

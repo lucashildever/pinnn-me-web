@@ -51,8 +51,11 @@ export interface VideoConfig extends BaseConfig {
 
 export interface IntegrationConfig extends BaseConfig {
   type: 'integration';
-  platform: IntegrationPlatform;
-  embedUrl: string;
+  embedConfig: {
+    platform: IntegrationPlatform;
+    url: string;
+    html?: string;
+  };
 }
 
 export interface TextConfig extends TextBasedConfig {

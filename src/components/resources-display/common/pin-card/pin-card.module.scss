@@ -1,6 +1,6 @@
 .pin-card {
   @include spacing(padding, 6, 6, 6, 6);
-  @include flex(column, flex-start, center, null, 5);
+  @include flex(column, flex-start, center, null, 6);
   border-radius: $medium-corner;
   z-index: 1;
   background-color: get-color('clearer-dark');

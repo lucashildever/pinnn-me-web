@@ -1,0 +1,16 @@
+.google-maps-container {
+  position: relative;
+  width: 100%;
+  padding-bottom: 75%; // 4:3 aspect ratio for maps
+  border-radius: $small-corner;
+  overflow: hidden;
+}
+
+.google-maps-embed {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}

@@ -1,8 +1,8 @@
-import { EmbedConfig } from '../types/embed';
+import { IntegrationConfig } from '@/components/resources-display/pin/types/variant';
 import styles from './embed.module.scss';
 
 interface EmbedProps {
-  config: EmbedConfig;
+  config: IntegrationConfig['embedConfig'];
 }
 
 export default function Embed({ config }: EmbedProps) {

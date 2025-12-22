@@ -1,7 +1,7 @@
 import styles from './author-meta.module.scss';
 
 import Image from 'next/image';
-import verifiedIcon from '/public/assets/icons/predefined/light-verified.svg';
+import verifiedIcon from '/public/assets/icons/predefined/blue-gradient-verified.svg';
 import React from 'react';
 
 interface AuthorMetaProps {

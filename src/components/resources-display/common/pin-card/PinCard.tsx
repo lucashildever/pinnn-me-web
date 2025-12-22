@@ -80,7 +80,9 @@ function VariantsRenderer({ variants }: VariantsRendererProps) {
         case 'video':
           return <VideoVariant key={index} src={variant.config.src} />;
         case 'integration':
-          return <IntegrationVariant key={index} />;
+          return (
+            <IntegrationVariant key={index} data={variant.config.embedConfig} />
+          );
         default:
           return 'invalid variant type';
       }

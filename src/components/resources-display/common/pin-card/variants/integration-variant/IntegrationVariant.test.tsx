@@ -1,33 +1,45 @@
 import IntegrationVariant from './IntegrationVariant';
 import { render, screen } from '@testing-library/react';
-import { EmbedConfig } from './types/embed';
+import { IntegrationConfig } from '@/components/resources-display/pin/types/variant';
 
 describe('IntegrationVariant', () => {
-  it('Should render provided caption', () => {
-    const mockConfig: EmbedConfig = {
-      url: 'https://spotify.com',
-      html: '<div>embed</div>',
+  it('Should render Spotify embed with valid URL', () => {
+    const mockData: IntegrationConfig['embedConfig'] = {
+      url: 'https://open.spotify.com/track/4iV5W9uYEdYUVa79Axb7Rh',
       platform: 'spotify',
     };
 
-    render(
-      <IntegrationVariant embedConfig={mockConfig} caption="Card caption" />,
-    );
+    const { container } = render(<IntegrationVariant data={mockData} />);
 
-    expect(screen.getByText('Card caption')).toBeInTheDocument();
+    const iframe = container.querySelector('iframe');
+    expect(iframe).toBeInTheDocument();
+    expect(iframe).toHaveAttribute(
+      'src',
+      'https://open.spotify.com/embed/track/4iV5W9uYEdYUVa79Axb7Rh',
+    );
   });
 
-  it('Should render the Embed component', () => {
-    const mockConfig: EmbedConfig = {
+  it('Should render HTML when provided by backend', () => {
+    const mockData: IntegrationConfig['embedConfig'] = {
       url: 'https://spotify.com',
-      html: '<div>embed content</div>',
+      html: '<div data-testid="backend-html">embed content</div>',
       platform: 'spotify',
     };
 
-    const { container } = render(
-      <IntegrationVariant embedConfig={mockConfig} caption="Teste" />,
-    );
+    render(<IntegrationVariant data={mockData} />);
 
-    expect(container.querySelector('.embed-container')).toBeInTheDocument();
+    expect(screen.getByTestId('backend-html')).toBeInTheDocument();
+  });
+
+  it('Should render fallback for unsupported platform', () => {
+    const mockData: IntegrationConfig['embedConfig'] = {
+      url: 'https://example.com/some-content',
+      platform: 'linkedin',
+    };
+
+    render(<IntegrationVariant data={mockData} />);
+
+    expect(screen.getByText('linkedin')).toBeInTheDocument();
+    expect(screen.getByText('Abrir link')).toBeInTheDocument();
   });
 });

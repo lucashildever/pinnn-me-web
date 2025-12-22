@@ -1,0 +1,24 @@
+@use '@/styles/variables' as *;
+
+.unsupported-embed {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: $small-corner;
+}
+
+.platform-label {
+  text-transform: capitalize;
+  font-size: 14px;
+}
+
+.link {
+  text-decoration: none;
+  font-size: 14px;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
