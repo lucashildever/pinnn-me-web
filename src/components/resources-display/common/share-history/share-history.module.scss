@@ -3,8 +3,9 @@
 
   .source-container {
     @include size(8, 8);
+    @include flex(row, center, center);
     border-radius: 50%;
-    background-color: rgb(85, 85, 85);
+    background-color: get-color('clearer-dark');
     position: relative;
     overflow: hidden;
 

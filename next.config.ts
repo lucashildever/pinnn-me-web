@@ -16,6 +16,12 @@ const nextConfig: NextConfig = {
   },
   images: {
     qualities: [70],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.pexels.com',
+      },
+    ],
   },
 };
 

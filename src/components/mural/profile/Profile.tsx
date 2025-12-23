@@ -2,22 +2,26 @@
 
 import { CSSProperties } from 'react';
 import Image from 'next/image';
-
 import AuthorMeta from '@/components/shared/author-meta/AuthorMeta';
 import Clickable from '@/components/shared/clickable/Clickable';
-
+import profPicPlaceholder from '/public/assets/prof-placeholder.jpg';
+import coverPicPlaceholder from '/public/assets/cov-placeholder.png';
+import { MuralAppearance } from './types/appearance';
 import styles from './profile.module.scss';
-
-import profilePic from '/public/assets/temp/pf.jpg';
-import coverPic from '/public/assets/temp/cp.jpg';
 
 interface ProfileProps {
   muralName: string;
   style?: CSSProperties;
   bio?: string;
+  appearance: MuralAppearance;
 }
 
-export default function Profile({ muralName, bio, style }: ProfileProps) {
+export default function Profile({
+  muralName,
+  bio,
+  style,
+  appearance,
+}: ProfileProps) {
   return (
     <div
       className={`${styles['profile']} ${styles['pf-overlay']}`}
@@ -26,7 +30,7 @@ export default function Profile({ muralName, bio, style }: ProfileProps) {
       <div className={styles['profile-img-n-cover']}>
         <div className={styles['pf-pic-container']}>
           <Image
-            src={profilePic}
+            src={appearance.profileImageUrl || profPicPlaceholder}
             alt="user profile picture"
             style={{ objectFit: 'cover' }}
             fill
@@ -60,7 +64,7 @@ export default function Profile({ muralName, bio, style }: ProfileProps) {
             </div>
           </div>
           <Image
-            src={coverPic}
+            src={appearance.coverImageUrl || coverPicPlaceholder}
             alt="profile cover"
             className={styles['cover-image']}
             style={{ objectFit: 'cover' }}

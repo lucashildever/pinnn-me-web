@@ -1,5 +1,5 @@
 import { Pagination } from '@/lib/types/pagination';
-import { HistoryEntry } from '../../types/history-entry';
+import { EntryPreview, HistoryEntry } from '../../types/history-entry';
 import { PaginatedVariants } from './variant';
 
 export interface Pin {
@@ -16,6 +16,7 @@ export interface PinsData {
 
 export interface PinMeta {
   history: HistoryEntry[];
+  ownerPreview: EntryPreview;
   firstPinId: string | null;
   sharedPinId: string | null;
   inheritedVariantsTotal: number | null;

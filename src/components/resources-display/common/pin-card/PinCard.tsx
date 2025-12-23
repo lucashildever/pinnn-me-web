@@ -9,7 +9,7 @@ import ImageVariant from './variants/image-variant/ImageVariant';
 import DownloadVariant from './variants/download-variant/DownloadVariant';
 import IntegrationVariant from './variants/integration-variant/IntegrationVariant';
 import Divider from '@/components/shared/divider/divider';
-import { HistoryEntry } from '../../types/history-entry';
+import { EntryPreview, HistoryEntry } from '../../types/history-entry';
 import ShareHistory from '../share-history/ShareHistory';
 import OptionsButton from '../options-button/OptionsButton';
 import VideoVariant from './variants/video-variant/VideoVariant';
@@ -18,19 +18,22 @@ interface PinCardProps {
   variants: Variant[];
   variantsFromSharedPin?: Variant[];
   shareHistory?: HistoryEntry[];
+  ownerPreview?: EntryPreview;
 }
 
 export default function PinCard({
   variants,
   variantsFromSharedPin,
   shareHistory,
+  ownerPreview,
 }: PinCardProps) {
   return (
     <div className={styles['pin-card']}>
       <OptionsButton top={5} right={5} />
-      {shareHistory ? (
+      {shareHistory && ownerPreview ? (
         <ShareHistory
           shareHistory={shareHistory}
+          ownerPreview={ownerPreview}
           style={{
             marginBottom: '10px',
           }}

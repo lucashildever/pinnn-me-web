@@ -17,6 +17,7 @@ import {
 import { TabsProps } from './types/tabs';
 
 import styles from './mural.module.scss';
+import { MuralAppearance } from './profile/types/appearance';
 
 interface MuralContainerProps {
   muralId: string;
@@ -25,6 +26,7 @@ interface MuralContainerProps {
   collections: CollectionTab[];
   paramCollectionId: string | undefined;
   mainCollectionResources?: any;
+  appearance: MuralAppearance;
   // mainCollectionResources?: Pin[]; => mudar tipo DEPOIS
 }
 
@@ -35,6 +37,7 @@ export default function MuralContainer({
   collections,
   paramCollectionId,
   mainCollectionResources,
+  appearance,
 }: MuralContainerProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -104,7 +107,11 @@ export default function MuralContainer({
 
   return (
     <div className={styles['mural-container']}>
-      <Profile muralName={displayName} bio={description} />
+      <Profile
+        muralName={displayName}
+        bio={description}
+        appearance={appearance}
+      />
       <TabsDisplay {...tabsProps} />
       <ResourcesDisplay
         key={activeTabData.id}

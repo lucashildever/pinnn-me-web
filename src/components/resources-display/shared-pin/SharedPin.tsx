@@ -11,6 +11,7 @@ export default function SharedPin({ data }: SharedPinProps) {
       variants={data.variants.data || []}
       variantsFromSharedPin={data.fromShared?.variants?.data || []}
       shareHistory={data.meta.history || []}
+      ownerPreview={data.meta.ownerPreview}
     />
   );
 }

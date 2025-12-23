@@ -9,6 +9,7 @@
 .renderer-container {
   position: relative;
   border-radius: $small-corner;
+  @include flex(row, center, center);
 
   // Dynamic size classes using modular scale (generates .size-1 through .size-75)
   // 75 is the maximum in modula-scale defined in _variables.scss
