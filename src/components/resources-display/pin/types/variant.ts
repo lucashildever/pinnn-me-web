@@ -68,7 +68,7 @@ export interface TitleConfig extends TextBasedConfig {
 
 export interface LinkConfig extends BaseConfig {
   type: 'link';
-  href: string;
+  src: string;
   iconConfig: IconConfig;
   content: string;
 }
@@ -78,6 +78,8 @@ export interface DownloadConfig extends BaseConfig {
   src: string;
   iconConfig: IconConfig;
   content: string;
+  fileName: string;
+  fileSize: number;
 }
 
 // Shared configs

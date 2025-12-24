@@ -29,7 +29,7 @@ export default function PinCard({
 }: PinCardProps) {
   return (
     <div className={styles['pin-card']}>
-      <OptionsButton top={5} right={5} />
+      {/* <OptionsButton top={5} right={5} /> */}
       {shareHistory && ownerPreview ? (
         <ShareHistory
           shareHistory={shareHistory}
@@ -68,6 +68,7 @@ function VariantsRenderer({ variants }: VariantsRendererProps) {
               key={index}
               content={variant.config.content}
               iconConfig={variant.config.iconConfig}
+              link={variant.config.src}
             />
           );
         case 'download':
@@ -76,6 +77,9 @@ function VariantsRenderer({ variants }: VariantsRendererProps) {
               key={index}
               content={variant.config.content}
               iconConfig={variant.config.iconConfig}
+              fileUrl={variant.config.src}
+              fileName={variant.config.fileName}
+              fileSize={variant.config.fileSize}
             />
           );
         case 'image':

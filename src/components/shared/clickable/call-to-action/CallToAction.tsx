@@ -1,10 +1,11 @@
 'use client';
 
+import { useState } from 'react';
 import IconRenderer from '../../icon-renderer/IconRenderer';
 import { CallToActionConfig } from '../types/clickableConfig';
 import { Clickable as IClickable } from '@/components/shared/clickable/types/clickable';
+import ExternalLinkModal from '../../modal/external-link-modal/ExternalLinkModal';
 import styles from '../clickable.module.scss';
-import React from 'react';
 
 interface CallToActionProps {
   payload: IClickable;
@@ -13,16 +14,40 @@ interface CallToActionProps {
 }
 
 export function CallToAction({ payload, config, style }: CallToActionProps) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleClick = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
-    <a
-      style={style}
-      className={styles['profile-cta']}
-      href={config.link}
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      <IconRenderer config={payload.iconConfig} renderedSize={6} />
-      <p>{payload.content}</p>
-    </a>
+    <>
+      <button
+        style={style}
+        className={styles['profile-cta']}
+        onClick={handleClick}
+        type="button"
+      >
+        {payload?.iconConfig && (
+          <IconRenderer
+            config={payload.iconConfig}
+            renderedSize={payload.iconConfig.type === 'emoji' ? 5 : 7}
+            style={{
+              marginRight: '4px',
+            }}
+          />
+        )}
+        {payload?.content && <p>{payload.content}</p>}
+      </button>
+      <ExternalLinkModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        link={config.link}
+      />
+    </>
   );
 }

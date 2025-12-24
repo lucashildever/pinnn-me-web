@@ -1,3 +1,29 @@
+import { CollectionTab } from '@/components/tabs-display/types/collectionTab';
+import { MuralAppearance } from '@/components/mural/profile/types/appearance';
+import { IconConfig } from '@/components/shared/icon-renderer/icon/types/app-icon';
+
+export interface CallToActionConfig {
+  link: string;
+  type: 'profile' | 'banner';
+}
+
+export interface CallToActionData {
+  id: string;
+  content: string;
+  iconConfig: IconConfig;
+  config: CallToActionConfig;
+}
+
+export interface MuralResponseData {
+  id: string;
+  displayName: string;
+  description: string;
+  collections: CollectionTab[];
+  appearance: MuralAppearance;
+  mainCollectionResources?: any;
+  callToActions?: CallToActionData[];
+}
+
 export type FetcherResponse<T = any> = FetcherSuccess<T> | FetcherError;
 
 export interface FetcherSuccess<T> {

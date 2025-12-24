@@ -16,8 +16,9 @@ import {
 } from '../tabs-display/types/collectionTab';
 import { TabsProps } from './types/tabs';
 
-import styles from './mural.module.scss';
+import styles from './mural-container.module.scss';
 import { MuralAppearance } from './profile/types/appearance';
+import { CallToActionData } from '@/lib/api-client/types/response';
 
 interface MuralContainerProps {
   muralId: string;
@@ -25,9 +26,9 @@ interface MuralContainerProps {
   description: string;
   collections: CollectionTab[];
   paramCollectionId: string | undefined;
-  mainCollectionResources?: any;
+  mainCollectionResources?: any; // mudar tipagem para Resource[]
   appearance: MuralAppearance;
-  // mainCollectionResources?: Pin[]; => mudar tipo DEPOIS
+  callToActions?: CallToActionData[];
 }
 
 export default function MuralContainer({
@@ -38,6 +39,7 @@ export default function MuralContainer({
   paramCollectionId,
   mainCollectionResources,
   appearance,
+  callToActions,
 }: MuralContainerProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -111,6 +113,7 @@ export default function MuralContainer({
         muralName={displayName}
         bio={description}
         appearance={appearance}
+        callToActions={callToActions}
       />
       <TabsDisplay {...tabsProps} />
       <ResourcesDisplay

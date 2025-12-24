@@ -1,5 +1,5 @@
+import { Pin } from '@/components/resources-display/pin/types/pin';
 import { CollectionTab } from '@/components/tabs-display/types/collectionTab';
-import { Pin } from '@/components/resources-display/types/resource';
 
 export interface FetcherOptions {
   method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';

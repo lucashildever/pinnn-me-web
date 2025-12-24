@@ -9,6 +9,7 @@ import {
   LoaderCircle,
   Repeat,
   SendHorizontal,
+  X,
 } from 'lucide-react';
 import { IconMetadata } from '../types/app-icon';
 
@@ -108,6 +109,11 @@ export const iconLibrary: Record<string, Record<string, IconMetadata>> = {
       type: 'lucide',
       icon: Link,
       label: 'Link',
+    },
+    close: {
+      type: 'lucide',
+      icon: X,
+      label: 'Close',
     },
   },
   communication: {

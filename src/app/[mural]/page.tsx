@@ -68,6 +68,7 @@ export default async function Mural({ params, searchParams }: MuralProps) {
       appearance={result.data.appearance}
       paramCollectionId={paramCollectionId}
       mainCollectionResources={result.data.mainCollectionResources}
+      callToActions={result.data.callToActions}
     />
   );
 }

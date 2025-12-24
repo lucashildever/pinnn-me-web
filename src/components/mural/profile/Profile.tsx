@@ -7,6 +7,7 @@ import Clickable from '@/components/shared/clickable/Clickable';
 import profPicPlaceholder from '/public/assets/prof-placeholder.jpg';
 import coverPicPlaceholder from '/public/assets/cov-placeholder.png';
 import { MuralAppearance } from './types/appearance';
+import { CallToActionData } from '@/lib/api-client/types/response';
 import styles from './profile.module.scss';
 
 interface ProfileProps {
@@ -14,6 +15,7 @@ interface ProfileProps {
   style?: CSSProperties;
   bio?: string;
   appearance: MuralAppearance;
+  callToActions?: CallToActionData[];
 }
 
 export default function Profile({
@@ -21,7 +23,12 @@ export default function Profile({
   bio,
   style,
   appearance,
+  callToActions,
 }: ProfileProps) {
+  const profileCta = callToActions?.find(
+    (cta) => cta.config.type === 'profile',
+  );
+
   return (
     <div
       className={`${styles['profile']} ${styles['pf-overlay']}`}
@@ -38,19 +45,18 @@ export default function Profile({
         </div>
         <div className={styles['profile-cover']}>
           <div className={styles['cover-buttons']}>
-            <Clickable
-              payload={{
-                content: 'Cta name',
-                iconConfig: {
-                  type: 'predefined',
-                  icon: 'message',
-                },
-              }}
-              config={{
-                clickableType: 'call-to-action',
-                link: 'https://www.google.com/',
-              }}
-            />
+            {profileCta && (
+              <Clickable
+                payload={{
+                  content: profileCta.content,
+                  iconConfig: profileCta.iconConfig,
+                }}
+                config={{
+                  clickableType: 'call-to-action',
+                  link: profileCta.config.link,
+                }}
+              />
+            )}
             <div className={styles['right-buttons']}>
               <Clickable
                 payload={{

@@ -7,6 +7,7 @@ interface CompactVariantProps {
   content: string;
   srcMeta: string;
   iconConfig: IconConfig;
+  onClick?: () => void;
 }
 
 export default function CompactVariant({
@@ -14,22 +15,35 @@ export default function CompactVariant({
   srcMeta,
   variantType,
   iconConfig,
+  onClick,
 }: CompactVariantProps) {
   return (
-    <div className={styles['compact-variant']}>
+    <div
+      className={styles['compact-variant']}
+      onClick={onClick}
+      style={{ cursor: onClick ? 'pointer' : 'default' }}
+    >
       <div className={styles['preview']}>
         {iconConfig.type === 'none' && variantType === 'link' ? (
           <IconRenderer
             config={{ type: 'predefined', icon: 'link' }}
-            renderedSize={12}
+            renderedSize={10}
           />
         ) : iconConfig.type === 'none' && variantType === 'download' ? (
           <IconRenderer
             config={{ type: 'predefined', icon: 'fileDown' }}
-            renderedSize={12}
+            renderedSize={10}
+          />
+        ) : iconConfig.type === 'custom' ? (
+          <IconRenderer
+            config={{ type: 'custom', url: iconConfig.url }}
+            style={{
+              width: '100%',
+              height: '100%',
+            }}
           />
         ) : (
-          <IconRenderer config={iconConfig} renderedSize={23} />
+          <IconRenderer config={iconConfig} renderedSize={8} />
         )}
       </div>
       <div className={styles['info']}>

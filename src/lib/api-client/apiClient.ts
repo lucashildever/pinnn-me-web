@@ -4,7 +4,7 @@ import { fetcher } from './helpers/request';
 
 import { CreateCollectionRequest, CreatePinRequest } from './types/request';
 import { CreateMuralRequest, MuralRequest } from './types/request';
-import { FetcherResponse } from './types/response';
+import { FetcherResponse, MuralResponseData } from './types/response';
 import { PaymentPeriod } from '@/app/(marketing)/checkout/[period]/page';
 
 export const apiClient = {
@@ -35,14 +35,16 @@ export const apiClient = {
     },
   },
   mural: {
-    get: async (mural: MuralRequest): Promise<FetcherResponse> => {
+    get: async (
+      mural: MuralRequest,
+    ): Promise<FetcherResponse<MuralResponseData>> => {
       const queryParams: Record<string, boolean> = {};
 
       if (mural.getMainCollectionResources) {
         queryParams.getMainCollectionResources = true;
       }
 
-      return await fetcher<FetcherResponse>(`/murals/${mural.muralName}`, {
+      return await fetcher<MuralResponseData>(`/murals/${mural.muralName}`, {
         queryParams,
       });
     },

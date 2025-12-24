@@ -6,6 +6,7 @@ export const ICONS = {
   ArrowUpRight: 'arrowUpRight',
   Download: 'download',
   Options: 'options',
+  Close: 'close',
   Message: 'message',
   Pinterest: 'pinterest',
   Twitch: 'twitch',
