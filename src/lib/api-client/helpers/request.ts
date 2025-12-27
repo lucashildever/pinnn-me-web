@@ -80,3 +80,37 @@ export async function fetcher<T = any>(
     };
   }
 }
+
+export async function uploadFile<T = { url: string }>(
+  path: string,
+  file: File,
+  token?: string,
+): Promise<FetcherResponse<T>> {
+  const endpoint = mountEndpoint(path);
+
+  const formData = new FormData();
+  formData.append('file', file);
+
+  const headers: Record<string, string> = {};
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+
+  try {
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers,
+      body: formData,
+    });
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    return {
+      success: false,
+      error: 'upload-error',
+      message: error instanceof Error ? error.message : 'Upload failed',
+    };
+  }
+}

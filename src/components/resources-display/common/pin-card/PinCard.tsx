@@ -19,6 +19,7 @@ interface PinCardProps {
   variantsFromSharedPin?: Variant[];
   shareHistory?: HistoryEntry[];
   ownerPreview?: EntryPreview;
+  children?: React.ReactNode;
 }
 
 export default function PinCard({
@@ -26,6 +27,7 @@ export default function PinCard({
   variantsFromSharedPin,
   shareHistory,
   ownerPreview,
+  children,
 }: PinCardProps) {
   return (
     <div className={styles['pin-card']}>
@@ -39,6 +41,7 @@ export default function PinCard({
           }}
         />
       ) : null}
+      {children}
       <VariantsRenderer variants={variants} />
       {variantsFromSharedPin && variantsFromSharedPin.length > 0 ? (
         <>

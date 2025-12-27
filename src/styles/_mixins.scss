@@ -143,3 +143,20 @@
     will-change: left;
   }
 }
+
+@mixin editable-variant {
+  background: transparent;
+  border: none;
+  border-radius: $xs-corner;
+  color: inherit;
+  outline: none;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  resize: none;
+  overflow: hidden;
+}
+
+@mixin editable-variant-container {
+  position: relative;
+  width: 100%;
+}

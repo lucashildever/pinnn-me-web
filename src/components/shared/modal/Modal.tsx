@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import styles from './modal.module.scss';
@@ -12,25 +12,26 @@ interface ModalProps {
 }
 
 export default function Modal({ isOpen, onClose, children }: ModalProps) {
-  // Disable body scroll when modal is open
+  const scrollYRef = useRef(0);
+
   useEffect(() => {
     if (isOpen) {
-      const scrollY = window.scrollY;
+      scrollYRef.current = window.scrollY;
 
       document.body.style.overflow = 'hidden';
       document.body.style.position = 'fixed';
-      document.body.style.top = `-${scrollY}px`;
+      document.body.style.top = `-${scrollYRef.current}px`;
       document.body.style.width = '100%';
     } else {
-      const scrollY = document.body.style.top;
+      const savedScrollY = scrollYRef.current;
 
       document.body.style.overflow = '';
       document.body.style.position = '';
       document.body.style.top = '';
       document.body.style.width = '';
 
-      if (scrollY) {
-        window.scrollTo(0, parseInt(scrollY || '0') * -1);
+      if (savedScrollY > 0) {
+        window.scrollTo(0, savedScrollY);
       }
     }
 

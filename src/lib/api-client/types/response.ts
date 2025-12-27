@@ -42,6 +42,7 @@ const FETCH_TYPES = {
   serverError: 'server-error',
   notFound: 'not-found',
   unauthorized: 'unauthorized',
+  uploadError: 'upload-error',
 } as const;
 
 export type FetchError = (typeof FETCH_TYPES)[keyof typeof FETCH_TYPES];

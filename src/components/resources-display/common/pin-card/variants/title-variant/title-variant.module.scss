@@ -1,4 +1,13 @@
 .title-variant {
-  @include font-size('md');
+  @include font-size('lg');
   font-weight: 600;
+  width: 100%;
+
+  &.editable {
+    @include editable-variant;
+  }
+}
+
+.editable-container {
+  @include editable-variant-container;
 }

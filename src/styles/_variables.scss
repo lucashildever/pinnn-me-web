@@ -109,6 +109,7 @@ $font-size-scale: (
 
 $line: 2px solid map.get($colors, 'clearer-dark');
 
+$xs-corner: 2px;
 $small-corner: map.get($spacing-scale, 4) * 1.2px;
 $medium-corner: map.get($spacing-scale, 6) * 1px;
 $large-corner: map.get($spacing-scale, 8) * 1px;

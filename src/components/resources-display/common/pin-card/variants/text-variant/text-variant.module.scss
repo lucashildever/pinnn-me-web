@@ -1,2 +1,12 @@
 .text-variant {
+  width: 100%;
+  @include font-size('sm');
+
+  &.editable {
+    @include editable-variant;
+  }
+}
+
+.editable-container {
+  @include editable-variant-container;
 }

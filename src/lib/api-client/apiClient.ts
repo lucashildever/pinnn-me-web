@@ -22,6 +22,21 @@ export const apiClient = {
         body: credentials,
       });
     },
+
+    validateToken: async (): Promise<boolean> => {
+      const token = localStorage.getItem('token');
+
+      if (!token) {
+        return false;
+      }
+
+      const response = await fetcher('/auth/validate', {
+        method: 'GET',
+        token,
+      });
+
+      return response.success;
+    },
   },
   collection: {
     create: async (collection: CreateCollectionRequest) => {
@@ -160,6 +175,161 @@ export const apiClient = {
         method: 'GET',
         token: token,
       });
+    },
+  },
+  storage: {
+    getPresignedUrl: async (
+      fileName: string,
+      mimeType: string,
+      fileSize: number,
+      context:
+        | 'profile-image'
+        | 'cover-image'
+        | 'pin-image'
+        | 'pin-video-stream'
+        | 'pin-video-download'
+        | 'pin-file',
+    ): Promise<
+      FetcherResponse<{
+        uploadUrl: string;
+        publicUrl: string;
+        fileKey: string;
+      }>
+    > => {
+      const token = localStorage.getItem('token');
+
+      if (!token) {
+        return {
+          success: false,
+          error: 'unauthorized',
+          message: 'Authentication required',
+        };
+      }
+
+      return await fetcher('/storage/presign', {
+        method: 'POST',
+        body: {
+          fileName,
+          mimeType,
+          fileSize,
+          context,
+        },
+        token,
+      });
+    },
+
+    uploadToPresignedUrl: async (
+      uploadUrl: string,
+      file: File,
+    ): Promise<{ success: boolean; error?: string }> => {
+      try {
+        const response = await fetch(uploadUrl, {
+          method: 'PUT',
+          body: file,
+          headers: {
+            'Content-Type': file.type,
+          },
+        });
+
+        if (!response.ok) {
+          return {
+            success: false,
+            error: `Upload failed: ${response.status} ${response.statusText}`,
+          };
+        }
+
+        return { success: true };
+      } catch (error) {
+        return {
+          success: false,
+          error: error instanceof Error ? error.message : 'Upload failed',
+        };
+      }
+    },
+
+    uploadImage: async (
+      file: File,
+    ): Promise<
+      FetcherResponse<{
+        publicUrl: string;
+        fileKey: string;
+      }>
+    > => {
+      // Step 1: Get presigned URL
+      const presignResult = await apiClient.storage.getPresignedUrl(
+        file.name,
+        file.type,
+        file.size,
+        'pin-image',
+      );
+
+      if (!presignResult.success) {
+        return presignResult;
+      }
+
+      // Step 2: Upload to presigned URL
+      const uploadResult = await apiClient.storage.uploadToPresignedUrl(
+        presignResult.data.uploadUrl,
+        file,
+      );
+
+      if (!uploadResult.success) {
+        return {
+          success: false,
+          error: 'upload-error',
+          message: uploadResult.error || 'Upload to storage failed',
+        };
+      }
+
+      // Step 3: Return public URL and file key
+      return {
+        success: true,
+        data: {
+          publicUrl: presignResult.data.publicUrl,
+          fileKey: presignResult.data.fileKey,
+        },
+      };
+    },
+
+    uploadVideo: async (
+      file: File,
+    ): Promise<
+      FetcherResponse<{
+        publicUrl: string;
+        fileKey: string;
+      }>
+    > => {
+      const presignResult = await apiClient.storage.getPresignedUrl(
+        file.name,
+        file.type,
+        file.size,
+        'pin-video-stream',
+      );
+
+      if (!presignResult.success) {
+        return presignResult;
+      }
+
+      const uploadResult = await apiClient.storage.uploadToPresignedUrl(
+        presignResult.data.uploadUrl,
+        file,
+      );
+
+      if (!uploadResult.success) {
+        return {
+          success: false,
+          error: 'upload-error',
+          message: uploadResult.error || 'Upload to storage failed',
+        };
+      }
+
+      return {
+        success: true,
+        data: {
+          publicUrl: presignResult.data.publicUrl,
+          fileKey: presignResult.data.fileKey,
+        },
+      };
     },
   },
 };

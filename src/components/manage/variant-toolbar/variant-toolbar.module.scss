@@ -1,0 +1,33 @@
+.toolbar {
+  @include flex(row, center, center, null, 2);
+  background-color: get-color('base-dark');
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  transform: translateY(-100%);
+  @include spacing(padding, 1);
+  border-radius: $small-corner;
+}
+
+.toolbar-button {
+  @include flex(row, center, center);
+  @include spacing(padding, 2);
+  background: transparent;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  border-radius: $small-corner;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  &.disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+
+    &:hover {
+      background-color: transparent;
+    }
+  }
+}

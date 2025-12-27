@@ -17,7 +17,7 @@ import Image from 'next/image';
 import styles from './auth-form.module.scss';
 
 import logo from '/public/assets/logo.svg';
-import arrow from '/public/assets/icons/light-arrow.svg';
+import IconRenderer from '../shared/icon-renderer/IconRenderer';
 
 interface AuthFormProps {
   authType: 'login' | 'signup';
@@ -99,7 +99,9 @@ export default function AuthForm({ authType }: AuthFormProps) {
           />
           <button type="submit" disabled={mutation.isPending}>
             {authType === 'login' ? 'Login' : 'Sign Up'}
-            <Image src={arrow} alt="arrow icon" className="btn-arrow-icon" />
+            <IconRenderer
+              config={{ icon: 'arrowUpRight', type: 'predefined' }}
+            />
           </button>
         </form>
         <p className={styles['form-footer-txt']}>
