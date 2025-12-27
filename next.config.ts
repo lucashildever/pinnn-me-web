@@ -18,8 +18,11 @@ const nextConfig: NextConfig = {
     qualities: [70],
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'images.pexels.com',
+        protocol: (process.env.NEXT_PUBLIC_STORAGE_PROTOCOL || 'http') as
+          | 'http'
+          | 'https',
+        hostname: process.env.NEXT_PUBLIC_STORAGE_HOSTNAME || 'localhost',
+        port: process.env.NEXT_PUBLIC_STORAGE_PORT || '9000',
       },
     ],
   },
