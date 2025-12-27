@@ -11,6 +11,8 @@ import Icon from './icon/Icon';
 interface ConfigureIconProps {
   config: IconConfig;
   renderedSize?: number;
+  strokeWidth?: number;
+  color?: string;
   style?: CSSProperties;
 }
 
@@ -21,6 +23,8 @@ interface ConfigureIconProps {
 export default function IconRenderer({
   config,
   renderedSize = 5,
+  strokeWidth,
+  color,
   style,
 }: ConfigureIconProps) {
   const sizeClass = `size-${renderedSize}`;
@@ -35,7 +39,11 @@ export default function IconRenderer({
         `}
           style={style}
         >
-          <Icon iconName={config.icon} />
+          <Icon
+            iconName={config.icon}
+            strokeWidth={strokeWidth}
+            color={color}
+          />
         </RendererContainer>
       );
     case 'custom':

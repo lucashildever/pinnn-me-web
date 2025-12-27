@@ -1,14 +1,23 @@
 import {
+  AlignLeft,
   ArrowUpRight,
+  ChevronDown,
+  ChevronUp,
   Download,
   EllipsisVertical,
   File,
   FileDown,
   Forward,
+  Heading,
+  Image as ImageIcon,
   Link,
   LoaderCircle,
+  Plus,
+  Puzzle,
   Repeat,
   SendHorizontal,
+  Trash,
+  Video,
   X,
 } from 'lucide-react';
 import { IconMetadata } from '../types/app-icon';
@@ -98,6 +107,51 @@ export const iconLibrary: Record<string, Record<string, IconMetadata>> = {
       icon: Forward,
       label: 'Forward',
     },
+    plus: {
+      type: 'lucide',
+      icon: Plus,
+      label: 'Plus',
+    },
+    chevronDown: {
+      type: 'lucide',
+      icon: ChevronDown,
+      label: 'Chevron Down',
+    },
+    chevronUp: {
+      type: 'lucide',
+      icon: ChevronUp,
+      label: 'Chevron Up',
+    },
+    trash: {
+      type: 'lucide',
+      icon: Trash,
+      label: 'Trash',
+    },
+    heading: {
+      type: 'lucide',
+      icon: Heading,
+      label: 'Heading',
+    },
+    alignLeft: {
+      type: 'lucide',
+      icon: AlignLeft,
+      label: 'Align Left',
+    },
+    image: {
+      type: 'lucide',
+      icon: ImageIcon,
+      label: 'Image',
+    },
+    video: {
+      type: 'lucide',
+      icon: Video,
+      label: 'Video',
+    },
+    puzzle: {
+      type: 'lucide',
+      icon: Puzzle,
+      label: 'Puzzle',
+    },
   },
   navigation: {
     options: {
@@ -133,6 +187,18 @@ export const iconLibrary: Record<string, Record<string, IconMetadata>> = {
       type: 'lucide',
       icon: FileDown,
       label: 'File Down',
+    },
+  },
+  custom: {
+    title: {
+      type: 'custom-svg',
+      path: '/assets/icons/own/title.svg',
+      label: 'Title',
+    },
+    text: {
+      type: 'custom-svg',
+      path: '/assets/icons/own/text.svg',
+      label: 'Text',
     },
   },
 };

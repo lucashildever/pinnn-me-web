@@ -7,6 +7,15 @@ export const ICONS = {
   Download: 'download',
   Options: 'options',
   Close: 'close',
+  Plus: 'plus',
+  ChevronDown: 'chevronDown',
+  ChevronUp: 'chevronUp',
+  Trash: 'trash',
+  Heading: 'heading',
+  AlignLeft: 'alignLeft',
+  Image: 'image',
+  Video: 'video',
+  Puzzle: 'puzzle',
   Message: 'message',
   Pinterest: 'pinterest',
   Twitch: 'twitch',
@@ -18,6 +27,8 @@ export const ICONS = {
   Youtube: 'youtube',
   X: 'x',
   Share: 'share',
+  Title: 'title',
+  Text: 'text',
 } as const;
 
 export type AppIcon = (typeof ICONS)[keyof typeof ICONS];
@@ -41,6 +52,11 @@ export type IconMetadata =
   | {
       type: 'lucide';
       icon: LucideIcon;
+      label: string;
+    }
+  | {
+      type: 'custom-svg';
+      path: string;
       label: string;
     };
 
