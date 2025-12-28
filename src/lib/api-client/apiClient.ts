@@ -1,4 +1,4 @@
-import { AuthCredentials } from './types/auth';
+import { AuthCredentials, AuthResponseData } from './types/auth';
 
 import { fetcher } from './helpers/request';
 
@@ -9,14 +9,18 @@ import { PaymentPeriod } from '@/app/(marketing)/checkout/[period]/page';
 
 export const apiClient = {
   auth: {
-    login: async (credentials: AuthCredentials): Promise<FetcherResponse> => {
+    login: async (
+      credentials: AuthCredentials,
+    ): Promise<FetcherResponse<AuthResponseData>> => {
       return await fetcher('/auth/login', {
         method: 'POST',
         body: credentials,
       });
     },
 
-    signup: async (credentials: AuthCredentials): Promise<FetcherResponse> => {
+    signup: async (
+      credentials: AuthCredentials,
+    ): Promise<FetcherResponse<AuthResponseData>> => {
       return await fetcher('/auth/register', {
         method: 'POST',
         body: credentials,
@@ -186,8 +190,7 @@ export const apiClient = {
         | 'profile-image'
         | 'cover-image'
         | 'pin-image'
-        | 'pin-video-stream'
-        | 'pin-video-download'
+        | 'pin-video'
         | 'pin-file',
     ): Promise<
       FetcherResponse<{
@@ -303,7 +306,7 @@ export const apiClient = {
         file.name,
         file.type,
         file.size,
-        'pin-video-stream',
+        'pin-video',
       );
 
       if (!presignResult.success) {
@@ -328,6 +331,51 @@ export const apiClient = {
         data: {
           publicUrl: presignResult.data.publicUrl,
           fileKey: presignResult.data.fileKey,
+        },
+      };
+    },
+
+    uploadFile: async (
+      file: File,
+    ): Promise<
+      FetcherResponse<{
+        publicUrl: string;
+        fileKey: string;
+        fileName: string;
+        fileSize: number;
+      }>
+    > => {
+      const presignResult = await apiClient.storage.getPresignedUrl(
+        file.name,
+        file.type,
+        file.size,
+        'pin-file',
+      );
+
+      if (!presignResult.success) {
+        return presignResult;
+      }
+
+      const uploadResult = await apiClient.storage.uploadToPresignedUrl(
+        presignResult.data.uploadUrl,
+        file,
+      );
+
+      if (!uploadResult.success) {
+        return {
+          success: false,
+          error: 'upload-error',
+          message: uploadResult.error || 'Upload to storage failed',
+        };
+      }
+
+      return {
+        success: true,
+        data: {
+          publicUrl: presignResult.data.publicUrl,
+          fileKey: presignResult.data.fileKey,
+          fileName: file.name,
+          fileSize: file.size,
         },
       };
     },
