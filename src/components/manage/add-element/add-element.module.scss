@@ -184,7 +184,7 @@
   cursor: pointer;
 
   &:hover {
-    background-color: rgba(get-color('base-dark'), 0.1);
+    background-color: get-color('clearer-dark');
   }
 }
 

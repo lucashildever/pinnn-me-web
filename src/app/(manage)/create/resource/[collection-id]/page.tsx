@@ -10,14 +10,22 @@ import TitleVariant from '@/components/resources-display/common/pin-card/variant
 import TextVariant from '@/components/resources-display/common/pin-card/variants/text-variant/TextVariant';
 import ImageVariant from '@/components/resources-display/common/pin-card/variants/image-variant/ImageVariant';
 import VideoVariant from '@/components/resources-display/common/pin-card/variants/video-variant/VideoVariant';
+import LinkVariant from '@/components/resources-display/common/pin-card/variants/link-variant/LinkVariant';
+import DownloadVariant from '@/components/resources-display/common/pin-card/variants/download-variant/DownloadVariant';
 import { VariantSelection } from '@/components/manage/add-element/AddElement';
 import { apiClient } from '@/lib/api-client/apiClient';
+import { useAppSelector } from '@/lib/state/hooks';
+import { selectLimits } from '@/lib/state/slices/authSlice';
 
 interface EditableVariant {
   id: string;
-  type: 'title' | 'text' | 'image' | 'video';
+  type: 'title' | 'text' | 'image' | 'video' | 'link' | 'download';
   content: string;
   src?: string;
+  link?: string;
+  fileName?: string;
+  fileUrl?: string;
+  fileSize?: number;
   isUploading?: boolean;
 }
 
@@ -25,8 +33,8 @@ export default function CreateResourcePage() {
   const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [variants, setVariants] = useState<EditableVariant[]>([]);
+  const limits = useAppSelector(selectLimits);
 
-  // Auth guard - redirect to login if not authenticated
   useEffect(() => {
     const validateAuth = async () => {
       const token = localStorage.getItem('token');
@@ -61,7 +69,13 @@ export default function CreateResourcePage() {
       return;
     }
 
-    const type = selection as 'title' | 'text' | 'image' | 'video';
+    const type = selection as
+      | 'title'
+      | 'text'
+      | 'image'
+      | 'video'
+      | 'link'
+      | 'download';
     const newVariant: EditableVariant = {
       id: crypto.randomUUID(),
       type,
@@ -73,6 +87,35 @@ export default function CreateResourcePage() {
   const handleVariantChange = (id: string, content: string) => {
     setVariants((prev) =>
       prev.map((v) => (v.id === id ? { ...v, content } : v)),
+    );
+  };
+
+  const handleLinkChange = (id: string, link: string) => {
+    setVariants((prev) => prev.map((v) => (v.id === id ? { ...v, link } : v)));
+  };
+
+  const handleFileChange = (
+    id: string,
+    fileName: string,
+    fileUrl: string,
+    fileSize: number,
+  ) => {
+    setVariants((prev) =>
+      prev.map((v) =>
+        v.id === id ? { ...v, fileName, fileUrl, fileSize } : v,
+      ),
+    );
+  };
+
+  const handleToggleVariant = (id: string) => {
+    setVariants((prev) =>
+      prev.map((v) => {
+        if (v.id === id) {
+          const newType = v.type === 'title' ? 'text' : 'title';
+          return { ...v, type: newType };
+        }
+        return v;
+      }),
     );
   };
 
@@ -184,11 +227,13 @@ export default function CreateResourcePage() {
                   key={variant.id}
                   content={variant.content}
                   editable
+                  maxLength={limits?.title_variant_max_length}
                   canMoveUp={!isFirst}
                   canMoveDown={!isLast}
                   onChange={(value) => handleVariantChange(variant.id, value)}
                   onMoveUp={() => handleMoveUp(variant.id)}
                   onMoveDown={() => handleMoveDown(variant.id)}
+                  onToggle={() => handleToggleVariant(variant.id)}
                   onDelete={() => handleDelete(variant.id)}
                 />
               );
@@ -201,9 +246,17 @@ export default function CreateResourcePage() {
                   src={variant.src}
                   isEditing={true}
                   isUploading={variant.isUploading}
+                  maxFileSize={limits?.image_size_limit}
                   canMoveUp={!isFirst}
                   canMoveDown={!isLast}
                   onFileSelect={(file) => handleImageUpload(variant.id, file)}
+                  onClearImage={() =>
+                    setVariants((prev) =>
+                      prev.map((v) =>
+                        v.id === variant.id ? { ...v, src: undefined } : v,
+                      ),
+                    )
+                  }
                   onMoveUp={() => handleMoveUp(variant.id)}
                   onMoveDown={() => handleMoveDown(variant.id)}
                   onDelete={() => handleDelete(variant.id)}
@@ -218,9 +271,64 @@ export default function CreateResourcePage() {
                   src={variant.src}
                   isEditing={true}
                   isUploading={variant.isUploading}
+                  maxFileSize={limits?.video_size_limit}
                   canMoveUp={!isFirst}
                   canMoveDown={!isLast}
                   onFileSelect={(file) => handleVideoUpload(variant.id, file)}
+                  onClearVideo={() =>
+                    setVariants((prev) =>
+                      prev.map((v) =>
+                        v.id === variant.id ? { ...v, src: undefined } : v,
+                      ),
+                    )
+                  }
+                  onMoveUp={() => handleMoveUp(variant.id)}
+                  onMoveDown={() => handleMoveDown(variant.id)}
+                  onDelete={() => handleDelete(variant.id)}
+                />
+              );
+            }
+
+            if (variant.type === 'link') {
+              return (
+                <LinkVariant
+                  key={variant.id}
+                  iconConfig={{ type: 'none' }}
+                  content={variant.content}
+                  link={variant.link || ''}
+                  isEditing={true}
+                  canMoveUp={!isFirst}
+                  canMoveDown={!isLast}
+                  onContentChange={(value) =>
+                    handleVariantChange(variant.id, value)
+                  }
+                  onLinkChange={(value) => handleLinkChange(variant.id, value)}
+                  onMoveUp={() => handleMoveUp(variant.id)}
+                  onMoveDown={() => handleMoveDown(variant.id)}
+                  onDelete={() => handleDelete(variant.id)}
+                />
+              );
+            }
+
+            if (variant.type === 'download') {
+              return (
+                <DownloadVariant
+                  key={variant.id}
+                  iconConfig={{ type: 'none' }}
+                  content={variant.content}
+                  fileUrl={variant.fileUrl || ''}
+                  fileName={variant.fileName || ''}
+                  fileSize={variant.fileSize || 0}
+                  isEditing={true}
+                  maxFileSize={limits?.file_size_limit}
+                  canMoveUp={!isFirst}
+                  canMoveDown={!isLast}
+                  onContentChange={(value) =>
+                    handleVariantChange(variant.id, value)
+                  }
+                  onFileChange={(fileName, fileUrl, fileSize) =>
+                    handleFileChange(variant.id, fileName, fileUrl, fileSize)
+                  }
                   onMoveUp={() => handleMoveUp(variant.id)}
                   onMoveDown={() => handleMoveDown(variant.id)}
                   onDelete={() => handleDelete(variant.id)}
@@ -233,11 +341,13 @@ export default function CreateResourcePage() {
                 key={variant.id}
                 content={variant.content}
                 editable
+                maxLength={limits?.text_variant_max_length}
                 canMoveUp={!isFirst}
                 canMoveDown={!isLast}
                 onChange={(value) => handleVariantChange(variant.id, value)}
                 onMoveUp={() => handleMoveUp(variant.id)}
                 onMoveDown={() => handleMoveDown(variant.id)}
+                onToggle={() => handleToggleVariant(variant.id)}
                 onDelete={() => handleDelete(variant.id)}
               />
             );

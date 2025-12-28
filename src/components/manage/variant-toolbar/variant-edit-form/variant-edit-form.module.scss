@@ -1,0 +1,96 @@
+.edit-form {
+  @include flex(column, stretch, stretch, null, 4);
+  background-color: get-color('base-dark');
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  transform: translateY(-100%);
+  @include spacing(padding, 4);
+  border-radius: $small-corner;
+  min-width: 280px;
+  z-index: 10;
+}
+
+.edit-header {
+  @include flex(row, center, space-between);
+  @include spacing(margin-bottom, 2);
+}
+
+.header-button {
+  @include flex(row, center, center);
+  @include spacing(padding, 2);
+  background: transparent;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  border-radius: $small-corner;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+.header-title {
+  @include font-size('base');
+  font-weight: 600;
+  color: white;
+}
+
+.edit-input-row {
+  @include flex(row, center, flex-start, null, 3);
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: $small-corner;
+  @include spacing(padding, 3);
+}
+
+.edit-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: white;
+  @include font-size('sm');
+
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+  }
+}
+
+.done-button {
+  @include spacing(margin-top, 2);
+  @include spacing(padding, 3);
+  border: none;
+  border-radius: $medium-corner;
+  color: get-color('base-dark');
+  background-color: get-color('light');
+  @include font-size('sm');
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 0.9;
+  }
+}
+
+.file-input {
+  display: none;
+}
+
+.clickable {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+  }
+}
+
+.file-label {
+  @include font-size('sm');
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.error {
+  @include error-outline(-2px);
+}

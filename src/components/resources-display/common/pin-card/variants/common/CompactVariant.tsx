@@ -7,6 +7,7 @@ interface CompactVariantProps {
   content: string;
   srcMeta: string;
   iconConfig: IconConfig;
+  hasError?: boolean;
   onClick?: () => void;
 }
 
@@ -15,11 +16,12 @@ export default function CompactVariant({
   srcMeta,
   variantType,
   iconConfig,
+  hasError = false,
   onClick,
 }: CompactVariantProps) {
   return (
     <div
-      className={styles['compact-variant']}
+      className={`${styles['compact-variant']} ${hasError ? styles['error'] : ''}`}
       onClick={onClick}
       style={{ cursor: onClick ? 'pointer' : 'default' }}
     >

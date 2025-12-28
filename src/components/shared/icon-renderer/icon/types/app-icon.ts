@@ -4,6 +4,7 @@ export const ICONS = {
   Tiktok: 'tiktok',
   Instagram: 'instagram',
   ArrowUpRight: 'arrowUpRight',
+  ArrowLeft: 'arrowLeft',
   Download: 'download',
   Options: 'options',
   Close: 'close',
@@ -29,6 +30,9 @@ export const ICONS = {
   Share: 'share',
   Title: 'title',
   Text: 'text',
+  Settings: 'settings',
+  Pencil: 'pencil',
+  ImageUp: 'imageUp',
 } as const;
 
 export type AppIcon = (typeof ICONS)[keyof typeof ICONS];

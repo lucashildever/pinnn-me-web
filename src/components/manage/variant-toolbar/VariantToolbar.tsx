@@ -3,14 +3,28 @@
 import styles from './variant-toolbar.module.scss';
 import IconRenderer from '@/components/shared/icon-renderer/IconRenderer';
 
-export type ToolbarAction = 'moveUp' | 'moveDown';
+export type ToolbarAction =
+  | 'moveUp'
+  | 'moveDown'
+  | 'settings'
+  | 'toggle'
+  | 'replaceImage'
+  | 'replaceVideo';
+
+export type VariantType = 'title' | 'text';
 
 interface VariantToolbarProps {
   actions: ToolbarAction[];
   canMoveUp?: boolean;
   canMoveDown?: boolean;
+  variantType?: VariantType;
+  hasSettingsError?: boolean;
   onMoveUp?: () => void;
   onMoveDown?: () => void;
+  onSettings?: () => void;
+  onToggle?: () => void;
+  onReplaceImage?: () => void;
+  onReplaceVideo?: () => void;
   onDelete: () => void;
 }
 
@@ -18,8 +32,14 @@ export default function VariantToolbar({
   actions,
   canMoveUp = true,
   canMoveDown = true,
+  variantType,
+  hasSettingsError = false,
   onMoveUp,
   onMoveDown,
+  onSettings,
+  onToggle,
+  onReplaceImage,
+  onReplaceVideo,
   onDelete,
 }: VariantToolbarProps) {
   return (
@@ -51,6 +71,66 @@ export default function VariantToolbar({
           <IconRenderer
             config={{ type: 'predefined', icon: 'chevronUp' }}
             renderedSize={8}
+          />
+        </button>
+      )}
+      {actions.includes('settings') && (
+        <button
+          type="button"
+          className={`${styles['toolbar-button']} ${hasSettingsError ? styles['error'] : ''}`}
+          onMouseDown={(e) => {
+            e.preventDefault();
+            onSettings?.();
+          }}
+        >
+          <IconRenderer
+            config={{ type: 'predefined', icon: 'settings' }}
+            renderedSize={6}
+          />
+        </button>
+      )}
+      {actions.includes('toggle') && variantType && (
+        <button
+          type="button"
+          className={styles['toolbar-button']}
+          onMouseDown={(e) => {
+            e.preventDefault();
+            onToggle?.();
+          }}
+        >
+          <IconRenderer
+            config={{ type: 'predefined', icon: variantType }}
+            renderedSize={6}
+          />
+        </button>
+      )}
+      {actions.includes('replaceImage') && (
+        <button
+          type="button"
+          className={styles['toolbar-button']}
+          onMouseDown={(e) => {
+            e.preventDefault();
+            onReplaceImage?.();
+          }}
+        >
+          <IconRenderer
+            config={{ type: 'predefined', icon: 'imageUp' }}
+            renderedSize={6}
+          />
+        </button>
+      )}
+      {actions.includes('replaceVideo') && (
+        <button
+          type="button"
+          className={styles['toolbar-button']}
+          onMouseDown={(e) => {
+            e.preventDefault();
+            onReplaceVideo?.();
+          }}
+        >
+          <IconRenderer
+            config={{ type: 'predefined', icon: 'video' }}
+            renderedSize={6}
           />
         </button>
       )}

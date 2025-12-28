@@ -160,3 +160,8 @@
   position: relative;
   width: 100%;
 }
+
+@mixin error-outline($offset: 4px) {
+  outline: 1px solid #e57373;
+  outline-offset: $offset;
+}

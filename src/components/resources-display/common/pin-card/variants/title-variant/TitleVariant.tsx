@@ -1,32 +1,39 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { AnimatePresence, motion } from 'motion/react';
 import styles from './title-variant.module.scss';
 import VariantToolbar from '@/components/manage/variant-toolbar/VariantToolbar';
 
 interface TitleVariantProps {
   content: string;
   editable?: boolean;
+  maxLength?: number;
   canMoveUp?: boolean;
   canMoveDown?: boolean;
   onChange?: (value: string) => void;
   onMoveUp?: () => void;
   onMoveDown?: () => void;
+  onToggle?: () => void;
   onDelete?: () => void;
 }
 
 export default function TitleVariant({
   content,
   editable,
+  maxLength,
   canMoveUp = true,
   canMoveDown = true,
   onChange,
   onMoveUp,
   onMoveDown,
+  onToggle,
   onDelete,
 }: TitleVariantProps) {
   const [isFocused, setIsFocused] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const isOverLimit = maxLength !== undefined && content.length > maxLength;
 
   useEffect(() => {
     if (textareaRef.current) {
@@ -38,27 +45,48 @@ export default function TitleVariant({
   if (editable) {
     return (
       <div className={styles['editable-container']}>
-        {isFocused && onDelete && (
-          <VariantToolbar
-            actions={['moveDown', 'moveUp']}
-            canMoveUp={canMoveUp}
-            canMoveDown={canMoveDown}
-            onMoveUp={onMoveUp}
-            onMoveDown={onMoveDown}
-            onDelete={onDelete}
-          />
-        )}
+        <AnimatePresence mode="wait">
+          {isFocused && onDelete && (
+            <motion.div
+              key="toolbar"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              transition={{ duration: 0.15 }}
+            >
+              <VariantToolbar
+                actions={['moveDown', 'moveUp', 'toggle']}
+                canMoveUp={canMoveUp}
+                canMoveDown={canMoveDown}
+                variantType="title"
+                onMoveUp={onMoveUp}
+                onMoveDown={onMoveDown}
+                onToggle={onToggle}
+                onDelete={onDelete}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
         <textarea
           ref={textareaRef}
-          className={`${styles['title-variant']} ${styles['editable']}`}
+          className={`${styles['title-variant']} ${styles['editable']} ${isOverLimit ? styles['error'] : ''}`}
           value={content}
           onChange={(e) => onChange?.(e.target.value)}
           placeholder="Enter title..."
           autoFocus
           rows={1}
-          onFocus={() => setIsFocused(true)}
+          onFocus={(e) => {
+            setIsFocused(true);
+            const length = e.target.value.length;
+            e.target.setSelectionRange(length, length);
+          }}
           onBlur={() => setIsFocused(false)}
         />
+        {isOverLimit && (
+          <span className={styles['error-message']}>
+            Text too long: limit {maxLength}
+          </span>
+        )}
       </div>
     );
   }

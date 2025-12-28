@@ -5,8 +5,19 @@
   &.editable {
     @include editable-variant;
   }
+
+  &.error {
+    @include error-outline;
+  }
 }
 
 .editable-container {
   @include editable-variant-container;
+}
+
+.error-message {
+  @include font-size('xs');
+  color: #e57373;
+  @include spacing(margin-top, 2);
+  display: block;
 }

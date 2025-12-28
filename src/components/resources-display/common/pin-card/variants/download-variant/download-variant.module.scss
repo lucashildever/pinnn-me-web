@@ -1,0 +1,9 @@
+.editable-container {
+  position: relative;
+  width: 100%;
+  outline: none;
+
+  &:focus {
+    outline: none;
+  }
+}

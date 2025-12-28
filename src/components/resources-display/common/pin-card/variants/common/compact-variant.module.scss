@@ -3,6 +3,11 @@
   @include size(100%, 22);
   box-sizing: border-box;
   cursor: pointer;
+  border-radius: $small-corner;
+
+  &.error {
+    @include error-outline;
+  }
 
   .preview {
     @include size(auto, 100%);
@@ -15,13 +20,13 @@
   .info {
     width: 100%;
     @include spacing(padding-left, 4);
-    @include flex(column, flex-start, center, null, 2);
+    @include flex(column, flex-start, center, null, 1);
 
     span {
       opacity: 0.35;
       font-weight: 400;
       @include font-size('sm');
-      transform: scale(1.1) translateX(7px);
+      transform: scale(1.1) translateX(3px);
     }
   }
 }
