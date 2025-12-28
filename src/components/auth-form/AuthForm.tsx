@@ -5,9 +5,9 @@ import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 
 import { useAppDispatch } from '@/lib/state/hooks';
-import { setToken } from '@/lib/state/slices/authSlice';
+import { setToken, setSubscription } from '@/lib/state/slices/authSlice';
 
-import { AuthCredentials } from '@/lib/api-client/types/auth';
+import { AuthCredentials, AuthResponseData } from '@/lib/api-client/types/auth';
 import { FetcherResponse } from '@/lib/api-client/types/response';
 import { apiClient } from '@/lib/api-client/apiClient';
 
@@ -31,16 +31,25 @@ export default function AuthForm({ authType }: AuthFormProps) {
 
   const dispatch = useAppDispatch();
 
-  const loginMutation = useMutation<FetcherResponse, Error, AuthCredentials>({
+  const loginMutation = useMutation<
+    FetcherResponse<AuthResponseData>,
+    Error,
+    AuthCredentials
+  >({
     mutationFn: apiClient.auth.login,
     onSuccess: (result) => {
       if (result.success) {
         localStorage.setItem('token', result.data.access_token);
+        localStorage.setItem(
+          'subscription',
+          JSON.stringify(result.data.subscription),
+        );
         dispatch(setToken(result.data.access_token));
+        dispatch(setSubscription(result.data.subscription));
         router.push('/dashboard');
       } else {
         // Tratar erro caso necessário
-        alert(`Failed to sign up: ${result.message}`);
+        alert(`Failed to login: ${result.message}`);
       }
     },
     onError: (error) => {
@@ -50,12 +59,21 @@ export default function AuthForm({ authType }: AuthFormProps) {
     },
   });
 
-  const signupMutation = useMutation<FetcherResponse, Error, AuthCredentials>({
+  const signupMutation = useMutation<
+    FetcherResponse<AuthResponseData>,
+    Error,
+    AuthCredentials
+  >({
     mutationFn: apiClient.auth.signup,
     onSuccess: (result) => {
       if (result.success) {
         localStorage.setItem('token', result.data.access_token);
+        localStorage.setItem(
+          'subscription',
+          JSON.stringify(result.data.subscription),
+        );
         dispatch(setToken(result.data.access_token));
+        dispatch(setSubscription(result.data.subscription));
         router.push('/dashboard');
       } else {
         // Tratar erro caso necessário
