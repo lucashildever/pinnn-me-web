@@ -1,0 +1,139 @@
+.icon-selector-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  @include flex(row, center, center);
+  z-index: 1000;
+}
+
+.icon-selector-modal {
+  background-color: get-color('base-dark');
+  border-radius: $medium-corner;
+  width: 360px;
+  max-height: 480px;
+  @include flex(column, stretch, stretch);
+  overflow: hidden;
+
+  .modal-header {
+    @include flex(row, center, space-between);
+    @include spacing(padding, 4);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+    .modal-title {
+      @include font-size('base');
+      font-weight: 600;
+      color: white;
+    }
+
+    .close-button {
+      @include flex(row, center, center);
+      background: transparent;
+      border: none;
+      color: white;
+      cursor: pointer;
+      opacity: 0.6;
+      transition: opacity 0.2s ease;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+
+  .tabs {
+    @include flex(row, center, stretch);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+    .tab {
+      flex: 1;
+      @include spacing(padding, 3);
+      background: transparent;
+      border: none;
+      color: white;
+      cursor: pointer;
+      @include font-size('sm');
+      opacity: 0.5;
+      transition: all 0.2s ease;
+      border-bottom: 2px solid transparent;
+
+      &.active {
+        opacity: 1;
+        border-bottom-color: white;
+      }
+
+      &:hover:not(.active) {
+        opacity: 0.8;
+      }
+    }
+  }
+
+  .tab-content {
+    flex: 1;
+    overflow-y: auto;
+    @include spacing(padding, 4);
+
+    .category {
+      @include spacing(margin-bottom, 4);
+
+      .category-title {
+        @include font-size('xs');
+        color: rgba(255, 255, 255, 0.5);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        @include spacing(margin-bottom, 2);
+      }
+
+      .icons-grid {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: get-spacing(2);
+      }
+    }
+
+    .icon-button {
+      aspect-ratio: 1 / 1;
+      @include flex(row, center, center);
+      background-color: rgba(255, 255, 255, 0.05);
+      border: none;
+      border-radius: $small-corner;
+      color: white;
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+
+      &:active {
+        transform: scale(0.95);
+      }
+    }
+  }
+
+  .emoji-tab-content {
+    flex: 1;
+    overflow: hidden;
+
+    // Override emoji-picker-react styles
+    :global(.EmojiPickerReact) {
+      --epr-bg-color: transparent !important;
+      --epr-category-label-bg-color: get-color('base-dark') !important;
+      --epr-hover-bg-color: rgba(255, 255, 255, 0.1) !important;
+      --epr-search-input-bg-color: rgba(255, 255, 255, 0.05) !important;
+      --epr-text-color: white !important;
+      --epr-category-icon-active-color: white !important;
+      width: 100% !important;
+      height: 100% !important;
+      border: none !important;
+    }
+  }
+
+  .emoji-loading {
+    @include flex(row, center, center);
+    height: 350px;
+    opacity: 0.5;
+  }
+}

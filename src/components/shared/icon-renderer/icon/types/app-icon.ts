@@ -33,6 +33,7 @@ export const ICONS = {
   Settings: 'settings',
   Pencil: 'pencil',
   ImageUp: 'imageUp',
+  RefreshCw: 'refreshCw',
 } as const;
 
 export type AppIcon = (typeof ICONS)[keyof typeof ICONS];
@@ -69,3 +70,25 @@ export type IconConfig =
   | { type: 'predefined'; icon: AppIcon }
   | { type: 'custom'; url: string }
   | { type: 'emoji'; unicode: string };
+
+// not available for user selection
+export const RESERVED_ICONS: AppIcon[] = [
+  'arrowUpRight',
+  'arrowLeft',
+  'loading',
+  'options',
+  'close',
+  'plus',
+  'chevronDown',
+  'chevronUp',
+  'trash',
+  'heading',
+  'alignLeft',
+  'settings',
+  'pencil',
+  'imageUp',
+  'refreshCw',
+  'forward',
+  'title',
+  'text',
+];

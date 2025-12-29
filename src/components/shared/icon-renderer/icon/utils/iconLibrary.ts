@@ -17,6 +17,7 @@ import {
   Pencil,
   Plus,
   Puzzle,
+  RefreshCw,
   Repeat,
   SendHorizontal,
   Settings,
@@ -175,6 +176,11 @@ export const iconLibrary: Record<string, Record<string, IconMetadata>> = {
       type: 'lucide',
       icon: ImageUp,
       label: 'Image Up',
+    },
+    refreshCw: {
+      type: 'lucide',
+      icon: RefreshCw,
+      label: 'Refresh',
     },
   },
   navigation: {
