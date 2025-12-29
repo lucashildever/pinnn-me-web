@@ -11,6 +11,7 @@ interface ImageVariantProps {
   src?: string;
   isEditing?: boolean;
   isUploading?: boolean;
+  uploadError?: string;
   maxFileSize?: number;
   canMoveUp?: boolean;
   canMoveDown?: boolean;
@@ -32,6 +33,7 @@ export default function ImageVariant({
   src,
   isEditing = false,
   isUploading = false,
+  uploadError,
   maxFileSize,
   canMoveUp = true,
   canMoveDown = true,
@@ -101,13 +103,17 @@ export default function ImageVariant({
     if (onFileSelect) {
       onFileSelect(file);
     }
+    // Reset input so user can select same file again on retry
+    e.target.value = '';
   };
 
   // Upload placeholder (no image yet)
+  const displayError = error || uploadError;
+
   if (isEditing && !src) {
     return (
       <div
-        className={`${styles['img-variant-container']} ${styles['upload-placeholder']} ${error ? styles['error'] : ''}`}
+        className={`${styles['img-variant-container']} ${styles['upload-placeholder']} ${displayError ? styles['error'] : ''}`}
         onClick={handleClick}
       >
         <input
@@ -131,7 +137,7 @@ export default function ImageVariant({
                 style={{ opacity: 0.5 }}
               />
               <span className={styles['placeholder-text']}>
-                {error || 'Click to upload image'}
+                {displayError || 'Click to upload image'}
               </span>
             </>
           )}

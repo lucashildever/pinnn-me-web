@@ -18,10 +18,12 @@ interface DownloadVariantProps {
   fileSize: number;
   isEditing?: boolean;
   maxFileSize?: number;
+  maxPreviewSize?: number;
   canMoveUp?: boolean;
   canMoveDown?: boolean;
   onContentChange?: (value: string) => void;
   onFileChange?: (fileName: string, fileUrl: string, fileSize: number) => void;
+  onIconConfigChange?: (config: IconConfig) => void;
   onMoveUp?: () => void;
   onMoveDown?: () => void;
   onDelete?: () => void;
@@ -42,6 +44,7 @@ export default function DownloadVariant({
   fileSize,
   isEditing = false,
   maxFileSize,
+  maxPreviewSize,
   canMoveUp = true,
   canMoveDown = true,
   onContentChange,
@@ -49,23 +52,32 @@ export default function DownloadVariant({
   onMoveUp,
   onMoveDown,
   onDelete,
+  onIconConfigChange,
 }: DownloadVariantProps) {
   const isNewVariant = isEditing && !content && !fileName;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFocused, setIsFocused] = useState(isNewVariant);
   const [isEditFormOpen, setIsEditFormOpen] = useState(isNewVariant);
   const [isUploading, setIsUploading] = useState(false);
+  const [isPreviewUploading, setIsPreviewUploading] = useState(false);
+  const [previewUploadError, setPreviewUploadError] = useState<string | null>(
+    null,
+  );
   const [fileSizeError, setFileSizeError] = useState<string | null>(null);
+  const [uploadError, setUploadError] = useState<string | null>(null);
   const [descriptionTouched, setDescriptionTouched] = useState(false);
   const [formWasClosed, setFormWasClosed] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  const fileError = fileSizeError || uploadError;
+
   const isDescriptionEmpty = !content.trim();
-  const isFileMissing = !fileName || !!fileSizeError;
+  const isFileMissing = !fileName || !!fileError;
 
   const showDescriptionError =
     isEditing && descriptionTouched && isDescriptionEmpty;
-  const showFileError = isEditing && formWasClosed && isFileMissing;
+  const showFileError =
+    isEditing && (!!fileError || (formWasClosed && isFileMissing));
   const hasError =
     isEditing && formWasClosed && (isDescriptionEmpty || isFileMissing);
 
@@ -81,6 +93,7 @@ export default function DownloadVariant({
         setIsFocused(false);
         if (isEditFormOpen) {
           setFormWasClosed(true);
+          setDescriptionTouched(true);
         }
         setIsEditFormOpen(false);
       }
@@ -111,11 +124,13 @@ export default function DownloadVariant({
 
   const handleBackClick = () => {
     setFormWasClosed(true);
+    setDescriptionTouched(true);
     setIsEditFormOpen(false);
   };
 
   const handleDone = () => {
     setFormWasClosed(true);
+    setDescriptionTouched(true);
     setIsEditFormOpen(false);
     setIsFocused(false);
   };
@@ -130,6 +145,7 @@ export default function DownloadVariant({
 
   const handleFileUpload = async (file: File) => {
     setFileSizeError(null);
+    setUploadError(null);
 
     if (maxFileSize && file.size > maxFileSize) {
       setFileSizeError(`File too large: max ${formatFileSize(maxFileSize)}`);
@@ -147,11 +163,42 @@ export default function DownloadVariant({
         );
       } else if (!result.success) {
         console.error('File upload failed:', result.error);
+        setUploadError('Upload failed, try again');
       }
     } catch (error) {
       console.error('File upload error:', error);
+      setUploadError('Upload failed, try again');
     } finally {
       setIsUploading(false);
+    }
+  };
+
+  const handlePreviewUpload = async (file: File) => {
+    if (!onIconConfigChange) return;
+
+    setPreviewUploadError(null);
+
+    if (maxPreviewSize && file.size > maxPreviewSize) {
+      setPreviewUploadError(
+        `Too large. Max: ${formatFileSize(maxPreviewSize)}`,
+      );
+      return;
+    }
+
+    setIsPreviewUploading(true);
+    try {
+      const result = await apiClient.storage.uploadImage(file);
+      if (result.success) {
+        onIconConfigChange({ type: 'custom', url: result.data.publicUrl });
+      } else {
+        console.error('Preview upload failed:', result.error);
+        setPreviewUploadError('Upload failed');
+      }
+    } catch (error) {
+      console.error('Preview upload error:', error);
+      setPreviewUploadError('Upload failed');
+    } finally {
+      setIsPreviewUploading(false);
     }
   };
 
@@ -190,8 +237,8 @@ export default function DownloadVariant({
               title="Edit your download"
               descriptionValue={content}
               descriptionPlaceholder="Add description..."
-              srcValue={fileName}
-              srcPlaceholder="Add your file..."
+              srcValue={fileError || fileName}
+              srcPlaceholder={fileError || 'Add your file...'}
               srcIcon="fileDown"
               descriptionError={showDescriptionError}
               srcError={showFileError}
@@ -205,6 +252,14 @@ export default function DownloadVariant({
               fileAccept=".pdf,.txt,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip,.rar,.7z,.psd,.ai,.eps,.svg,.sketch,.fig,.ttf,.otf,.woff,.woff2"
               onFileSelect={handleFileUpload}
               isUploading={isUploading}
+              showPreviewEditor={!!onIconConfigChange}
+              variantType="download"
+              iconConfig={iconConfig}
+              onIconConfigChange={onIconConfigChange}
+              onPreviewUpload={handlePreviewUpload}
+              isPreviewUploading={isPreviewUploading}
+              previewUploadError={previewUploadError || undefined}
+              onClearPreviewError={() => setPreviewUploadError(null)}
             />
           )}
         </AnimatePresence>

@@ -4,7 +4,11 @@ import { useRef } from 'react';
 import { motion } from 'motion/react';
 import styles from './variant-edit-form.module.scss';
 import IconRenderer from '@/components/shared/icon-renderer/IconRenderer';
-import { AppIcon } from '@/components/shared/icon-renderer/icon/types/app-icon';
+import {
+  AppIcon,
+  IconConfig,
+} from '@/components/shared/icon-renderer/icon/types/app-icon';
+import PreviewEditor from './preview-editor/PreviewEditor';
 
 interface VariantEditFormProps {
   title: string;
@@ -26,6 +30,15 @@ interface VariantEditFormProps {
   fileAccept?: string;
   onFileSelect?: (file: File) => void;
   isUploading?: boolean;
+  // Preview editor props
+  showPreviewEditor?: boolean;
+  variantType?: 'link' | 'download';
+  iconConfig?: IconConfig;
+  onIconConfigChange?: (config: IconConfig) => void;
+  onPreviewUpload?: (file: File) => void;
+  isPreviewUploading?: boolean;
+  previewUploadError?: string;
+  onClearPreviewError?: () => void;
 }
 
 export default function VariantEditForm({
@@ -47,6 +60,14 @@ export default function VariantEditForm({
   fileAccept,
   onFileSelect,
   isUploading = false,
+  showPreviewEditor = false,
+  variantType,
+  iconConfig,
+  onIconConfigChange,
+  onPreviewUpload,
+  isPreviewUploading = false,
+  previewUploadError,
+  onClearPreviewError,
 }: VariantEditFormProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -59,6 +80,8 @@ export default function VariantEditForm({
     if (file && onFileSelect) {
       onFileSelect(file);
     }
+    // Reset input so user can select same file again on retry
+    e.target.value = '';
   };
 
   return (
@@ -159,6 +182,22 @@ export default function VariantEditForm({
           />
         </div>
       )}
+
+      {showPreviewEditor &&
+        variantType &&
+        iconConfig &&
+        onIconConfigChange &&
+        onPreviewUpload && (
+          <PreviewEditor
+            variantType={variantType}
+            iconConfig={iconConfig}
+            onIconConfigChange={onIconConfigChange}
+            onCustomUpload={onPreviewUpload}
+            isUploading={isPreviewUploading}
+            uploadError={previewUploadError}
+            onClearError={onClearPreviewError}
+          />
+        )}
 
       <button
         type="button"

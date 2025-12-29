@@ -28,3 +28,41 @@ export interface CreateCollectionRequest extends Omit<CollectionTab, 'order'> {
 
 // Pins
 export interface CreatePinRequest extends Omit<Pin, 'id' | 'order' | 'cards'> {}
+
+// Resources
+export interface VariantIconConfig {
+  type: 'none' | 'predefined' | 'custom' | 'emoji';
+  icon?: string;
+  url?: string;
+  unicode?: string;
+}
+
+export type VariantConfigDto =
+  | { type: 'title'; content: string }
+  | { type: 'text'; content: string }
+  | { type: 'image'; src: string; fileKey?: string }
+  | { type: 'video'; src: string; fileKey?: string }
+  | {
+      type: 'link';
+      content: string;
+      src: string;
+      iconConfig: VariantIconConfig;
+    }
+  | {
+      type: 'download';
+      content: string;
+      src: string;
+      iconConfig: VariantIconConfig;
+      fileName: string;
+      fileSize: number;
+      fileKey?: string;
+    };
+
+export interface CreateVariantDto {
+  order: string;
+  config: VariantConfigDto;
+}
+
+export interface CreatePinResourceRequest {
+  variants: CreateVariantDto[];
+}

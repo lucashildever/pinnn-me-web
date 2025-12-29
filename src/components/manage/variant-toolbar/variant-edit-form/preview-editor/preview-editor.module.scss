@@ -1,0 +1,72 @@
+.preview-editor {
+  @include flex(column, stretch, stretch, null, 3);
+  @include spacing(margin-top, 2);
+  background-color: get-color('clearer-dark');
+  border-radius: $small-corner;
+  @include spacing(padding, 4);
+
+  .section-header {
+    @include flex(row, center, flex-start, null, 2);
+    opacity: 0.5;
+    @include spacing(margin-bottom, 1);
+
+    span {
+      @include font-size('sm');
+      color: white;
+    }
+  }
+
+  .mode-buttons {
+    @include flex(column, stretch, stretch, null, 1);
+  }
+
+  .mode-button {
+    @include flex(row, center, space-between);
+    @include spacing(padding, 3);
+    background-color: transparent;
+    border: none;
+    border-radius: $small-corner;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: get-color('base-dark');
+    }
+
+    &.active {
+      background-color: get-color('base-dark');
+    }
+
+    .mode-label {
+      @include font-size('sm');
+    }
+  }
+
+  .preview-box {
+    @include flex(column, center, center, null, 2);
+    @include spacing(margin-top, 3);
+    align-self: center;
+
+    .preview-icon {
+      @include size(22, 22);
+      @include flex(row, center, center);
+      background-color: get-color('base-dark');
+      border-radius: $medium-corner;
+
+      &.error {
+        @include error-outline;
+      }
+    }
+
+    .error-message {
+      @include font-size('xs');
+      color: #e57373;
+      text-align: center;
+    }
+  }
+
+  .file-input {
+    display: none;
+  }
+}

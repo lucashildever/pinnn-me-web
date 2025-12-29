@@ -2,7 +2,11 @@ import { AuthCredentials, AuthResponseData } from './types/auth';
 
 import { fetcher } from './helpers/request';
 
-import { CreateCollectionRequest, CreatePinRequest } from './types/request';
+import {
+  CreateCollectionRequest,
+  CreatePinRequest,
+  CreatePinResourceRequest,
+} from './types/request';
 import { CreateMuralRequest, MuralRequest } from './types/request';
 import { FetcherResponse, MuralResponseData } from './types/response';
 import { PaymentPeriod } from '@/app/(marketing)/checkout/[period]/page';
@@ -86,9 +90,9 @@ export const apiClient = {
     },
   },
   resources: {
-    create: async (
+    createPinResource: async (
       collectionId: string,
-      pin: CreatePinRequest,
+      request: CreatePinResourceRequest,
     ): Promise<FetcherResponse> => {
       const token = localStorage.getItem('token');
       if (!token) {
@@ -99,9 +103,9 @@ export const apiClient = {
         };
       }
 
-      return await fetcher(`/pins/create/${collectionId}`, {
+      return await fetcher(`/resources/create/pin/${collectionId}`, {
         method: 'POST',
-        body: pin,
+        body: request,
         token: token,
       });
     },

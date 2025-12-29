@@ -1,0 +1,43 @@
+.page-container {
+  @include flex(column, center, center);
+  min-height: 100vh;
+  width: 100%;
+}
+
+.mural-container-wrapper {
+  margin: 0;
+  margin-top: 0;
+}
+
+.publish-button {
+  position: fixed;
+  bottom: get-spacing(8);
+  left: 50%;
+  transform: translateX(-50%);
+  @include spacing(padding-y, 3);
+  @include spacing(padding-x, 8);
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: $large-corner;
+  color: white;
+  @include font-size('base');
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 100;
+
+  &:hover:not(.disabled) {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+
+  &:active:not(.disabled) {
+    transform: translateX(-50%) scale(0.98);
+  }
+
+  &.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}

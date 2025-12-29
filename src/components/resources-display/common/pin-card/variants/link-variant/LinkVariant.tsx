@@ -9,17 +9,27 @@ import VariantToolbar from '@/components/manage/variant-toolbar/VariantToolbar';
 import VariantEditForm from '@/components/manage/variant-toolbar/variant-edit-form/VariantEditForm';
 import { extractDomain } from './utils/extractDomain';
 import { isValidUrl } from './utils/isValidUrl';
+import { apiClient } from '@/lib/api-client/apiClient';
 import styles from './link-variant.module.scss';
+
+const formatFileSize = (bytes: number): string => {
+  if (bytes >= 1024 * 1024) {
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  }
+  return `${(bytes / 1024).toFixed(0)} KB`;
+};
 
 interface LinkVariantProps {
   iconConfig: IconConfig;
   content: string;
   link: string;
   isEditing?: boolean;
+  maxPreviewSize?: number;
   canMoveUp?: boolean;
   canMoveDown?: boolean;
   onContentChange?: (value: string) => void;
   onLinkChange?: (value: string) => void;
+  onIconConfigChange?: (config: IconConfig) => void;
   onMoveUp?: () => void;
   onMoveDown?: () => void;
   onDelete?: () => void;
@@ -30,10 +40,12 @@ export default function LinkVariant({
   iconConfig,
   link,
   isEditing = false,
+  maxPreviewSize,
   canMoveUp = true,
   canMoveDown = true,
   onContentChange,
   onLinkChange,
+  onIconConfigChange,
   onMoveUp,
   onMoveDown,
   onDelete,
@@ -45,6 +57,10 @@ export default function LinkVariant({
   const [descriptionTouched, setDescriptionTouched] = useState(false);
   const [linkStartedTyping, setLinkStartedTyping] = useState(!!link);
   const [formWasClosed, setFormWasClosed] = useState(false);
+  const [isPreviewUploading, setIsPreviewUploading] = useState(false);
+  const [previewUploadError, setPreviewUploadError] = useState<string | null>(
+    null,
+  );
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Base validation (always computed)
@@ -72,6 +88,8 @@ export default function LinkVariant({
         setIsFocused(false);
         if (isEditFormOpen) {
           setFormWasClosed(true);
+          setDescriptionTouched(true);
+          setLinkStartedTyping(true);
         }
         setIsEditFormOpen(false);
       }
@@ -102,11 +120,15 @@ export default function LinkVariant({
 
   const handleBackClick = () => {
     setFormWasClosed(true);
+    setDescriptionTouched(true);
+    setLinkStartedTyping(true);
     setIsEditFormOpen(false);
   };
 
   const handleDone = () => {
     setFormWasClosed(true);
+    setDescriptionTouched(true);
+    setLinkStartedTyping(true);
     setIsEditFormOpen(false);
     setIsFocused(false);
   };
@@ -124,6 +146,35 @@ export default function LinkVariant({
       setLinkStartedTyping(true);
     }
     onLinkChange?.(value);
+  };
+
+  const handlePreviewUpload = async (file: File) => {
+    if (!onIconConfigChange) return;
+
+    setPreviewUploadError(null);
+
+    if (maxPreviewSize && file.size > maxPreviewSize) {
+      setPreviewUploadError(
+        `Too large. Max: ${formatFileSize(maxPreviewSize)}`,
+      );
+      return;
+    }
+
+    setIsPreviewUploading(true);
+    try {
+      const result = await apiClient.storage.uploadImage(file);
+      if (result.success) {
+        onIconConfigChange({ type: 'custom', url: result.data.publicUrl });
+      } else {
+        console.error('Preview upload failed:', result.error);
+        setPreviewUploadError('Upload failed');
+      }
+    } catch (error) {
+      console.error('Preview upload error:', error);
+      setPreviewUploadError('Upload failed');
+    } finally {
+      setIsPreviewUploading(false);
+    }
   };
 
   const displaySrcMeta = link
@@ -178,6 +229,14 @@ export default function LinkVariant({
               onBack={handleBackClick}
               onDelete={onDelete}
               onDone={handleDone}
+              showPreviewEditor={!!onIconConfigChange}
+              variantType="link"
+              iconConfig={iconConfig}
+              onIconConfigChange={onIconConfigChange}
+              onPreviewUpload={handlePreviewUpload}
+              isPreviewUploading={isPreviewUploading}
+              previewUploadError={previewUploadError || undefined}
+              onClearPreviewError={() => setPreviewUploadError(null)}
             />
           )}
         </AnimatePresence>
