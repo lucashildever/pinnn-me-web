@@ -16,7 +16,7 @@ import profPlaceholder from '/public/assets/prof-placeholder.jpg';
 interface ShareHistoryProps {
   shareHistory: HistoryEntry[];
   style?: React.CSSProperties;
-  ownerPreview: EntryPreview;
+  ownerPreview?: EntryPreview;
 }
 
 export default function ShareHistory({
@@ -25,7 +25,7 @@ export default function ShareHistory({
   ownerPreview,
 }: ShareHistoryProps) {
   const ownerImageSrc =
-    ownerPreview.type === 'image' ? ownerPreview.url : profPlaceholder;
+    ownerPreview?.type === 'image' ? ownerPreview.url : profPlaceholder;
 
   const lastEntry = shareHistory.reduce((max, entry) =>
     entry.order > max.order ? entry : max,

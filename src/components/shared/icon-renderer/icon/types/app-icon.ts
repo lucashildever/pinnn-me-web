@@ -34,6 +34,7 @@ export const ICONS = {
   Pencil: 'pencil',
   ImageUp: 'imageUp',
   RefreshCw: 'refreshCw',
+  Pin: 'pin',
 } as const;
 
 export type AppIcon = (typeof ICONS)[keyof typeof ICONS];

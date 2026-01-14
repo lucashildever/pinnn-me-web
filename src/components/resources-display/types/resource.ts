@@ -19,6 +19,7 @@ interface BaseResource {
   type: ResourceType;
   order: string;
   pins: PinsData | SharedPinsData;
+  isPinned?: boolean;
 }
 
 export interface PinResource extends BaseResource {

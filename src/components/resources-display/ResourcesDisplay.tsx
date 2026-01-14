@@ -36,10 +36,6 @@ export default function ResourcesDisplay({
   } = useResources(currentCollectionId, mainCollectionResources);
 
   useEffect(() => {
-    console.log('resources ->', resources);
-  }, [resources]);
-
-  useEffect(() => {
     if (!observerRef.current || !hasNextPage || isFetchingNextPage) return;
 
     const observer = new IntersectionObserver(
@@ -81,25 +77,31 @@ export default function ResourcesDisplay({
           case 'pin':
             return (
               <React.Fragment key={`${resource.id}-${index}`}>
-                <Pin variants={resource.pins.data[0].variants} />
+                <Pin
+                  variants={resource.pins.data[0].variants}
+                  isPinned={resource.isPinned}
+                />
               </React.Fragment>
             );
           case 'shared-pin':
             return (
               <React.Fragment key={`${resource.id}-${index}`}>
-                <SharedPin data={resource.pins.data[0]} />
+                <SharedPin
+                  data={resource.pins.data[0]}
+                  isPinned={resource.isPinned}
+                />
               </React.Fragment>
             );
           case 'pin-group':
             return (
               <React.Fragment key={`${resource.id}-${index}`}>
-                <PinGroup data={resource} />
+                <PinGroup data={resource} isPinned={resource.isPinned} />
               </React.Fragment>
             );
           case 'shared-pin-group':
             return (
               <React.Fragment key={`${resource.id}-${index}`}>
-                <SharedPinGroup data={resource} />
+                <SharedPinGroup data={resource} isPinned={resource.isPinned} />
               </React.Fragment>
             );
           default:

@@ -23,6 +23,7 @@ import {
   Settings,
   Trash,
   Video,
+  Pin,
   X,
 } from 'lucide-react';
 import { IconMetadata } from '../types/app-icon';
@@ -217,6 +218,11 @@ export const iconLibrary: Record<string, Record<string, IconMetadata>> = {
       type: 'lucide',
       icon: FileDown,
       label: 'File Down',
+    },
+    pin: {
+      type: 'lucide',
+      icon: Pin,
+      label: 'Pin',
     },
   },
   custom: {

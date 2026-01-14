@@ -6,6 +6,12 @@
     @include pin-line-defs;
   }
 
+  .pin-group-meta {
+    @include flex(row, center, flex-start, null, 1);
+    @include spacing(padding-left, 4);
+    transform: translateX(1px);
+  }
+
   .line-with-divider {
     @include pin-line-defs;
     @include flex(row, center, center);

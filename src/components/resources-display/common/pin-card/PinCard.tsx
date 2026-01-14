@@ -14,12 +14,15 @@ import ShareHistory from '../share-history/ShareHistory';
 import OptionsButton from '../options-button/OptionsButton';
 import VideoVariant from './variants/video-variant/VideoVariant';
 
+import IconRenderer from '@/components/shared/icon-renderer/IconRenderer';
+
 interface PinCardProps {
   variants: Variant[];
   variantsFromSharedPin?: Variant[];
   shareHistory?: HistoryEntry[];
   ownerPreview?: EntryPreview;
   children?: React.ReactNode;
+  isPinned?: boolean;
 }
 
 export default function PinCard({
@@ -28,19 +31,32 @@ export default function PinCard({
   shareHistory,
   ownerPreview,
   children,
+  isPinned,
 }: PinCardProps) {
   return (
     <div className={styles['pin-card']}>
       {/* <OptionsButton top={5} right={5} /> */}
-      {shareHistory && ownerPreview ? (
-        <ShareHistory
-          shareHistory={shareHistory}
-          ownerPreview={ownerPreview}
-          style={{
-            marginBottom: '10px',
-          }}
-        />
-      ) : null}
+
+      {(isPinned || (shareHistory && ownerPreview)) && (
+        <div className={styles['pin-card-meta']}>
+          {isPinned && (
+            <IconRenderer
+              config={{ type: 'predefined', icon: 'pin' }}
+              renderedSize={6}
+              style={{ opacity: 0.65 }}
+            />
+          )}
+
+          {shareHistory && ownerPreview ? (
+            <ShareHistory
+              shareHistory={shareHistory}
+              ownerPreview={ownerPreview}
+              style={{ marginBottom: 0 }}
+            />
+          ) : null}
+        </div>
+      )}
+
       {children}
       <VariantsRenderer variants={variants} />
       {variantsFromSharedPin && variantsFromSharedPin.length > 0 ? (

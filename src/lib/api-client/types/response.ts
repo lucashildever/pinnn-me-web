@@ -1,6 +1,8 @@
 import { CollectionTab } from '@/components/tabs-display/types/collectionTab';
 import { MuralAppearance } from '@/components/mural/profile/types/appearance';
 import { IconConfig } from '@/components/shared/icon-renderer/icon/types/app-icon';
+import { Resource } from '@/components/resources-display/types/resource';
+import { Pagination } from '@/lib/types/pagination';
 
 export interface CallToActionConfig {
   link: string;
@@ -20,8 +22,18 @@ export interface MuralResponseData {
   description: string;
   collections: CollectionTab[];
   appearance: MuralAppearance;
-  mainCollectionResources?: any;
+  mainCollectionResources?: GetResourcesResponseData;
   callToActions?: CallToActionData[];
+}
+
+export interface GetResourcesResponseData {
+  pinnedResources: {
+    id: string;
+    order: number;
+    resource: Resource;
+  }[];
+  resources: Resource[];
+  pagination: Pagination;
 }
 
 export type FetcherResponse<T = any> = FetcherSuccess<T> | FetcherError;

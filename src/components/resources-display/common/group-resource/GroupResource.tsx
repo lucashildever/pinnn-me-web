@@ -7,12 +7,14 @@ import { SharedPin as SharedPinType } from '../../shared-pin/types/shared-pin';
 import Pin from '../../pin/Pin';
 import ShareHistory from '../share-history/ShareHistory';
 import PinSkeleton from '@/components/shared/skeletons/pin-skeleton/PinSkeleton';
+import IconRenderer from '@/components/shared/icon-renderer/IconRenderer';
 
 interface GroupResourceProps {
   data: PinGroupResource | SharedPinGroupResource;
+  isPinned?: boolean;
 }
 
-export default function GroupResource({ data }: GroupResourceProps) {
+export default function GroupResource({ data, isPinned }: GroupResourceProps) {
   const [resourceData, setResourceData] = React.useState<
     PinGroupResource | SharedPinGroupResource | null
   >(null);
@@ -35,14 +37,23 @@ export default function GroupResource({ data }: GroupResourceProps) {
       {/* <OptionsButton /> no MVP não precisa */}
       {isSharedGroup ? (
         <>
-          {resourceData.meta.history.length > 0 && (
-            <ShareHistory
-              shareHistory={resourceData.meta.history}
-              style={{
-                marginLeft: '11px',
-                marginBottom: '-7px',
-              }}
-            />
+          {(isPinned || resourceData.meta.history.length > 0) && (
+            <div className={styles['pin-group-meta']}>
+              {isPinned && (
+                <IconRenderer
+                  config={{ type: 'predefined', icon: 'pin' }}
+                  renderedSize={6}
+                  style={{ opacity: 0.65 }}
+                />
+              )}
+
+              {resourceData.meta.history.length > 0 && (
+                <ShareHistory
+                  shareHistory={resourceData.meta.history}
+                  style={{ marginBottom: 0 }}
+                />
+              )}
+            </div>
           )}
           <div className={styles['line-with-group-name']}>
             <span className={styles['group-name']}>
@@ -53,7 +64,19 @@ export default function GroupResource({ data }: GroupResourceProps) {
       ) : (
         <div className={styles['group-info']}>
           <div className={styles['initial-line']}>
-            <span className={styles['head']}></span>
+            {isPinned ? (
+              <IconRenderer
+                config={{ type: 'predefined', icon: 'pin' }}
+                renderedSize={6}
+                style={{
+                  opacity: 0.65,
+                  transform: 'translate(10px, 2px)',
+                  marginBottom: '6px',
+                }}
+              />
+            ) : (
+              <span className={styles['head']}></span>
+            )}
             <span className={styles['line']}></span>
           </div>
           <div

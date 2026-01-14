@@ -18,7 +18,10 @@ import { TabsProps } from './types/tabs';
 
 import styles from './mural-container.module.scss';
 import { MuralAppearance } from './profile/types/appearance';
-import { CallToActionData } from '@/lib/api-client/types/response';
+import {
+  CallToActionData,
+  GetResourcesResponseData,
+} from '@/lib/api-client/types/response';
 
 interface MuralContainerProps {
   muralId: string;
@@ -26,7 +29,7 @@ interface MuralContainerProps {
   description: string;
   collections: CollectionTab[];
   paramCollectionId: string | undefined;
-  mainCollectionResources?: any; // mudar tipagem para Resource[]
+  mainCollectionResources?: GetResourcesResponseData;
   appearance: MuralAppearance;
   callToActions?: CallToActionData[];
 }

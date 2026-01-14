@@ -3,41 +3,27 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { apiClient } from '@/lib/api-client/apiClient';
 import { Resource } from '../types/resource';
 import { Pagination } from '@/lib/types/pagination';
+import { GetResourcesResponseData } from '@/lib/api-client/types/response';
 
-export interface PaginatedResources {
-  resources: Resource[];
-  pagination: Pagination;
-}
+export type PaginatedResources = GetResourcesResponseData;
 
 export const useResources = (
   collectionId: string,
   initialResources?: PaginatedResources,
 ) => {
   // Compute initial data outside the query config for stable reference
-  // Handle both possible API structures: { resources: [...] } or { data: [...] }
   const computedInitialData = React.useMemo(() => {
     if (!initialResources) return undefined;
 
-    // Support both { resources: [...] } and { data: [...] } structures
-    const resourcesArray =
-      (initialResources as any).resources || (initialResources as any).data;
-    const pagination = initialResources.pagination;
-
-    if (resourcesArray && resourcesArray.length > 0) {
-      return {
-        pages: [
-          {
-            success: true,
-            data: {
-              data: resourcesArray,
-              pagination: pagination,
-            },
-          },
-        ],
-        pageParams: [1],
-      };
-    }
-    return undefined;
+    return {
+      pages: [
+        {
+          success: true,
+          data: initialResources,
+        },
+      ],
+      pageParams: [1],
+    };
   }, [initialResources]);
 
   const hasInitialData = !!computedInitialData;
@@ -60,6 +46,7 @@ export const useResources = (
     },
     initialPageParam: hasInitialData ? 2 : 1, // Start from page 2 if we have initial data
     getNextPageParam: (lastPage) => {
+      // Check if lastPage has data and pagination
       if (!lastPage.success || !lastPage.data?.pagination) {
         return undefined;
       }
@@ -81,16 +68,46 @@ export const useResources = (
       return [];
     }
 
-    return query.data.pages
-      .filter((page: any) => {
-        const hasData =
-          page.success && (page.data?.data || page.data?.resources);
-        return hasData;
-      })
-      .flatMap((page: any) => {
-        const resources = page.data.data || page.data.resources || [];
-        return resources as Resource[];
-      });
+    const pinnedResourcesMap = new Map<string, Resource>();
+    const regularResources: Resource[] = [];
+
+    query.data.pages.forEach((page: any) => {
+      if (!page.success || !page.data) return;
+
+      // Extract pinned resources
+      if (
+        page.data.pinnedResources &&
+        Array.isArray(page.data.pinnedResources)
+      ) {
+        page.data.pinnedResources.forEach((pinned: any) => {
+          if (pinned.resource) {
+            const resourceWithPinFlag = { ...pinned.resource, isPinned: true };
+            pinnedResourcesMap.set(pinned.resource.id, resourceWithPinFlag);
+          }
+        });
+      }
+
+      // Extract regular resources
+      const resources = page.data.resources || page.data.data || [];
+      if (Array.isArray(resources)) {
+        regularResources.push(...resources);
+      }
+    });
+
+    // Convert map to array (deduplicated by ID naturally via Map)
+    // Note: We might want to preserve order if backend sends specific order
+    // But Map iterates in insertion order, so if they come ordered, we are good.
+    // If we receive the same pinned resource in multiple pages, it re-sets it, maintaining latest (or first if we check).
+
+    // Better strategy for pinned: Use the ones from the first page (or accumulate all unique ones).
+    const pinned = Array.from(pinnedResourcesMap.values());
+
+    // Filter regular resources to remove any that are also in pinned (if backend duplicates them)
+    const filteredRegular = regularResources.filter(
+      (r) => !pinnedResourcesMap.has(r.id),
+    );
+
+    return [...pinned, ...filteredRegular];
   }, [query.data?.pages]);
 
   return {

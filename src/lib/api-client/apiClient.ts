@@ -1,4 +1,5 @@
 import { AuthCredentials, AuthResponseData } from './types/auth';
+import { Resource } from '@/components/resources-display/types/resource';
 
 import { fetcher } from './helpers/request';
 
@@ -8,7 +9,12 @@ import {
   CreatePinResourceRequest,
 } from './types/request';
 import { CreateMuralRequest, MuralRequest } from './types/request';
-import { FetcherResponse, MuralResponseData } from './types/response';
+import {
+  FetcherResponse,
+  GetResourcesResponseData,
+  MuralResponseData,
+} from './types/response';
+import { Pagination } from '@/lib/types/pagination';
 import { PaymentPeriod } from '@/app/(marketing)/checkout/[period]/page';
 
 export const apiClient = {
@@ -113,8 +119,16 @@ export const apiClient = {
       collectionId: string,
       page: number = 1,
       limit: number = 5,
-    ): Promise<FetcherResponse> => {
-      return await fetcher(`/resources/collection/${collectionId}`, {
+    ): Promise<FetcherResponse<GetResourcesResponseData>> => {
+      return await fetcher<{
+        pinnedResources: {
+          id: string;
+          order: number;
+          resource: Resource;
+        }[];
+        resources: Resource[];
+        pagination: Pagination;
+      }>(`/resources/collection/${collectionId}`, {
         method: 'GET',
         queryParams: {
           page: page.toString(),

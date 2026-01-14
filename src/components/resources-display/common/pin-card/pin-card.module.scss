@@ -7,4 +7,8 @@
   position: relative;
   width: 100%;
   box-sizing: border-box;
+
+  .pin-card-meta {
+    @include flex(row, center, center, null, 1);
+  }
 }

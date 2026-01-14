@@ -3,8 +3,9 @@ import { PaginatedVariants } from './types/variant';
 
 interface PinProps {
   variants: PaginatedVariants;
+  isPinned?: boolean;
 }
 
-export default function Pin({ variants }: PinProps) {
-  return <PinCard variants={variants.data} />;
+export default function Pin({ variants, isPinned }: PinProps) {
+  return <PinCard variants={variants.data} isPinned={isPinned} />;
 }
