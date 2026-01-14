@@ -21,6 +21,7 @@ import {
   generateNextOrder,
   generateOrderBetween,
 } from '@/lib/utils/fractional-index';
+import EditorHeader from '../../_components/EditorHeader';
 
 interface EditableVariant {
   id: string;
@@ -372,21 +373,186 @@ export default function CreateResourcePage() {
       <div
         className={`${muralStyles['mural-container']} ${styles['mural-container-wrapper']}`}
       >
-        <PinCard variants={[]}>
-          <AddElement label="Add content" onSelect={handleAddVariant} />
-          {[...variants]
-            .sort((a, b) => a.order.localeCompare(b.order))
-            .map((variant, index, sortedArray) => {
-              const isFirst = index === 0;
-              const isLast = index === sortedArray.length - 1;
+        <EditorHeader
+          onPublish={handlePublish}
+          isPublishing={isPublishing}
+          hasErrors={hasErrors}
+        />
+        <div className={styles['editor-content']}>
+          <PinCard variants={[]}>
+            <AddElement label="Add content" onSelect={handleAddVariant} />
+            {[...variants]
+              .sort((a, b) => a.order.localeCompare(b.order))
+              .map((variant, index, sortedArray) => {
+                const isFirst = index === 0;
+                const isLast = index === sortedArray.length - 1;
 
-              if (variant.type === 'title') {
+                if (variant.type === 'title') {
+                  return (
+                    <TitleVariant
+                      key={variant.id}
+                      content={variant.content}
+                      editable
+                      maxLength={limits?.title_variant_max_length}
+                      canMoveUp={!isFirst}
+                      canMoveDown={!isLast}
+                      onChange={(value) =>
+                        handleVariantChange(variant.id, value)
+                      }
+                      onMoveUp={() => handleMoveUp(variant.id)}
+                      onMoveDown={() => handleMoveDown(variant.id)}
+                      onToggle={() => handleToggleVariant(variant.id)}
+                      onDelete={() => handleDelete(variant.id)}
+                    />
+                  );
+                }
+
+                if (variant.type === 'image') {
+                  return (
+                    <ImageVariant
+                      key={variant.id}
+                      src={variant.src}
+                      isEditing={true}
+                      isUploading={variant.isUploading}
+                      uploadError={variant.uploadError}
+                      maxFileSize={limits?.image_size_limit}
+                      canMoveUp={!isFirst}
+                      canMoveDown={!isLast}
+                      onFileSelect={(file) =>
+                        handleImageUpload(variant.id, file)
+                      }
+                      onClearImage={() =>
+                        setVariants((prev) =>
+                          prev.map((v) =>
+                            v.id === variant.id ? { ...v, src: undefined } : v,
+                          ),
+                        )
+                      }
+                      onMoveUp={() => handleMoveUp(variant.id)}
+                      onMoveDown={() => handleMoveDown(variant.id)}
+                      onDelete={() => handleDelete(variant.id)}
+                    />
+                  );
+                }
+
+                if (variant.type === 'video') {
+                  return (
+                    <VideoVariant
+                      key={variant.id}
+                      src={variant.src}
+                      isEditing={true}
+                      isUploading={variant.isUploading}
+                      uploadError={variant.uploadError}
+                      maxFileSize={limits?.video_size_limit}
+                      canMoveUp={!isFirst}
+                      canMoveDown={!isLast}
+                      onFileSelect={(file) =>
+                        handleVideoUpload(variant.id, file)
+                      }
+                      onClearVideo={() =>
+                        setVariants((prev) =>
+                          prev.map((v) =>
+                            v.id === variant.id ? { ...v, src: undefined } : v,
+                          ),
+                        )
+                      }
+                      onMoveUp={() => handleMoveUp(variant.id)}
+                      onMoveDown={() => handleMoveDown(variant.id)}
+                      onDelete={() => handleDelete(variant.id)}
+                    />
+                  );
+                }
+
+                if (variant.type === 'link') {
+                  return (
+                    <LinkVariant
+                      key={variant.id}
+                      iconConfig={
+                        variant.iconConfig || {
+                          type: 'predefined',
+                          icon: 'link',
+                        }
+                      }
+                      content={variant.content}
+                      link={variant.link || ''}
+                      isEditing={true}
+                      maxPreviewSize={limits?.image_size_limit}
+                      canMoveUp={!isFirst}
+                      canMoveDown={!isLast}
+                      onContentChange={(value) =>
+                        handleVariantChange(variant.id, value)
+                      }
+                      onLinkChange={(value) =>
+                        handleLinkChange(variant.id, value)
+                      }
+                      onIconConfigChange={(config) =>
+                        setVariants((prev) =>
+                          prev.map((v) =>
+                            v.id === variant.id
+                              ? { ...v, iconConfig: config }
+                              : v,
+                          ),
+                        )
+                      }
+                      onMoveUp={() => handleMoveUp(variant.id)}
+                      onMoveDown={() => handleMoveDown(variant.id)}
+                      onDelete={() => handleDelete(variant.id)}
+                    />
+                  );
+                }
+
+                if (variant.type === 'download') {
+                  return (
+                    <DownloadVariant
+                      key={variant.id}
+                      iconConfig={
+                        variant.iconConfig || {
+                          type: 'predefined',
+                          icon: 'fileDown',
+                        }
+                      }
+                      content={variant.content}
+                      fileUrl={variant.fileUrl || ''}
+                      fileName={variant.fileName || ''}
+                      fileSize={variant.fileSize || 0}
+                      isEditing={true}
+                      maxFileSize={limits?.file_size_limit}
+                      maxPreviewSize={limits?.image_size_limit}
+                      canMoveUp={!isFirst}
+                      canMoveDown={!isLast}
+                      onContentChange={(value) =>
+                        handleVariantChange(variant.id, value)
+                      }
+                      onFileChange={(fileName, fileUrl, fileSize) =>
+                        handleFileChange(
+                          variant.id,
+                          fileName,
+                          fileUrl,
+                          fileSize,
+                        )
+                      }
+                      onIconConfigChange={(config) =>
+                        setVariants((prev) =>
+                          prev.map((v) =>
+                            v.id === variant.id
+                              ? { ...v, iconConfig: config }
+                              : v,
+                          ),
+                        )
+                      }
+                      onMoveUp={() => handleMoveUp(variant.id)}
+                      onMoveDown={() => handleMoveDown(variant.id)}
+                      onDelete={() => handleDelete(variant.id)}
+                    />
+                  );
+                }
+
                 return (
-                  <TitleVariant
+                  <TextVariant
                     key={variant.id}
                     content={variant.content}
                     editable
-                    maxLength={limits?.title_variant_max_length}
+                    maxLength={limits?.text_variant_max_length}
                     canMoveUp={!isFirst}
                     canMoveDown={!isLast}
                     onChange={(value) => handleVariantChange(variant.id, value)}
@@ -396,164 +562,11 @@ export default function CreateResourcePage() {
                     onDelete={() => handleDelete(variant.id)}
                   />
                 );
-              }
-
-              if (variant.type === 'image') {
-                return (
-                  <ImageVariant
-                    key={variant.id}
-                    src={variant.src}
-                    isEditing={true}
-                    isUploading={variant.isUploading}
-                    uploadError={variant.uploadError}
-                    maxFileSize={limits?.image_size_limit}
-                    canMoveUp={!isFirst}
-                    canMoveDown={!isLast}
-                    onFileSelect={(file) => handleImageUpload(variant.id, file)}
-                    onClearImage={() =>
-                      setVariants((prev) =>
-                        prev.map((v) =>
-                          v.id === variant.id ? { ...v, src: undefined } : v,
-                        ),
-                      )
-                    }
-                    onMoveUp={() => handleMoveUp(variant.id)}
-                    onMoveDown={() => handleMoveDown(variant.id)}
-                    onDelete={() => handleDelete(variant.id)}
-                  />
-                );
-              }
-
-              if (variant.type === 'video') {
-                return (
-                  <VideoVariant
-                    key={variant.id}
-                    src={variant.src}
-                    isEditing={true}
-                    isUploading={variant.isUploading}
-                    uploadError={variant.uploadError}
-                    maxFileSize={limits?.video_size_limit}
-                    canMoveUp={!isFirst}
-                    canMoveDown={!isLast}
-                    onFileSelect={(file) => handleVideoUpload(variant.id, file)}
-                    onClearVideo={() =>
-                      setVariants((prev) =>
-                        prev.map((v) =>
-                          v.id === variant.id ? { ...v, src: undefined } : v,
-                        ),
-                      )
-                    }
-                    onMoveUp={() => handleMoveUp(variant.id)}
-                    onMoveDown={() => handleMoveDown(variant.id)}
-                    onDelete={() => handleDelete(variant.id)}
-                  />
-                );
-              }
-
-              if (variant.type === 'link') {
-                return (
-                  <LinkVariant
-                    key={variant.id}
-                    iconConfig={
-                      variant.iconConfig || { type: 'predefined', icon: 'link' }
-                    }
-                    content={variant.content}
-                    link={variant.link || ''}
-                    isEditing={true}
-                    maxPreviewSize={limits?.image_size_limit}
-                    canMoveUp={!isFirst}
-                    canMoveDown={!isLast}
-                    onContentChange={(value) =>
-                      handleVariantChange(variant.id, value)
-                    }
-                    onLinkChange={(value) =>
-                      handleLinkChange(variant.id, value)
-                    }
-                    onIconConfigChange={(config) =>
-                      setVariants((prev) =>
-                        prev.map((v) =>
-                          v.id === variant.id
-                            ? { ...v, iconConfig: config }
-                            : v,
-                        ),
-                      )
-                    }
-                    onMoveUp={() => handleMoveUp(variant.id)}
-                    onMoveDown={() => handleMoveDown(variant.id)}
-                    onDelete={() => handleDelete(variant.id)}
-                  />
-                );
-              }
-
-              if (variant.type === 'download') {
-                return (
-                  <DownloadVariant
-                    key={variant.id}
-                    iconConfig={
-                      variant.iconConfig || {
-                        type: 'predefined',
-                        icon: 'fileDown',
-                      }
-                    }
-                    content={variant.content}
-                    fileUrl={variant.fileUrl || ''}
-                    fileName={variant.fileName || ''}
-                    fileSize={variant.fileSize || 0}
-                    isEditing={true}
-                    maxFileSize={limits?.file_size_limit}
-                    maxPreviewSize={limits?.image_size_limit}
-                    canMoveUp={!isFirst}
-                    canMoveDown={!isLast}
-                    onContentChange={(value) =>
-                      handleVariantChange(variant.id, value)
-                    }
-                    onFileChange={(fileName, fileUrl, fileSize) =>
-                      handleFileChange(variant.id, fileName, fileUrl, fileSize)
-                    }
-                    onIconConfigChange={(config) =>
-                      setVariants((prev) =>
-                        prev.map((v) =>
-                          v.id === variant.id
-                            ? { ...v, iconConfig: config }
-                            : v,
-                        ),
-                      )
-                    }
-                    onMoveUp={() => handleMoveUp(variant.id)}
-                    onMoveDown={() => handleMoveDown(variant.id)}
-                    onDelete={() => handleDelete(variant.id)}
-                  />
-                );
-              }
-
-              return (
-                <TextVariant
-                  key={variant.id}
-                  content={variant.content}
-                  editable
-                  maxLength={limits?.text_variant_max_length}
-                  canMoveUp={!isFirst}
-                  canMoveDown={!isLast}
-                  onChange={(value) => handleVariantChange(variant.id, value)}
-                  onMoveUp={() => handleMoveUp(variant.id)}
-                  onMoveDown={() => handleMoveDown(variant.id)}
-                  onToggle={() => handleToggleVariant(variant.id)}
-                  onDelete={() => handleDelete(variant.id)}
-                />
-              );
-            })}
-        </PinCard>
-        <AddElement label="Add pin" />
+              })}
+          </PinCard>
+          <AddElement label="Add pin" />
+        </div>
       </div>
-
-      <button
-        type="button"
-        className={`${styles['publish-button']} ${hasErrors || isPublishing ? styles['disabled'] : ''}`}
-        onClick={handlePublish}
-        disabled={hasErrors || isPublishing}
-      >
-        {isPublishing ? 'Publicando...' : 'Publicar'}
-      </button>
     </main>
   );
 }

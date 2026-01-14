@@ -25,6 +25,8 @@ import {
   Video,
   Pin,
   X,
+  ChevronLeft,
+  Check,
 } from 'lucide-react';
 import { IconMetadata } from '../types/app-icon';
 
@@ -182,6 +184,16 @@ export const iconLibrary: Record<string, Record<string, IconMetadata>> = {
       type: 'lucide',
       icon: RefreshCw,
       label: 'Refresh',
+    },
+    chevronLeft: {
+      type: 'lucide',
+      icon: ChevronLeft,
+      label: 'Chevron Left',
+    },
+    check: {
+      type: 'lucide',
+      icon: Check,
+      label: 'Check',
     },
   },
   navigation: {
