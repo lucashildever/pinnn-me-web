@@ -1,5 +1,5 @@
 .mural-container {
-  @include flex(column, flex-start, center, nowrap, 7);
+  @include flex(column, center, flex-start, nowrap, 7);
   position: relative;
   margin: auto;
   min-height: 100vh;
