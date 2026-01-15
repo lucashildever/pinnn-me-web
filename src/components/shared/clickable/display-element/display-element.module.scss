@@ -1,0 +1,7 @@
+.display-element {
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  gap: #{get-spacing(2)}px;
+  white-space: nowrap;
+}

@@ -1,10 +1,12 @@
 import { ActiveTabData } from '@/components/tabs-display/types/collectionTab';
+import { Clickable } from './clickable';
 
 export type ClickableConfig =
   | CollectionTabConfig
   | CollectionTabOverlayConfig
   | UtilityButtonConfig
-  | CallToActionConfig;
+  | CallToActionConfig
+  | CollectionSelectorConfig;
 
 export type TabClick = (tabData: ActiveTabData) => void;
 
@@ -33,4 +35,13 @@ export interface CallToActionConfig {
 
 export interface UtilityButtonConfig {
   clickableType: 'mural-options';
+}
+
+export interface CollectionSelectorConfig {
+  clickableType: 'collection-selector';
+  items: Array<{
+    id: string;
+    payload: Clickable;
+  }>;
+  onSelect: (id: string) => void;
 }

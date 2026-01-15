@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import IconRenderer from '@/components/shared/icon-renderer/IconRenderer';
 import styles from './editor-header.module.scss';
 import { useAppSelector } from '@/lib/state/hooks';
+import Divider from '@/components/shared/divider/divider';
 
 interface EditorHeaderProps {
   onPublish?: () => void;
@@ -59,7 +60,7 @@ export default function EditorHeader({
         </button>
       </div>
 
-      <div className={styles['divider']} />
+      <Divider />
 
       <div className={styles['title-section']}>
         <h1 className={styles['main-title']}>Create Resource</h1>

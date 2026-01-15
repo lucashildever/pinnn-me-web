@@ -11,6 +11,7 @@ const CLICKABLE_TYPES = {
   muralCta: 'mural-cta',
   muralOptions: 'mural-options',
   muralTheme: 'mural-theme',
+  collectionSelector: 'collection-selector',
 } as const;
 
 export type ClickableType =

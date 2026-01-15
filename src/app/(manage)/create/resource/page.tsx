@@ -22,6 +22,7 @@ import {
   generateOrderBetween,
 } from '@/lib/utils/fractional-index';
 import EditorHeader from '../../_components/EditorHeader';
+import Clickable from '@/components/shared/clickable/Clickable';
 
 interface EditableVariant {
   id: string;
@@ -47,6 +48,32 @@ export default function CreateResourcePage() {
 
   // Hardcoded collection ID for now
   const COLLECTION_ID = '0c9cbead-f7ae-4ce6-85e7-2867546f402f';
+
+  const MOCK_COLLECTIONS = [
+    {
+      id: '0c9cbead-f7ae-4ce6-85e7-2867546f402f',
+      name: 'Design Resources',
+      icon: { type: 'predefined', icon: 'image' } as const,
+    },
+    {
+      id: '2',
+      name: 'My Documents',
+      icon: { type: 'predefined', icon: 'file' } as const,
+    },
+    {
+      id: '3',
+      name: 'Pinned Items',
+      icon: { type: 'predefined', icon: 'pin' } as const,
+    },
+  ];
+
+  const [selectedCollectionId, setSelectedCollectionId] =
+    useState(COLLECTION_ID);
+
+  const selectedCollection =
+    MOCK_COLLECTIONS.find((c) => c.id === selectedCollectionId) ||
+    MOCK_COLLECTIONS[0];
+  ///
 
   useEffect(() => {
     const validateAuth = async () => {
@@ -379,6 +406,25 @@ export default function CreateResourcePage() {
           hasErrors={hasErrors}
         />
         <div className={styles['editor-content']}>
+          <Clickable
+            payload={{
+              content: selectedCollection.name,
+              iconConfig: selectedCollection.icon,
+            }}
+            config={{
+              clickableType: 'collection-selector',
+              items: MOCK_COLLECTIONS.filter(
+                (c) => c.id !== selectedCollectionId,
+              ).map((c) => ({
+                id: c.id,
+                payload: {
+                  content: c.name,
+                  iconConfig: c.icon,
+                },
+              })),
+              onSelect: (id) => setSelectedCollectionId(id),
+            }}
+          />
           <PinCard variants={[]}>
             <AddElement label="Add content" onSelect={handleAddVariant} />
             {[...variants]

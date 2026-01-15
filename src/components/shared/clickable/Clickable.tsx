@@ -7,6 +7,7 @@ import styles from './clickable.module.scss';
 import { CollectionTab } from './collection-tab/CollectionTab';
 import { CallToAction } from './call-to-action/CallToAction';
 import { MuralOptions } from './mural-options/MuralOptions';
+import { CollectionSelector } from './collection-selector/CollectionSelector';
 
 interface ClickableProps {
   payload: IClickable;
@@ -31,6 +32,10 @@ export default function Clickable({ payload, config, style }: ClickableProps) {
       return <CallToAction payload={payload} config={config} style={style} />;
     case 'mural-options':
       return <MuralOptions payload={payload} config={config} style={style} />;
+    case 'collection-selector':
+      return (
+        <CollectionSelector payload={payload} config={config} style={style} />
+      );
     default:
       return null;
   }
