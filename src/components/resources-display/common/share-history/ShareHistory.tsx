@@ -6,7 +6,7 @@ import { EntryPreview, HistoryEntry } from '../../types/history-entry';
 import Image from 'next/image';
 
 import { useAppSelector } from '@/lib/state/hooks';
-import { selectMuralId } from '@/lib/state/slices/muralSlice';
+import { selectActiveMuralId } from '@/lib/state/slices/muralSlice';
 import { useEffect, useState } from 'react';
 import { IconConfig } from '@/components/shared/icon-renderer/icon/types/app-icon';
 import AuthorMeta from '@/components/shared/author-meta/AuthorMeta';
@@ -58,7 +58,7 @@ export default function ShareHistory({
 function HistorySourcesRenderer({ history }: { history: HistoryEntry[] }) {
   const [overplus, setOverplus] = useState(false);
   const maxOrderHistory = Math.max(...history.map((entry) => entry.order));
-  const muralId = useAppSelector(selectMuralId);
+  const muralId = useAppSelector(selectActiveMuralId);
 
   useEffect(() => {
     if (maxOrderHistory > 5) {

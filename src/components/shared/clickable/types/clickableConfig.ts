@@ -39,9 +39,6 @@ export interface UtilityButtonConfig {
 
 export interface CollectionSelectorConfig {
   clickableType: 'collection-selector';
-  items: Array<{
-    id: string;
-    payload: Clickable;
-  }>;
+  selectedCollectionId: string;
   onSelect: (id: string) => void;
 }

@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import AuthProvider from '@/components/providers/auth-provider/AuthProvider';
 import PinCard from '@/components/resources-display/common/pin-card/PinCard';
 import styles from './create-resource.module.scss';
 import muralStyles from '@/components/mural/mural-container.module.scss';
@@ -16,12 +16,13 @@ import { VariantSelection } from '@/components/manage/add-element/AddElement';
 import { apiClient } from '@/lib/api-client/apiClient';
 import { useAppSelector } from '@/lib/state/hooks';
 import { selectLimits } from '@/lib/state/slices/authSlice';
+
 import { IconConfig } from '@/components/shared/icon-renderer/icon/types/app-icon';
 import {
   generateNextOrder,
   generateOrderBetween,
 } from '@/lib/utils/fractional-index';
-import EditorHeader from '../../_components/EditorHeader';
+import EditorHeader from '../../_components/editor-header/EditorHeader';
 import Clickable from '@/components/shared/clickable/Clickable';
 
 interface EditableVariant {
@@ -40,67 +41,11 @@ interface EditableVariant {
 }
 
 export default function CreateResourcePage() {
-  const router = useRouter();
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [variants, setVariants] = useState<EditableVariant[]>([]);
   const [isPublishing, setIsPublishing] = useState(false);
   const limits = useAppSelector(selectLimits);
 
-  // Hardcoded collection ID for now
-  const COLLECTION_ID = '0c9cbead-f7ae-4ce6-85e7-2867546f402f';
-
-  const MOCK_COLLECTIONS = [
-    {
-      id: '0c9cbead-f7ae-4ce6-85e7-2867546f402f',
-      name: 'Design Resources',
-      icon: { type: 'predefined', icon: 'image' } as const,
-    },
-    {
-      id: '2',
-      name: 'My Documents',
-      icon: { type: 'predefined', icon: 'file' } as const,
-    },
-    {
-      id: '3',
-      name: 'Pinned Items',
-      icon: { type: 'predefined', icon: 'pin' } as const,
-    },
-  ];
-
-  const [selectedCollectionId, setSelectedCollectionId] =
-    useState(COLLECTION_ID);
-
-  const selectedCollection =
-    MOCK_COLLECTIONS.find((c) => c.id === selectedCollectionId) ||
-    MOCK_COLLECTIONS[0];
-  ///
-
-  useEffect(() => {
-    const validateAuth = async () => {
-      const token = localStorage.getItem('token');
-
-      if (!token) {
-        router.replace('/login');
-        return;
-      }
-
-      const isValid = await apiClient.auth.validateToken();
-
-      if (!isValid) {
-        localStorage.removeItem('token');
-        router.replace('/login');
-      } else {
-        setIsAuthenticated(true);
-      }
-    };
-
-    validateAuth();
-  }, [router]);
-
-  // Show nothing while checking auth
-  if (isAuthenticated === null) {
-    return null;
-  }
+  const [selectedCollectionId, setSelectedCollectionId] = useState<string>('');
 
   const handleAddVariant = (selection: VariantSelection) => {
     if (typeof selection === 'object' && selection.type === 'integration') {
@@ -323,7 +268,7 @@ export default function CreateResourcePage() {
   const hasErrors = getVariantErrors();
 
   const handlePublish = async () => {
-    if (hasErrors || isPublishing) return;
+    if (hasErrors || isPublishing || !selectedCollectionId) return;
 
     setIsPublishing(true);
 
@@ -376,7 +321,7 @@ export default function CreateResourcePage() {
       });
 
       const result = await apiClient.resources.createPinResource(
-        COLLECTION_ID,
+        selectedCollectionId,
         {
           variants: variantsPayload,
         },
@@ -396,50 +341,207 @@ export default function CreateResourcePage() {
   };
 
   return (
-    <main className={styles['page-container']}>
-      <div
-        className={`${muralStyles['mural-container']} ${styles['mural-container-wrapper']}`}
-      >
-        <EditorHeader
-          onPublish={handlePublish}
-          isPublishing={isPublishing}
-          hasErrors={hasErrors}
-        />
-        <div className={styles['editor-content']}>
-          <Clickable
-            payload={{
-              content: selectedCollection.name,
-              iconConfig: selectedCollection.icon,
-            }}
-            config={{
-              clickableType: 'collection-selector',
-              items: MOCK_COLLECTIONS.filter(
-                (c) => c.id !== selectedCollectionId,
-              ).map((c) => ({
-                id: c.id,
-                payload: {
-                  content: c.name,
-                  iconConfig: c.icon,
-                },
-              })),
-              onSelect: (id) => setSelectedCollectionId(id),
-            }}
+    <AuthProvider>
+      <main className={styles['page-container']}>
+        <div
+          className={`${muralStyles['mural-container']} ${styles['mural-container-wrapper']}`}
+        >
+          <EditorHeader
+            onPublish={handlePublish}
+            isPublishing={isPublishing}
+            hasErrors={hasErrors}
           />
-          <PinCard variants={[]}>
-            <AddElement label="Add content" onSelect={handleAddVariant} />
-            {[...variants]
-              .sort((a, b) => a.order.localeCompare(b.order))
-              .map((variant, index, sortedArray) => {
-                const isFirst = index === 0;
-                const isLast = index === sortedArray.length - 1;
+          <div className={styles['editor-content']}>
+            <div className={styles['coll-selector-container']}>
+              <Clickable
+                payload={{
+                  iconConfig: { type: 'predefined', icon: 'chevronDown' },
+                }}
+                config={{
+                  clickableType: 'collection-selector',
+                  selectedCollectionId,
+                  onSelect: setSelectedCollectionId,
+                }}
+              />
+            </div>
+            <PinCard variants={[]}>
+              <AddElement label="Add content" onSelect={handleAddVariant} />
+              {[...variants]
+                .sort((a, b) => a.order.localeCompare(b.order))
+                .map((variant, index, sortedArray) => {
+                  const isFirst = index === 0;
+                  const isLast = index === sortedArray.length - 1;
 
-                if (variant.type === 'title') {
+                  if (variant.type === 'title') {
+                    return (
+                      <TitleVariant
+                        key={variant.id}
+                        content={variant.content}
+                        editable
+                        maxLength={limits?.title_variant_max_length}
+                        canMoveUp={!isFirst}
+                        canMoveDown={!isLast}
+                        onChange={(value) =>
+                          handleVariantChange(variant.id, value)
+                        }
+                        onMoveUp={() => handleMoveUp(variant.id)}
+                        onMoveDown={() => handleMoveDown(variant.id)}
+                        onToggle={() => handleToggleVariant(variant.id)}
+                        onDelete={() => handleDelete(variant.id)}
+                      />
+                    );
+                  }
+
+                  if (variant.type === 'image') {
+                    return (
+                      <ImageVariant
+                        key={variant.id}
+                        src={variant.src}
+                        isEditing={true}
+                        isUploading={variant.isUploading}
+                        uploadError={variant.uploadError}
+                        maxFileSize={limits?.image_size_limit}
+                        canMoveUp={!isFirst}
+                        canMoveDown={!isLast}
+                        onFileSelect={(file) =>
+                          handleImageUpload(variant.id, file)
+                        }
+                        onClearImage={() =>
+                          setVariants((prev) =>
+                            prev.map((v) =>
+                              v.id === variant.id
+                                ? { ...v, src: undefined }
+                                : v,
+                            ),
+                          )
+                        }
+                        onMoveUp={() => handleMoveUp(variant.id)}
+                        onMoveDown={() => handleMoveDown(variant.id)}
+                        onDelete={() => handleDelete(variant.id)}
+                      />
+                    );
+                  }
+
+                  if (variant.type === 'video') {
+                    return (
+                      <VideoVariant
+                        key={variant.id}
+                        src={variant.src}
+                        isEditing={true}
+                        isUploading={variant.isUploading}
+                        uploadError={variant.uploadError}
+                        maxFileSize={limits?.video_size_limit}
+                        canMoveUp={!isFirst}
+                        canMoveDown={!isLast}
+                        onFileSelect={(file) =>
+                          handleVideoUpload(variant.id, file)
+                        }
+                        onClearVideo={() =>
+                          setVariants((prev) =>
+                            prev.map((v) =>
+                              v.id === variant.id
+                                ? { ...v, src: undefined }
+                                : v,
+                            ),
+                          )
+                        }
+                        onMoveUp={() => handleMoveUp(variant.id)}
+                        onMoveDown={() => handleMoveDown(variant.id)}
+                        onDelete={() => handleDelete(variant.id)}
+                      />
+                    );
+                  }
+
+                  if (variant.type === 'link') {
+                    return (
+                      <LinkVariant
+                        key={variant.id}
+                        iconConfig={
+                          variant.iconConfig || {
+                            type: 'predefined',
+                            icon: 'link',
+                          }
+                        }
+                        content={variant.content}
+                        link={variant.link || ''}
+                        isEditing={true}
+                        maxPreviewSize={limits?.image_size_limit}
+                        canMoveUp={!isFirst}
+                        canMoveDown={!isLast}
+                        onContentChange={(value) =>
+                          handleVariantChange(variant.id, value)
+                        }
+                        onLinkChange={(value) =>
+                          handleLinkChange(variant.id, value)
+                        }
+                        onIconConfigChange={(config) =>
+                          setVariants((prev) =>
+                            prev.map((v) =>
+                              v.id === variant.id
+                                ? { ...v, iconConfig: config }
+                                : v,
+                            ),
+                          )
+                        }
+                        onMoveUp={() => handleMoveUp(variant.id)}
+                        onMoveDown={() => handleMoveDown(variant.id)}
+                        onDelete={() => handleDelete(variant.id)}
+                      />
+                    );
+                  }
+
+                  if (variant.type === 'download') {
+                    return (
+                      <DownloadVariant
+                        key={variant.id}
+                        iconConfig={
+                          variant.iconConfig || {
+                            type: 'predefined',
+                            icon: 'fileDown',
+                          }
+                        }
+                        content={variant.content}
+                        fileUrl={variant.fileUrl || ''}
+                        fileName={variant.fileName || ''}
+                        fileSize={variant.fileSize || 0}
+                        isEditing={true}
+                        maxFileSize={limits?.file_size_limit}
+                        maxPreviewSize={limits?.image_size_limit}
+                        canMoveUp={!isFirst}
+                        canMoveDown={!isLast}
+                        onContentChange={(value) =>
+                          handleVariantChange(variant.id, value)
+                        }
+                        onFileChange={(fileName, fileUrl, fileSize) =>
+                          handleFileChange(
+                            variant.id,
+                            fileName,
+                            fileUrl,
+                            fileSize,
+                          )
+                        }
+                        onIconConfigChange={(config) =>
+                          setVariants((prev) =>
+                            prev.map((v) =>
+                              v.id === variant.id
+                                ? { ...v, iconConfig: config }
+                                : v,
+                            ),
+                          )
+                        }
+                        onMoveUp={() => handleMoveUp(variant.id)}
+                        onMoveDown={() => handleMoveDown(variant.id)}
+                        onDelete={() => handleDelete(variant.id)}
+                      />
+                    );
+                  }
+
                   return (
-                    <TitleVariant
+                    <TextVariant
                       key={variant.id}
                       content={variant.content}
                       editable
-                      maxLength={limits?.title_variant_max_length}
+                      maxLength={limits?.text_variant_max_length}
                       canMoveUp={!isFirst}
                       canMoveDown={!isLast}
                       onChange={(value) =>
@@ -451,168 +553,12 @@ export default function CreateResourcePage() {
                       onDelete={() => handleDelete(variant.id)}
                     />
                   );
-                }
-
-                if (variant.type === 'image') {
-                  return (
-                    <ImageVariant
-                      key={variant.id}
-                      src={variant.src}
-                      isEditing={true}
-                      isUploading={variant.isUploading}
-                      uploadError={variant.uploadError}
-                      maxFileSize={limits?.image_size_limit}
-                      canMoveUp={!isFirst}
-                      canMoveDown={!isLast}
-                      onFileSelect={(file) =>
-                        handleImageUpload(variant.id, file)
-                      }
-                      onClearImage={() =>
-                        setVariants((prev) =>
-                          prev.map((v) =>
-                            v.id === variant.id ? { ...v, src: undefined } : v,
-                          ),
-                        )
-                      }
-                      onMoveUp={() => handleMoveUp(variant.id)}
-                      onMoveDown={() => handleMoveDown(variant.id)}
-                      onDelete={() => handleDelete(variant.id)}
-                    />
-                  );
-                }
-
-                if (variant.type === 'video') {
-                  return (
-                    <VideoVariant
-                      key={variant.id}
-                      src={variant.src}
-                      isEditing={true}
-                      isUploading={variant.isUploading}
-                      uploadError={variant.uploadError}
-                      maxFileSize={limits?.video_size_limit}
-                      canMoveUp={!isFirst}
-                      canMoveDown={!isLast}
-                      onFileSelect={(file) =>
-                        handleVideoUpload(variant.id, file)
-                      }
-                      onClearVideo={() =>
-                        setVariants((prev) =>
-                          prev.map((v) =>
-                            v.id === variant.id ? { ...v, src: undefined } : v,
-                          ),
-                        )
-                      }
-                      onMoveUp={() => handleMoveUp(variant.id)}
-                      onMoveDown={() => handleMoveDown(variant.id)}
-                      onDelete={() => handleDelete(variant.id)}
-                    />
-                  );
-                }
-
-                if (variant.type === 'link') {
-                  return (
-                    <LinkVariant
-                      key={variant.id}
-                      iconConfig={
-                        variant.iconConfig || {
-                          type: 'predefined',
-                          icon: 'link',
-                        }
-                      }
-                      content={variant.content}
-                      link={variant.link || ''}
-                      isEditing={true}
-                      maxPreviewSize={limits?.image_size_limit}
-                      canMoveUp={!isFirst}
-                      canMoveDown={!isLast}
-                      onContentChange={(value) =>
-                        handleVariantChange(variant.id, value)
-                      }
-                      onLinkChange={(value) =>
-                        handleLinkChange(variant.id, value)
-                      }
-                      onIconConfigChange={(config) =>
-                        setVariants((prev) =>
-                          prev.map((v) =>
-                            v.id === variant.id
-                              ? { ...v, iconConfig: config }
-                              : v,
-                          ),
-                        )
-                      }
-                      onMoveUp={() => handleMoveUp(variant.id)}
-                      onMoveDown={() => handleMoveDown(variant.id)}
-                      onDelete={() => handleDelete(variant.id)}
-                    />
-                  );
-                }
-
-                if (variant.type === 'download') {
-                  return (
-                    <DownloadVariant
-                      key={variant.id}
-                      iconConfig={
-                        variant.iconConfig || {
-                          type: 'predefined',
-                          icon: 'fileDown',
-                        }
-                      }
-                      content={variant.content}
-                      fileUrl={variant.fileUrl || ''}
-                      fileName={variant.fileName || ''}
-                      fileSize={variant.fileSize || 0}
-                      isEditing={true}
-                      maxFileSize={limits?.file_size_limit}
-                      maxPreviewSize={limits?.image_size_limit}
-                      canMoveUp={!isFirst}
-                      canMoveDown={!isLast}
-                      onContentChange={(value) =>
-                        handleVariantChange(variant.id, value)
-                      }
-                      onFileChange={(fileName, fileUrl, fileSize) =>
-                        handleFileChange(
-                          variant.id,
-                          fileName,
-                          fileUrl,
-                          fileSize,
-                        )
-                      }
-                      onIconConfigChange={(config) =>
-                        setVariants((prev) =>
-                          prev.map((v) =>
-                            v.id === variant.id
-                              ? { ...v, iconConfig: config }
-                              : v,
-                          ),
-                        )
-                      }
-                      onMoveUp={() => handleMoveUp(variant.id)}
-                      onMoveDown={() => handleMoveDown(variant.id)}
-                      onDelete={() => handleDelete(variant.id)}
-                    />
-                  );
-                }
-
-                return (
-                  <TextVariant
-                    key={variant.id}
-                    content={variant.content}
-                    editable
-                    maxLength={limits?.text_variant_max_length}
-                    canMoveUp={!isFirst}
-                    canMoveDown={!isLast}
-                    onChange={(value) => handleVariantChange(variant.id, value)}
-                    onMoveUp={() => handleMoveUp(variant.id)}
-                    onMoveDown={() => handleMoveDown(variant.id)}
-                    onToggle={() => handleToggleVariant(variant.id)}
-                    onDelete={() => handleDelete(variant.id)}
-                  />
-                );
-              })}
-          </PinCard>
-          <AddElement label="Add pin" />
+                })}
+            </PinCard>
+            <AddElement label="Add pin" />
+          </div>
         </div>
-      </div>
-    </main>
+      </main>
+    </AuthProvider>
   );
 }

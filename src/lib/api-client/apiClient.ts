@@ -1,4 +1,8 @@
-import { AuthCredentials, AuthResponseData } from './types/auth';
+import {
+  AuthCredentials,
+  AuthResponseData,
+  ValidateResponseData,
+} from './types/auth';
 import { Resource } from '@/components/resources-display/types/resource';
 
 import { fetcher } from './helpers/request';
@@ -37,22 +41,40 @@ export const apiClient = {
       });
     },
 
-    validateToken: async (): Promise<boolean> => {
+    validateToken: async (): Promise<FetcherResponse<ValidateResponseData>> => {
       const token = localStorage.getItem('token');
 
       if (!token) {
-        return false;
+        return {
+          success: false,
+          error: 'unauthorized',
+          message: 'No token found',
+        };
       }
 
-      const response = await fetcher('/auth/validate', {
+      return await fetcher<ValidateResponseData>('/auth/validate', {
         method: 'GET',
         token,
       });
-
-      return response.success;
     },
   },
   collection: {
+    getAll: async (muralId: string) => {
+      const token = localStorage.getItem('token');
+
+      if (!token) {
+        return {
+          success: false,
+          error: 'unauthorized',
+          message: 'Authentication required',
+        };
+      }
+
+      return await fetcher(`/collections/get-all/${muralId}`, {
+        method: 'GET',
+        token,
+      });
+    },
     create: async (collection: CreateCollectionRequest) => {
       return await fetcher(`collections/create/${collection.muralId}`, {
         method: 'POST',

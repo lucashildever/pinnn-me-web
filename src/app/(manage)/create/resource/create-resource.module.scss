@@ -12,6 +12,11 @@
   .editor-content {
     width: 100%;
     min-height: calc(100vh - #{get-spacing(50)}px);
-    @include flex(column, center, center, nowrap, 3);
+    @include flex(column, center, center, nowrap, 6);
+
+    .coll-selector-container {
+      width: 100%;
+      @include flex(row, center, flex-start, nowrap, 2);
+    }
   }
 }

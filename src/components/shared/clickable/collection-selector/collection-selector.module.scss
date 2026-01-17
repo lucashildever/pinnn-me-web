@@ -1,52 +1,51 @@
-@use '@/styles/mixins' as *;
-
 .collection-selector {
-  @include base-clickable;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: #{get-spacing(4)}px;
+  @include flex(row, center, center, nowrap, 2);
   position: relative;
   cursor: pointer;
 
-  // Custom style for the DisplayElement inside to ensure it flows well
-  & > div:first-child {
-    flex-grow: 1;
+  .loading {
+    color: var(--text-secondary);
+    font-size: 14px;
   }
-}
 
-.dropdown-list {
-  @include shadow;
-  position: absolute;
-  top: 100%; // Position below the main element
-  left: 0;
-  width: 250px; // Or 100% or min-content
-  margin-top: #{get-spacing(2)}px;
-  background-color: get-color('clearer-dark');
-  border-radius: $large-corner;
-  padding: #{get-spacing(2)}px;
-  z-index: 10;
-  display: flex;
-  flex-direction: column;
-  gap: #{get-spacing(1)}px;
-}
+  .dropdown-list {
+    @include shadow;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: auto;
+    margin-top: #{get-spacing(2)}px;
+    background-color: get-color('clearer-dark');
+    border-radius: $xs-corner;
+    overflow: hidden;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: #{get-spacing(1)}px;
 
-.dropdown-item {
-  width: 100%;
-  padding: #{get-spacing(2)}px;
-  border-radius: $small-corner;
-  cursor: pointer;
-  transition: background-color 0.2s;
+    .dropdown-item {
+      width: 100%;
+      padding: #{get-spacing(4)}px;
+      cursor: pointer;
 
-  &:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+    }
+
+    .dropdown-empty {
+      padding: #{get-spacing(4)}px;
+      color: var(--text-tertiary);
+      font-size: 14px;
+      white-space: nowrap;
+    }
   }
-}
 
-.chevron {
-  transition: transform 0.2s ease;
+  .chevron {
+    transition: transform 0.2s ease;
 
-  &.open {
-    transform: rotate(180deg);
+    &.open {
+      transform: rotate(180deg);
+    }
   }
 }

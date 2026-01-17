@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 
 import { useAppDispatch } from '@/lib/state/hooks';
 import { setToken, setSubscription } from '@/lib/state/slices/authSlice';
+import { setActiveMuralId } from '@/lib/state/slices/muralSlice';
 
 import { AuthCredentials, AuthResponseData } from '@/lib/api-client/types/auth';
 import { FetcherResponse } from '@/lib/api-client/types/response';
@@ -46,6 +47,7 @@ export default function AuthForm({ authType }: AuthFormProps) {
         );
         dispatch(setToken(result.data.access_token));
         dispatch(setSubscription(result.data.subscription));
+        dispatch(setActiveMuralId(result.data.user.activeMuralId));
         router.push('/dashboard');
       } else {
         // Tratar erro caso necessário
@@ -74,6 +76,7 @@ export default function AuthForm({ authType }: AuthFormProps) {
         );
         dispatch(setToken(result.data.access_token));
         dispatch(setSubscription(result.data.subscription));
+        dispatch(setActiveMuralId(result.data.user.activeMuralId));
         router.push('/dashboard');
       } else {
         // Tratar erro caso necessário

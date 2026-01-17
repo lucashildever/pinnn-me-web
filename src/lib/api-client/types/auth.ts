@@ -7,6 +7,7 @@ export interface AuthUser {
   id: string;
   email: string;
   username: string;
+  activeMuralId: string;
 }
 
 export interface SubscriptionLimits {
@@ -34,4 +35,8 @@ export interface AuthResponseData {
   access_token: string;
   user: AuthUser;
   subscription: Subscription;
+}
+
+export interface ValidateResponseData {
+  user: AuthUser;
 }

@@ -1,26 +1,27 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../store';
 
-export interface muralState {
-  id: string;
+export interface MuralState {
+  activeMuralId: string;
 }
 
-const initialState: muralState = {
-  id: '',
+const initialState: MuralState = {
+  activeMuralId: '',
 };
 
 const muralSlice = createSlice({
   name: 'mural',
   initialState,
   reducers: {
-    setMuralId: (state, action: PayloadAction<string>) => {
-      state.id = action.payload;
+    setActiveMuralId: (state, action: PayloadAction<string>) => {
+      state.activeMuralId = action.payload;
     },
   },
 });
 
-export const { setMuralId } = muralSlice.actions;
+export const { setActiveMuralId } = muralSlice.actions;
 
-export const selectMuralId = (state: RootState): string => state.mural.id;
+export const selectActiveMuralId = (state: RootState): string =>
+  state.mural.activeMuralId;
 
 export default muralSlice.reducer;

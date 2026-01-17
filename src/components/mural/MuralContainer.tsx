@@ -4,7 +4,7 @@ import { Suspense, useEffect, useRef, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import { useAppDispatch } from '@/lib/state/hooks';
-import { setMuralId } from '@/lib/state/slices/muralSlice';
+import { setActiveMuralId } from '@/lib/state/slices/muralSlice';
 
 import TabsDisplay from '../tabs-display/TabsDisplay';
 import ResourcesDisplay from '../resources-display/ResourcesDisplay';
@@ -55,7 +55,7 @@ export default function MuralContainer({
 
   useEffect(() => {
     if (muralId) {
-      dispatch(setMuralId(muralId));
+      dispatch(setActiveMuralId(muralId));
     }
   }, [muralId, dispatch]);
 

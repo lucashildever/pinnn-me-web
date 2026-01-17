@@ -4,31 +4,47 @@ import React, { useState, useRef, useEffect } from 'react';
 import styles from './collection-selector.module.scss';
 import DisplayElement from '../display-element/DisplayElement';
 import IconRenderer from '../../icon-renderer/IconRenderer';
-import { Clickable as IClickable } from '@/components/shared/clickable/types/clickable';
-import { CollectionSelectorConfig } from '@/components/shared/clickable/types/clickableConfig';
+import { useAppSelector } from '@/lib/state/hooks';
+import { selectActiveMuralId } from '@/lib/state/slices/muralSlice';
+import { useCollections } from '@/components/tabs-display/utils/useCollections';
 
 interface CollectionSelectorProps {
-  payload: IClickable;
-  config: CollectionSelectorConfig;
-  style?: React.CSSProperties;
+  selectedCollectionId: string;
+  onSelect: (id: string) => void;
 }
 
 export function CollectionSelector({
-  payload,
-  config,
-  style,
+  selectedCollectionId,
+  onSelect,
 }: CollectionSelectorProps) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  const muralId = useAppSelector(selectActiveMuralId);
+  const { data: collections, isLoading } = useCollections(muralId);
+
+  useEffect(() => {
+    if (collections && collections.length > 0 && !selectedCollectionId) {
+      const mainCollection = collections.find((c) => c.isMain);
+      onSelect(mainCollection?.id || collections[0].id);
+    }
+  }, [collections, selectedCollectionId, onSelect]);
+
+  const selectedCollection = collections?.find(
+    (c) => c.id === selectedCollectionId,
+  );
+
+  const otherCollections = collections?.filter(
+    (c) => c.id !== selectedCollectionId,
+  );
+
   const toggleDropdown = () => setIsOpen(!isOpen);
 
   const handleSelect = (id: string) => {
-    config.onSelect(id);
+    onSelect(id);
     setIsOpen(false);
   };
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
@@ -48,39 +64,53 @@ export function CollectionSelector({
     };
   }, [isOpen]);
 
+  if (isLoading || !selectedCollection) {
+    return (
+      <div className={styles['collection-selector']}>
+        <span className={styles['loading']}>Loading...</span>
+      </div>
+    );
+  }
+
   return (
     <div
       ref={containerRef}
       className={styles['collection-selector']}
-      style={style}
       onClick={toggleDropdown}
     >
-      <DisplayElement iconConfig={payload.iconConfig} label={payload.content} />
+      <DisplayElement
+        iconConfig={selectedCollection.displayElement.iconConfig}
+        label={selectedCollection.displayElement.content}
+      />
 
       <div className={`${styles['chevron']} ${isOpen ? styles['open'] : ''}`}>
         <IconRenderer
           config={{ type: 'predefined', icon: 'chevronDown' }}
-          renderedSize={4}
+          renderedSize={7}
         />
       </div>
 
       {isOpen && (
         <div className={styles['dropdown-list']}>
-          {config.items.map((item) => (
-            <div
-              key={item.id}
-              className={styles['dropdown-item']}
-              onClick={(e) => {
-                e.stopPropagation(); // Prevent toggling the dropdown again
-                handleSelect(item.id);
-              }}
-            >
-              <DisplayElement
-                iconConfig={item.payload.iconConfig}
-                label={item.payload.content}
-              />
-            </div>
-          ))}
+          {otherCollections && otherCollections.length > 0 ? (
+            otherCollections.map((collection) => (
+              <div
+                key={collection.id}
+                className={styles['dropdown-item']}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleSelect(collection.id);
+                }}
+              >
+                <DisplayElement
+                  iconConfig={collection.displayElement.iconConfig}
+                  label={collection.displayElement.content}
+                />
+              </div>
+            ))
+          ) : (
+            <div className={styles['dropdown-empty']}>No more collections</div>
+          )}
         </div>
       )}
     </div>

@@ -1,6 +1,6 @@
 # DisplayElement - Especificação Técnica
 
-**Versão:** 1.0.0 | **Data:** 15/01/2026 | **Status:** Rascunho
+**Status:** Implemented
 
 ---
 
@@ -109,3 +109,9 @@ Drop down que combina o `DisplayElement` com outro ícone ao lado (chevronDown a
 - **Consistência:** Alterar o espaçamento entre ícone e texto no `DisplayElement` reflete em todo o app.
 - **Simplicidade:** Componentes como `CallToAction` ficam mais limpos, focados apenas na lógica de ação (link, modal, etc).
 - **Abstração Backend:** Como o backend retorna `DisplayElement` como conceito de classe, o frontend reflete isso diretamente na estrutura de componentes.
+
+---
+
+## 6. TO-DO
+
+adicionar os outros clickables que faltam
