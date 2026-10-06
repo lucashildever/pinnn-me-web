@@ -1,6 +1,7 @@
 import {
   AuthCredentials,
   AuthResponseData,
+  RefreshResponseData,
   ValidateResponseData,
 } from './types/auth';
 import { Resource } from '@/components/resources-display/types/resource';
@@ -55,6 +56,25 @@ export const apiClient = {
       return await fetcher<ValidateResponseData>('/auth/validate', {
         method: 'GET',
         token,
+      });
+    },
+
+    refresh: async (
+      refreshToken: string,
+    ): Promise<FetcherResponse<RefreshResponseData>> => {
+      return await fetcher<RefreshResponseData>('/auth/refresh', {
+        method: 'POST',
+        body: { refresh_token: refreshToken },
+      });
+    },
+
+    logout: async (refreshToken: string): Promise<FetcherResponse> => {
+      const token = localStorage.getItem('token');
+
+      return await fetcher('/auth/logout', {
+        method: 'POST',
+        body: { refresh_token: refreshToken },
+        token: token || undefined,
       });
     },
   },

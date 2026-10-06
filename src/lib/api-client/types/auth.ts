@@ -33,8 +33,14 @@ export interface Subscription {
 
 export interface AuthResponseData {
   access_token: string;
+  refresh_token: string;
   user: AuthUser;
   subscription: Subscription;
+}
+
+export interface RefreshResponseData {
+  access_token: string;
+  refresh_token: string;
 }
 
 export interface ValidateResponseData {

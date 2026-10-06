@@ -2,14 +2,9 @@
 
 import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
 
-import { useAppDispatch } from '@/lib/state/hooks';
-import { setToken, setSubscription } from '@/lib/state/slices/authSlice';
-import { setActiveMuralId } from '@/lib/state/slices/muralSlice';
-
-import { AuthCredentials, AuthResponseData } from '@/lib/api-client/types/auth';
-import { FetcherResponse } from '@/lib/api-client/types/response';
+import { useAuth } from '@/components/providers/auth-provider/AuthProvider';
+import { AuthCredentials } from '@/lib/api-client/types/auth';
 import { apiClient } from '@/lib/api-client/apiClient';
 
 import Link from 'next/link';
@@ -28,63 +23,29 @@ export default function AuthForm({ authType }: AuthFormProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const router = useRouter();
+  const { SignIn } = useAuth();
 
-  const dispatch = useAppDispatch();
-
-  const loginMutation = useMutation<
-    FetcherResponse<AuthResponseData>,
-    Error,
-    AuthCredentials
-  >({
-    mutationFn: apiClient.auth.login,
-    onSuccess: (result) => {
-      if (result.success) {
-        localStorage.setItem('token', result.data.access_token);
-        localStorage.setItem(
-          'subscription',
-          JSON.stringify(result.data.subscription),
-        );
-        dispatch(setToken(result.data.access_token));
-        dispatch(setSubscription(result.data.subscription));
-        dispatch(setActiveMuralId(result.data.user.activeMuralId));
-        router.push('/dashboard');
-      } else {
-        // Tratar erro caso necessário
-        alert(`Failed to login: ${result.message}`);
-      }
+  const loginMutation = useMutation<void, Error, AuthCredentials>({
+    mutationFn: async (credentials) => {
+      await SignIn(credentials);
     },
     onError: (error) => {
-      // TODO - implement ui update for errors, like incorrect email or server Error
-      console.log(`Failed to login: ${error.message}`);
       alert(`Failed to login: ${error.message}`);
     },
   });
 
-  const signupMutation = useMutation<
-    FetcherResponse<AuthResponseData>,
-    Error,
-    AuthCredentials
-  >({
-    mutationFn: apiClient.auth.signup,
-    onSuccess: (result) => {
-      if (result.success) {
-        localStorage.setItem('token', result.data.access_token);
-        localStorage.setItem(
-          'subscription',
-          JSON.stringify(result.data.subscription),
-        );
-        dispatch(setToken(result.data.access_token));
-        dispatch(setSubscription(result.data.subscription));
-        dispatch(setActiveMuralId(result.data.user.activeMuralId));
-        router.push('/dashboard');
-      } else {
-        // Tratar erro caso necessário
-        alert(`Failed to sign up: ${result.message}`);
+  const signupMutation = useMutation({
+    mutationFn: async (credentials: AuthCredentials) => {
+      const result = await apiClient.auth.signup(credentials);
+
+      if (!result.success) {
+        throw new Error(result.message || 'Signup failed');
       }
+
+      // After successful signup, use SignIn to handle token storage and navigation
+      await SignIn(credentials);
     },
-    onError: (error) => {
-      // TODO - implement ui update for errors, like incorrect email/password format or server Error
+    onError: (error: Error) => {
       alert(`Failed to sign up: ${error.message}`);
     },
   });
