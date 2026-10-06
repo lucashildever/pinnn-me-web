@@ -136,6 +136,10 @@ export async function fetcher<T = any>(
 
     const data = await response.json();
 
+    if (!data.success && response.status >= 500) {
+      console.error(`API ${response.status} on ${method} ${path}:`, data);
+    }
+
     // Handle 401 Unauthorized - attempt token refresh
     if (!data.success && response.status === 401 && !isPublicAuthEndpoint) {
       // Prevent multiple simultaneous refresh attempts
@@ -174,6 +178,7 @@ export async function fetcher<T = any>(
 
     return data;
   } catch (error) {
+    console.error(`Request failed on ${method} ${path}:`, error);
     return {
       success: false,
       error: 'network-error',

@@ -41,6 +41,7 @@ export interface AuthResponseData {
 export interface RefreshResponseData {
   access_token: string;
   refresh_token: string;
+  subscription?: Subscription;
 }
 
 export interface ValidateResponseData {

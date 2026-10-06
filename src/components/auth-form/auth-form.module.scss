@@ -57,6 +57,14 @@
           cursor: not-allowed;
         }
       }
+
+      .error-txt {
+        @include font-size("sm");
+        color: map.get($colors, "red");
+        @include spacing(margin-top, 4, 0);
+        max-width: 100%;
+        word-break: break-word;
+      }
     }
   }
 }

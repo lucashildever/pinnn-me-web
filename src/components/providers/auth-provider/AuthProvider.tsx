@@ -97,6 +97,14 @@ export default function AuthProvider({ children }: AuthProviderProps) {
           );
           dispatch(setToken(refreshResult.data.access_token));
 
+          if (refreshResult.data.subscription) {
+            localStorage.setItem(
+              'subscription',
+              JSON.stringify(refreshResult.data.subscription),
+            );
+            dispatch(setSubscription(refreshResult.data.subscription));
+          }
+
           // Validate the new token to get user data
           const validateResult = await apiClient.auth.validateToken();
           if (validateResult.success) {
@@ -134,14 +142,17 @@ export default function AuthProvider({ children }: AuthProviderProps) {
       // Store tokens
       localStorage.setItem('token', result.data.access_token);
       localStorage.setItem('refresh_token', result.data.refresh_token);
-      localStorage.setItem(
-        'subscription',
-        JSON.stringify(result.data.subscription),
-      );
+
+      const subscription = result.data.subscription ?? null;
+      if (subscription) {
+        localStorage.setItem('subscription', JSON.stringify(subscription));
+      } else {
+        localStorage.removeItem('subscription');
+      }
 
       // Update Redux state
       dispatch(setToken(result.data.access_token));
-      dispatch(setSubscription(result.data.subscription));
+      dispatch(setSubscription(subscription));
       dispatch(setActiveMuralId(result.data.user.activeMuralId));
 
       // Update local state

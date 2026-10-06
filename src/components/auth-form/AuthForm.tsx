@@ -22,6 +22,7 @@ interface AuthFormProps {
 export default function AuthForm({ authType }: AuthFormProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const { SignIn } = useAuth();
 
@@ -30,7 +31,8 @@ export default function AuthForm({ authType }: AuthFormProps) {
       await SignIn(credentials);
     },
     onError: (error) => {
-      alert(`Failed to login: ${error.message}`);
+      console.error('Login failed:', error);
+      setErrorMessage(error.message || 'Login failed. Please try again.');
     },
   });
 
@@ -46,7 +48,8 @@ export default function AuthForm({ authType }: AuthFormProps) {
       await SignIn(credentials);
     },
     onError: (error: Error) => {
-      alert(`Failed to sign up: ${error.message}`);
+      console.error('Signup failed:', error);
+      setErrorMessage(error.message || 'Sign up failed. Please try again.');
     },
   });
 
@@ -54,6 +57,7 @@ export default function AuthForm({ authType }: AuthFormProps) {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setErrorMessage(null);
     mutation.mutate({ email, password });
   };
 
@@ -85,6 +89,11 @@ export default function AuthForm({ authType }: AuthFormProps) {
               config={{ icon: 'arrowUpRight', type: 'predefined' }}
             />
           </button>
+          {errorMessage && (
+            <p className={styles['error-txt']} role="alert">
+              {errorMessage}
+            </p>
+          )}
         </form>
         <p className={styles['form-footer-txt']}>
           {authType === 'login' ? (
