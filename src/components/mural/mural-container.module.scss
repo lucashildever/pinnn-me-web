@@ -4,52 +4,5 @@
   margin: auto;
   min-height: 100vh;
   @include spacing(margin-top, 6);
-}
-
-@media screen and (min-width: 2500px) {
-  .mural-container {
-    width: 20%;
-  }
-}
-
-@media screen and (max-width: 2500px) {
-  .mural-container {
-    width: 20%;
-  }
-}
-
-@media screen and (max-width: 2000px) {
-  .mural-container {
-    width: 23%;
-  }
-}
-
-@media screen and (max-width: 1400px) {
-  .mural-container {
-    width: 30%;
-  }
-}
-
-@media screen and (max-width: 1200px) {
-  .mural-container {
-    width: 35%;
-  }
-}
-
-@media screen and (max-width: 992px) {
-  .mural-container {
-    width: 45%;
-  }
-}
-
-@media screen and (max-width: 768px) {
-  .mural-container {
-    width: 55%;
-  }
-}
-
-@media screen and (max-width: 596px) {
-  .mural-container {
-    width: 93%;
-  }
+  @include container-width;
 }
