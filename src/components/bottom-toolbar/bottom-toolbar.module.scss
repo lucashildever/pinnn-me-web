@@ -1,0 +1,124 @@
+.toolbar {
+  @include flex(row, center, space-between, nowrap, 0);
+  @include spacing(padding, 3, 6);
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  box-sizing: border-box;
+  margin-inline: auto;
+  background-color: get-color('base-dark');
+  border-top: 1px solid #3f3f46;
+  @include container-width;
+
+  .toolbar-button {
+    @include flex(row, center, center);
+    width: 46px;
+    height: 46px;
+    aspect-ratio: 1;
+    border-radius: $medium-corner;
+    color: get-color('light');
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    text-decoration: none;
+    transition:
+      background-color 0.15s ease,
+      transform 0.15s ease;
+
+    svg {
+      width: 22px;
+      height: 22px;
+      opacity: 0.5;
+      transition: opacity 0.15s ease;
+    }
+
+    &:hover svg {
+      opacity: 1;
+    }
+
+    &.toolbar-button-active svg {
+      opacity: 1;
+    }
+
+    &.toolbar-button-primary {
+      background-color: get-color('clearer-dark');
+
+      svg {
+        opacity: 1;
+      }
+
+      &:hover {
+        transform: scale(1.13);
+      }
+    }
+  }
+
+  .toolbar-create-wrapper {
+    position: relative;
+    @include flex(row, center, center);
+  }
+
+  .create-menu {
+    position: absolute;
+    bottom: calc(100% + #{get-spacing(3)}px);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 120;
+    min-width: 190px;
+
+    .create-menu-card {
+      @include flex(column, stretch, flex-start, nowrap, 1);
+      @include spacing(padding, 3);
+      background-color: get-color('clearer-dark');
+      border: 1px solid #3f3f46;
+      border-radius: $medium-corner;
+      @include shadow;
+      animation: create-menu-in 0.15s ease;
+    }
+
+    .create-menu-title {
+      @include font-size('xs');
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      opacity: 0.5;
+      margin: 0;
+      @include spacing(padding, 1, 3);
+    }
+
+    .create-menu-item {
+      @include flex(row, center, flex-start, nowrap, 3);
+      @include spacing(padding, 3);
+      border-radius: $small-corner;
+      color: get-color('light');
+      text-decoration: none;
+      @include font-size('sm');
+      font-weight: 600;
+      transition: background-color 0.15s ease;
+
+      svg {
+        width: 18px;
+        height: 18px;
+        opacity: 0.7;
+      }
+
+      &:hover {
+        background-color: #3a3a3a;
+      }
+    }
+  }
+}
+
+@keyframes create-menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

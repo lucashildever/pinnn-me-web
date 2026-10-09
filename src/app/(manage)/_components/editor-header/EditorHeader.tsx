@@ -10,12 +10,14 @@ interface EditorHeaderProps {
   onPublish?: () => void;
   isPublishing?: boolean;
   hasErrors?: boolean;
+  title?: string;
 }
 
 export default function EditorHeader({
   onPublish,
   isPublishing,
   hasErrors,
+  title = 'Create Resource',
 }: EditorHeaderProps) {
   const router = useRouter();
 
@@ -63,7 +65,7 @@ export default function EditorHeader({
       <Divider />
 
       <div className={styles['title-section']}>
-        <h1 className={styles['main-title']}>Create Resource</h1>
+        <h1 className={styles['main-title']}>{title}</h1>
         <p className={styles['sub-text']}>Need help?</p>
       </div>
     </div>

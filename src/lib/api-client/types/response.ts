@@ -26,6 +26,18 @@ export interface MuralResponseData {
   callToActions?: CallToActionData[];
 }
 
+export interface UserMuralData {
+  id: string;
+  name: string;
+  displayName: string;
+  isActive: boolean;
+}
+
+export interface GetUserMuralsResponseData {
+  murals: UserMuralData[];
+  activeMuralId: string | null;
+}
+
 export interface GetResourcesResponseData {
   pinnedResources: {
     id: string;

@@ -1,0 +1,14 @@
+.page {
+  @include flex(column, center, center);
+  min-height: 100vh;
+  box-sizing: border-box;
+  margin: 0 auto;
+  @include spacing(padding, 8, 0, 25);
+  @include container-width;
+
+  .page-title {
+    @include font-size('2xl');
+    font-weight: 600;
+    margin: 0;
+  }
+}

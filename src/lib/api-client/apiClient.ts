@@ -17,6 +17,7 @@ import { CreateMuralRequest, MuralRequest } from './types/request';
 import {
   FetcherResponse,
   GetResourcesResponseData,
+  GetUserMuralsResponseData,
   MuralResponseData,
 } from './types/response';
 import { Pagination } from '@/lib/types/pagination';
@@ -96,7 +97,7 @@ export const apiClient = {
       });
     },
     create: async (collection: CreateCollectionRequest) => {
-      return await fetcher(`collections/create/${collection.muralId}`, {
+      return await fetcher(`/collections/create/${collection.muralId}`, {
         method: 'POST',
         body: {
           isMain: collection.isMain,
@@ -133,6 +134,24 @@ export const apiClient = {
       return await fetcher('/murals/create', {
         method: 'POST',
         body: mural,
+        token: token,
+      });
+    },
+    getUserMurals: async (): Promise<
+      FetcherResponse<GetUserMuralsResponseData>
+    > => {
+      const token = localStorage.getItem('token');
+
+      if (!token) {
+        return {
+          success: false,
+          error: 'unauthorized',
+          message: 'Authentication required',
+        };
+      }
+
+      return await fetcher<GetUserMuralsResponseData>('/murals/user', {
+        method: 'GET',
         token: token,
       });
     },

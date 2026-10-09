@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 
 import Providers from '@/components/providers/providers';
 import ReduxHydration from '@/components/redux-hydration/ReduxHydration';
+import BottomToolbar from '@/components/bottom-toolbar/BottomToolbar';
 
 import { Source_Sans_3 } from 'next/font/google';
 import '@/styles/reset.css';
@@ -37,6 +38,7 @@ export default function RootLayout({
           <>
             <ReduxHydration />
             {children}
+            <BottomToolbar />
           </>
         </Providers>
       </body>

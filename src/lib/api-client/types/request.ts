@@ -22,7 +22,8 @@ export interface MuralRequest {
 }
 
 // Collections
-export interface CreateCollectionRequest extends Omit<CollectionTab, 'order'> {
+export interface CreateCollectionRequest
+  extends Omit<CollectionTab, 'order' | 'id'> {
   muralId: string;
 }
 
