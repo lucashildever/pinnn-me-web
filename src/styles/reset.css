@@ -20,10 +20,16 @@ time, mark, audio, video {
  	color: inherit;
 }
 
-html, body {
+html {
 	-webkit-overflow-scrolling: touch;
 	-webkit-overscroll-behavior: none;
 	overflow-x: hidden;
+	overscroll-behavior: none;
+}
+
+body {
+	-webkit-overflow-scrolling: touch;
+	-webkit-overscroll-behavior: none;
 	overscroll-behavior: none;
 }
 
