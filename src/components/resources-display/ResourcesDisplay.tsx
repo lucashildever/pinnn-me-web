@@ -7,6 +7,7 @@ import Pin from './pin/Pin';
 import SharedPin from './shared-pin/SharedPin';
 import SharedPinGroup from './shared-pin-group/SharedPinGroup';
 import PinGroup from './pin-group/PinGroup';
+import EmptyCollectionState from './empty-collection-state/EmptyCollectionState';
 
 import { Resource } from './types/resource';
 
@@ -67,7 +68,7 @@ export default function ResourcesDisplay({
   }
 
   if (!resources || resources.length === 0) {
-    return <p>Nenhum pin encontrado nesta coleção</p>;
+    return <EmptyCollectionState />;
   }
 
   return (

@@ -1,0 +1,65 @@
+.empty-state {
+  @include flex(column, center, center, nowrap, 2);
+  width: 100%;
+  min-height: 100vh;
+  @include spacing(padding, 12, 6);
+  text-align: center;
+  animation: empty-state-in 0.3s ease;
+
+  .empty-state-icon {
+    @include flex(row, center, center);
+    @include size(22, 22);
+    border-radius: 50%;
+    background-color: get-color('clearer-dark');
+    color: get-color('orange');
+    @include shadow;
+
+    svg {
+      @include size(10, 10);
+      stroke-width: 1.75;
+    }
+  }
+
+  .empty-state-title {
+    @include font-size('md');
+    font-weight: 600;
+  }
+
+  .empty-state-description {
+    @include font-size('sm');
+    color: rgba(get-color('light'), 0.6);
+    max-width: 80%;
+  }
+
+  .empty-state-cta {
+    @include base-clickable;
+    @include spacing(margin-top, 2);
+    gap: calc(#{get-spacing(1)}px + 2px);
+    background-color: get-color('orange');
+    color: get-color('base-dark');
+    transition:
+      transform 0.15s ease,
+      filter 0.15s ease;
+
+    svg {
+      @include size(6, 6);
+      stroke-width: 2.5;
+    }
+
+    &:hover {
+      filter: brightness(1.08);
+      transform: translateY(-1px);
+    }
+  }
+}
+
+@keyframes empty-state-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
