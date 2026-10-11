@@ -27,8 +27,24 @@
   }
 }
 
+.author-meta-group {
+  @include flex(row, center, center);
+  position: relative;
+}
+
 .author-meta-large {
   @include defs();
-  @include font-size('xl');
+  @include font-size('lg');
   font-weight: 600;
+
+  .author-name {
+    margin-right: 0;
+  }
+
+  .badge-icon {
+    position: absolute;
+    top: 50%;
+    left: calc(100% + 6px);
+    transform: translate(-2px, -50%);
+  }
 }

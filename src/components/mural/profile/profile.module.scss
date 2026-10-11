@@ -1,29 +1,36 @@
 .profile {
   width: 100%;
+  position: relative;
+  overflow: hidden;
+  background-color: get-color('base-dark');
 
   .profile-img-n-cover {
-    height: 155px;
+    height: 140px;
     position: relative;
 
     .profile-cover {
       overflow: hidden;
-      position: relative;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 90px;
       border-radius: $small-corner;
-      height: 58%;
-      @include spacing(padding, 5, 5, 0, 5);
 
       .cover-image {
         z-index: 1;
         transform: scale(1.1);
       }
+    }
 
-      .cover-buttons {
-        @include flex(row, center, space-between);
-        position: inherit;
-        z-index: 2;
-        button {
-          box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.1);
-        }
+    .cover-buttons {
+      @include position(absolute, 0, 0, auto, 0);
+      @include flex(row, center, space-between);
+      @include spacing(padding, 5, 5, 0, 5);
+      z-index: 3;
+
+      button {
+        box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.1);
       }
 
       .right-buttons {
@@ -31,26 +38,42 @@
         gap: #{get-spacing(2)}px;
       }
     }
+  }
 
-    .pf-pic-container {
-      @include position(absolute, auto, auto, 0, 50%);
-      @include size(29, 29);
-      z-index: 2;
-      overflow: hidden;
-      border-radius: 50%;
-      transform: translateX(-50%);
-      border: solid 6px get-color('base-dark');
-    }
+  .pf-pic-container {
+    @include position(absolute, auto, auto, auto, auto);
+    z-index: 2;
+    overflow: hidden;
+    border-radius: 50%;
+    border-style: solid;
+    border-color: get-color('base-dark');
   }
 
   .profile-info {
-    @include spacing(padding, 2, 0, 0, 0);
+    @include spacing(padding, 5, 0, 5, 0);
     @include flex(column, center, center);
     text-align: center;
 
     p {
       @include spacing(margin-top, 1);
+      @include font-size('sm');
       width: 67%;
+    }
+  }
+
+  .profile-compact-username {
+    @include position(absolute, 25px, auto, auto, 70px);
+    @include flex(row, center, center);
+    z-index: 3;
+
+    .compact-username {
+      @include font-size('base');
+      font-weight: 600;
+      @include spacing(margin-right, 2);
+    }
+
+    .badge-icon {
+      @include size(5, 5);
     }
   }
 }

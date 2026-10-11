@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import { useAppDispatch } from '@/lib/state/hooks';
@@ -80,6 +80,19 @@ export default function MuralContainer({
     getTargetTab(paramCollectionId, collections),
   );
 
+  const topbarRef = useRef<HTMLDivElement>(null);
+  const [topbarHeightPx, setTopbarHeightPx] = useState(0);
+
+  useEffect(() => {
+    const measure = () => {
+      setTopbarHeightPx(topbarRef.current?.offsetHeight ?? 0);
+    };
+
+    measure();
+    window.addEventListener('resize', measure);
+    return () => window.removeEventListener('resize', measure);
+  }, []);
+
   const handleTabChange = (tabData: ActiveTabData) => {
     setActiveTabData(tabData);
 
@@ -111,14 +124,23 @@ export default function MuralContainer({
   };
 
   return (
-    <div className={styles['mural-container']}>
-      <Profile
-        muralName={displayName}
-        bio={description}
-        appearance={appearance}
-        callToActions={callToActions}
-      />
-      <TabsDisplay {...tabsProps} />
+    <div
+      className={styles['mural-container']}
+      style={topbarHeightPx > 0 ? { paddingTop: topbarHeightPx } : undefined}
+    >
+      <div ref={topbarRef} className={styles['mural-topbar']}>
+        <Profile
+          muralName={displayName}
+          bio={description}
+          appearance={appearance}
+          callToActions={callToActions}
+        />
+        <div className={styles['mural-topbar-chrome']}>
+          <div className={styles['mural-topbar-divider']} />
+          <TabsDisplay {...tabsProps} />
+          <div className={styles['mural-topbar-divider']} />
+        </div>
+      </div>
       <ResourcesDisplay
         key={activeTabData.id}
         mainCollectionResources={
