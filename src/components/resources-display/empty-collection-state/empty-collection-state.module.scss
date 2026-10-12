@@ -1,5 +1,5 @@
 .empty-state {
-  @include flex(column, center, center, nowrap, 2);
+  @include flex(column, center, flex-start, nowrap, 2);
   width: 100%;
   min-height: 100vh;
   @include spacing(padding, 12, 6);

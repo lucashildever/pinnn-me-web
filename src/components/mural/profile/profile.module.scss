@@ -5,7 +5,7 @@
   background-color: get-color('base-dark');
 
   .profile-img-n-cover {
-    height: 140px;
+    height: 134px;
     position: relative;
 
     .profile-cover {
@@ -20,6 +20,16 @@
       .cover-image {
         z-index: 1;
         transform: scale(1.1);
+      }
+    }
+
+    // On small screens the cover gets a fixed side gap (16px) matching the lateral frame,
+    // instead of following the layout container width (the top gap is 18px).
+    @media (max-width: 596px) {
+      .profile-cover {
+        left: calc(50% - 50vw + 16px);
+        right: auto;
+        width: calc(100vw - 32px);
       }
     }
 
@@ -50,7 +60,7 @@
   }
 
   .profile-info {
-    @include spacing(padding, 5, 0, 5, 0);
+    @include spacing(padding, 5, 0, 4, 0);
     @include flex(column, center, center);
     text-align: center;
 

@@ -12,6 +12,23 @@
   border-top: 1px solid #3f3f46;
   @include container-width;
 
+  // On small screens the divider above the toolbar stays full-bleed while
+  // the toolbar content keeps the layout container width.
+  @media (max-width: 596px) {
+    border-top: none;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100vw;
+      height: 1px;
+      background-color: #3f3f46;
+    }
+  }
+
   .toolbar-button {
     @include flex(row, center, center);
     width: 46px;

@@ -20,4 +20,13 @@
     height: 1px;
     background-color: #3f3f46;
   }
+
+  // Dividers stay full-bleed (touch the viewport sides) on small screens,
+  // unlike the cover which is inset.
+  @media (max-width: 596px) {
+    .mural-topbar-divider {
+      width: 100vw;
+      margin-left: calc(50% - 50vw);
+    }
+  }
 }

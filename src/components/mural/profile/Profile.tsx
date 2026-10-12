@@ -27,13 +27,17 @@ const COLLAPSE_DISTANCE = 180;
 const COMPACT_HEIGHT = 64;
 // Top gap applied only while the header is maximized (fades with the collapse)
 const TOP_GAP = 15;
+// Extra top gap applied only to the cover/banner so it doesn't push the info down.
+// Total cover top gap = TOP_GAP + COVER_TOP_GAP = 18px.
+const COVER_TOP_GAP = 3;
 
 const PIC_EXPANDED = 87;
 const PIC_COMPACT = 40;
 const PIC_BORDER_EXPANDED = 6;
 const PIC_BORDER_COMPACT = 3;
-const PIC_EXPANDED_TOP = 47; // 90 (cover) - ~43 (overlap = ~49% of pic)
-const PIC_COMPACT_TOP = 15;
+// Half of the pic sits over the cover (cover bottom = 15 + 3 + 90 = 108)
+const PIC_EXPANDED_TOP = 62;
+const PIC_COMPACT_TOP = 11;
 const PIC_COMPACT_LEFT = 16;
 
 interface ProfileProps {
@@ -71,7 +75,15 @@ export default function Profile({
 
     measure();
     window.addEventListener('resize', measure);
-    return () => window.removeEventListener('resize', measure);
+
+    const observer = new ResizeObserver(measure);
+    if (imgCoverRef.current) observer.observe(imgCoverRef.current);
+    if (infoRef.current) observer.observe(infoRef.current);
+
+    return () => {
+      window.removeEventListener('resize', measure);
+      observer.disconnect();
+    };
   }, []);
 
   const scrollY = useMotionValue(0);
@@ -111,6 +123,12 @@ export default function Profile({
     progress,
     [0, 1],
     [TOP_GAP, 0],
+    { clamp: true },
+  );
+  const coverTopGap: MotionValue<number> = useTransform(
+    progress,
+    [0, 1],
+    [COVER_TOP_GAP, 0],
     { clamp: true },
   );
   const coverOpacity = useTransform(progress, [0, 1], [1, 0], {
@@ -166,7 +184,11 @@ export default function Profile({
       <div ref={imgCoverRef} className={styles['profile-img-n-cover']}>
         <motion.div
           className={styles['profile-cover']}
-          style={{ opacity: coverOpacity, borderRadius: coverRadius }}
+          style={{
+            opacity: coverOpacity,
+            borderRadius: coverRadius,
+            top: coverTopGap,
+          }}
         >
           <Image
             src={appearance.coverImageUrl || coverPicPlaceholder}
