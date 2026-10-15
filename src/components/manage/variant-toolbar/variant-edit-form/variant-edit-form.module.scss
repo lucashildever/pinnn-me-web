@@ -1,14 +1,36 @@
+.edit-form-overlay {
+  @include flex(column, center, center);
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  box-sizing: border-box;
+  @include spacing(padding, 4);
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 1000;
+}
+
 .edit-form {
   @include flex(column, stretch, stretch, null, 4);
   background-color: get-color('base-dark');
-  position: absolute;
-  top: -6px;
-  left: -6px;
-  transform: translateY(-100%);
+  position: relative;
+  box-sizing: border-box;
   @include spacing(padding, 4);
   border-radius: $small-corner;
-  min-width: 280px;
-  z-index: 10;
+  border: 1px solid #3f3f46;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  width: 280px;
+  max-width: 100%;
+  max-height: 100%;
+  min-height: 0;
+  overflow-y: auto;
+
+  @media screen and (max-width: 596px) {
+    width: 100%;
+  }
 }
 
 .edit-header {

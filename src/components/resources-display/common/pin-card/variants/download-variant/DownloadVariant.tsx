@@ -19,13 +19,9 @@ interface DownloadVariantProps {
   isEditing?: boolean;
   maxFileSize?: number;
   maxPreviewSize?: number;
-  canMoveUp?: boolean;
-  canMoveDown?: boolean;
   onContentChange?: (value: string) => void;
   onFileChange?: (fileName: string, fileUrl: string, fileSize: number) => void;
   onIconConfigChange?: (config: IconConfig) => void;
-  onMoveUp?: () => void;
-  onMoveDown?: () => void;
   onDelete?: () => void;
 }
 
@@ -45,12 +41,8 @@ export default function DownloadVariant({
   isEditing = false,
   maxFileSize,
   maxPreviewSize,
-  canMoveUp = true,
-  canMoveDown = true,
   onContentChange,
   onFileChange,
-  onMoveUp,
-  onMoveDown,
   onDelete,
   onIconConfigChange,
 }: DownloadVariantProps) {
@@ -84,10 +76,12 @@ export default function DownloadVariant({
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Node;
+      const targetEl = event.target as Element;
 
       if (
         containerRef.current &&
         !containerRef.current.contains(target) &&
+        !targetEl?.closest?.('[data-variant-edit-form]') &&
         document.body.contains(target)
       ) {
         setIsFocused(false);
@@ -220,12 +214,8 @@ export default function DownloadVariant({
               transition={{ duration: 0.15 }}
             >
               <VariantToolbar
-                actions={['moveDown', 'moveUp', 'settings']}
-                canMoveUp={canMoveUp}
-                canMoveDown={canMoveDown}
+                actions={['drag', 'settings']}
                 hasSettingsError={hasError}
-                onMoveUp={onMoveUp}
-                onMoveDown={onMoveDown}
                 onSettings={handleSettingsClick}
                 onDelete={onDelete}
               />

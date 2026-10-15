@@ -1,7 +1,34 @@
 'use client';
 
-import { useState } from 'react';
-import AuthProvider from '@/components/providers/auth-provider/AuthProvider';
+import {
+  Fragment,
+  useState,
+  type KeyboardEvent,
+  type ReactNode,
+} from 'react';
+import { useRouter } from 'next/navigation';
+import {
+  DndContext,
+  KeyboardSensor,
+  MeasuringStrategy,
+  PointerSensor,
+  closestCorners,
+  useDroppable,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+  type DragOverEvent,
+  type UniqueIdentifier,
+} from '@dnd-kit/core';
+import {
+  SortableContext,
+  arrayMove,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+import AuthGuard from '@/components/auth-guard';
 import PinCard from '@/components/resources-display/common/pin-card/PinCard';
 import styles from './create-resource.module.scss';
 import muralStyles from '@/components/mural/mural-container.module.scss';
@@ -16,14 +43,23 @@ import { VariantSelection } from '@/components/manage/add-element/AddElement';
 import { apiClient } from '@/lib/api-client/apiClient';
 import { useAppSelector } from '@/lib/state/hooks';
 import { selectLimits } from '@/lib/state/slices/authSlice';
+import { selectActiveMuralId } from '@/lib/state/slices/muralSlice';
+import { useUserMurals } from '@/components/mural/utils/useUserMurals';
 
 import { IconConfig } from '@/components/shared/icon-renderer/icon/types/app-icon';
 import {
   generateNextOrder,
   generateOrderBetween,
+  reassignOrders,
 } from '@/lib/utils/fractional-index';
 import EditorHeader from '../../_components/editor-header/EditorHeader';
 import Clickable from '@/components/shared/clickable/Clickable';
+import IconRenderer from '@/components/shared/icon-renderer/IconRenderer';
+import ErrorBanner from '@/components/shared/error-banner/ErrorBanner';
+import { VariantDragProvider } from '@/components/manage/variant-toolbar/variant-drag-context';
+
+const GROUP_NAME_MAX_LENGTH = 45;
+const DEFAULT_GROUP_NAME = 'My group';
 
 interface EditableVariant {
   id: string;
@@ -40,14 +76,139 @@ interface EditableVariant {
   iconConfig?: IconConfig;
 }
 
+interface EditableCard {
+  variants: EditableVariant[];
+}
+
+interface SortableVariantProps {
+  id: string;
+  children: ReactNode;
+}
+
+/**
+ * Wraps a single editable variant in a dnd-kit sortable item. The drag can only
+ * be started from the toolbar's handle, whose props are shared with the variant
+ * through VariantDragProvider (useSortable's listeners/attributes are not spread
+ * on the item itself).
+ */
+function SortableVariant({ id, children }: SortableVariantProps) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    setActivatorNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id });
+
+  return (
+    <div
+      ref={setNodeRef}
+      className={styles['variant-item']}
+      style={{
+        transform: CSS.Translate.toString(transform),
+        transition,
+        opacity: isDragging ? 0.5 : 1,
+      }}
+    >
+      <VariantDragProvider
+        value={{ attributes, listeners, setActivatorNodeRef }}
+      >
+        {children}
+      </VariantDragProvider>
+    </div>
+  );
+}
+
+interface SortableCardProps {
+  index: number;
+  itemIds: string[];
+  children: ReactNode;
+}
+
+/**
+ * A droppable drop target for one pin card. Its SortableContext holds the
+ * variant ids of that card, so variants can be sorted within, and dragged
+ * across, cards.
+ */
+function SortableCard({ index, itemIds, children }: SortableCardProps) {
+  const { setNodeRef } = useDroppable({
+    id: `card-${index}`,
+    data: { type: 'card', index },
+  });
+
+  return (
+    <div ref={setNodeRef}>
+      <SortableContext items={itemIds} strategy={verticalListSortingStrategy}>
+        {children}
+      </SortableContext>
+    </div>
+  );
+}
+
 export default function CreateResourcePage() {
-  const [variants, setVariants] = useState<EditableVariant[]>([]);
+  const [cards, setCards] = useState<EditableCard[]>([{ variants: [] }]);
   const [isPublishing, setIsPublishing] = useState(false);
   const limits = useAppSelector(selectLimits);
+  const activeMuralId = useAppSelector(selectActiveMuralId);
+  const { data: userMurals } = useUserMurals();
+  const router = useRouter();
 
   const [selectedCollectionId, setSelectedCollectionId] = useState<string>('');
+  const [groupName, setGroupName] = useState(DEFAULT_GROUP_NAME);
+  const [isEditingGroupName, setIsEditingGroupName] = useState(false);
+  const [groupNameDraft, setGroupNameDraft] = useState(DEFAULT_GROUP_NAME);
 
-  const handleAddVariant = (selection: VariantSelection) => {
+  const startEditingGroupName = () => {
+    setGroupNameDraft(groupName);
+    setIsEditingGroupName(true);
+  };
+
+  const commitGroupName = () => {
+    setGroupName(groupNameDraft.trim() || DEFAULT_GROUP_NAME);
+    setIsEditingGroupName(false);
+  };
+
+  const handleGroupNameKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      commitGroupName();
+    } else if (e.key === 'Escape') {
+      setIsEditingGroupName(false);
+    }
+  };
+
+  const updateVariant = (
+    id: string,
+    updater: (variant: EditableVariant) => EditableVariant,
+  ) => {
+    setCards((prev) =>
+      prev.map((card) => ({
+        ...card,
+        variants: card.variants.map((v) => (v.id === id ? updater(v) : v)),
+      })),
+    );
+  };
+
+  const updateCardVariants = (
+    cardIndex: number,
+    updater: (variants: EditableVariant[]) => EditableVariant[],
+  ) => {
+    setCards((prev) =>
+      prev.map((card, index) =>
+        index === cardIndex
+          ? { ...card, variants: updater(card.variants) }
+          : card,
+      ),
+    );
+  };
+
+  const handleAddCard = () => {
+    setCards((prev) => [...prev, { variants: [] }]);
+  };
+
+  const handleAddVariant = (cardIndex: number, selection: VariantSelection) => {
     if (typeof selection === 'object' && selection.type === 'integration') {
       console.log('Integration variant:', selection.platform);
       return;
@@ -61,30 +222,31 @@ export default function CreateResourcePage() {
       | 'link'
       | 'download';
 
-    // Get smallest existing order to prepend new variant at top
-    const sortedVariants = [...variants].sort((a, b) =>
-      a.order.localeCompare(b.order),
-    );
-    const firstOrder = sortedVariants[0]?.order || null;
-    const newOrder = generateOrderBetween(null, firstOrder);
+    updateCardVariants(cardIndex, (variants) => {
+      // Get smallest existing order to prepend new variant at top
+      const sortedVariants = [...variants].sort((a, b) =>
+        a.order.localeCompare(b.order),
+      );
+      const firstOrder = sortedVariants[0]?.order || null;
+      const newOrder = generateOrderBetween(null, firstOrder);
 
-    const newVariant: EditableVariant = {
-      id: crypto.randomUUID(),
-      type,
-      order: newOrder,
-      content: '',
-    };
-    setVariants((prev) => [newVariant, ...prev]);
+      const newVariant: EditableVariant = {
+        id: crypto.randomUUID(),
+        type,
+        order: newOrder,
+        content: '',
+      };
+
+      return [newVariant, ...variants];
+    });
   };
 
   const handleVariantChange = (id: string, content: string) => {
-    setVariants((prev) =>
-      prev.map((v) => (v.id === id ? { ...v, content } : v)),
-    );
+    updateVariant(id, (v) => ({ ...v, content }));
   };
 
   const handleLinkChange = (id: string, link: string) => {
-    setVariants((prev) => prev.map((v) => (v.id === id ? { ...v, link } : v)));
+    updateVariant(id, (v) => ({ ...v, link }));
   };
 
   const handleFileChange = (
@@ -93,179 +255,383 @@ export default function CreateResourcePage() {
     fileUrl: string,
     fileSize: number,
   ) => {
-    setVariants((prev) =>
-      prev.map((v) =>
-        v.id === id ? { ...v, fileName, fileUrl, fileSize } : v,
-      ),
-    );
+    updateVariant(id, (v) => ({ ...v, fileName, fileUrl, fileSize }));
   };
 
   const handleToggleVariant = (id: string) => {
-    setVariants((prev) =>
-      prev.map((v) => {
-        if (v.id === id) {
-          const newType = v.type === 'title' ? 'text' : 'title';
-          return { ...v, type: newType };
-        }
-        return v;
-      }),
-    );
+    updateVariant(id, (v) => ({
+      ...v,
+      type: v.type === 'title' ? 'text' : 'title',
+    }));
   };
 
   const handleImageUpload = async (id: string, file: File) => {
     // Set uploading state
-    setVariants((prev) =>
-      prev.map((v) =>
-        v.id === id ? { ...v, isUploading: true, uploadError: undefined } : v,
-      ),
-    );
+    updateVariant(id, (v) => ({
+      ...v,
+      isUploading: true,
+      uploadError: undefined,
+    }));
 
     try {
       const result = await apiClient.storage.uploadImage(file);
 
       if (result.success) {
-        setVariants((prev) =>
-          prev.map((v) =>
-            v.id === id
-              ? { ...v, src: result.data.publicUrl, isUploading: false }
-              : v,
-          ),
-        );
+        updateVariant(id, (v) => ({
+          ...v,
+          src: result.data.publicUrl,
+          isUploading: false,
+        }));
       } else {
         console.error('Upload failed:', result.message);
-        setVariants((prev) =>
-          prev.map((v) =>
-            v.id === id
-              ? {
-                  ...v,
-                  isUploading: false,
-                  uploadError: 'Upload failed, try again',
-                }
-              : v,
-          ),
-        );
+        updateVariant(id, (v) => ({
+          ...v,
+          isUploading: false,
+          uploadError: 'Upload failed, try again',
+        }));
       }
     } catch (error) {
       console.error('Upload error:', error);
-      setVariants((prev) =>
-        prev.map((v) =>
-          v.id === id
-            ? {
-                ...v,
-                isUploading: false,
-                uploadError: 'Upload failed, try again',
-              }
-            : v,
-        ),
-      );
+      updateVariant(id, (v) => ({
+        ...v,
+        isUploading: false,
+        uploadError: 'Upload failed, try again',
+      }));
     }
   };
 
   const handleVideoUpload = async (id: string, file: File) => {
-    setVariants((prev) =>
-      prev.map((v) =>
-        v.id === id ? { ...v, isUploading: true, uploadError: undefined } : v,
-      ),
-    );
+    updateVariant(id, (v) => ({
+      ...v,
+      isUploading: true,
+      uploadError: undefined,
+    }));
 
     try {
       const result = await apiClient.storage.uploadVideo(file);
 
       if (result.success) {
-        setVariants((prev) =>
-          prev.map((v) =>
-            v.id === id
-              ? { ...v, src: result.data.publicUrl, isUploading: false }
-              : v,
-          ),
-        );
+        updateVariant(id, (v) => ({
+          ...v,
+          src: result.data.publicUrl,
+          isUploading: false,
+        }));
       } else {
         console.error('Video upload failed:', result.message);
-        setVariants((prev) =>
-          prev.map((v) =>
-            v.id === id
-              ? {
-                  ...v,
-                  isUploading: false,
-                  uploadError: 'Upload failed, try again',
-                }
-              : v,
-          ),
-        );
+        updateVariant(id, (v) => ({
+          ...v,
+          isUploading: false,
+          uploadError: 'Upload failed, try again',
+        }));
       }
     } catch (error) {
       console.error('Video upload error:', error);
-      setVariants((prev) =>
-        prev.map((v) =>
-          v.id === id
-            ? {
-                ...v,
-                isUploading: false,
-                uploadError: 'Upload failed, try again',
-              }
-            : v,
-        ),
-      );
+      updateVariant(id, (v) => ({
+        ...v,
+        isUploading: false,
+        uploadError: 'Upload failed, try again',
+      }));
     }
   };
 
-  const handleMoveUp = (id: string) => {
-    setVariants((prev) => {
-      const sorted = [...prev].sort((a, b) => a.order.localeCompare(b.order));
-      const index = sorted.findIndex((v) => v.id === id);
-      if (index <= 0) return prev;
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
+  );
 
-      // Calculate new order between the one above and two above
-      const orderAbove = sorted[index - 1].order;
-      const orderTwoAbove = sorted[index - 2]?.order || null;
-      const newOrder = generateOrderBetween(orderTwoAbove, orderAbove);
+  const findCardIndexByVariant = (id: UniqueIdentifier) =>
+    cards.findIndex((card) => card.variants.some((v) => v.id === id));
 
-      return prev.map((v) => (v.id === id ? { ...v, order: newOrder } : v));
+  const parseCardId = (id: UniqueIdentifier): number | null => {
+    const value = String(id);
+    return value.startsWith('card-') ? Number(value.slice(5)) : null;
+  };
+
+  const handleDragOver = (event: DragOverEvent) => {
+    const { active, over } = event;
+    if (!over) return;
+
+    const activeId = active.id;
+    const overId = over.id;
+
+    const activeCardIndex = findCardIndexByVariant(activeId);
+    const overCardIndex = parseCardId(overId) ?? findCardIndexByVariant(overId);
+
+    if (activeCardIndex === -1 || overCardIndex === -1) return;
+    if (activeCardIndex === overCardIndex) return;
+
+    setCards((prev) => {
+      const activeCard = prev[activeCardIndex];
+      const overCard = prev[overCardIndex];
+      const activeVariant = activeCard.variants.find((v) => v.id === activeId);
+      if (!activeVariant) return prev;
+
+      const overIndex = overCard.variants.findIndex((v) => v.id === overId);
+      const translated = active.rect.current.translated;
+      const isBelow =
+        translated != null && translated.top > over.rect.top + over.rect.height;
+      const newIndex =
+        overIndex === -1 ? overCard.variants.length : overIndex + (isBelow ? 1 : 0);
+
+      const next = [...prev];
+      next[activeCardIndex] = {
+        ...activeCard,
+        variants: reassignOrders(
+          activeCard.variants.filter((v) => v.id !== activeId),
+        ),
+      };
+
+      const overVariants = [...overCard.variants];
+      overVariants.splice(newIndex, 0, activeVariant);
+      next[overCardIndex] = {
+        ...overCard,
+        variants: reassignOrders(overVariants),
+      };
+
+      return next;
     });
   };
 
-  const handleMoveDown = (id: string) => {
-    setVariants((prev) => {
-      const sorted = [...prev].sort((a, b) => a.order.localeCompare(b.order));
-      const index = sorted.findIndex((v) => v.id === id);
-      if (index < 0 || index >= sorted.length - 1) return prev;
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over) return;
 
-      // Calculate new order between the one below and two below
-      const orderBelow = sorted[index + 1].order;
-      const orderTwoBelow = sorted[index + 2]?.order || null;
-      const newOrder = generateOrderBetween(orderBelow, orderTwoBelow);
+    const activeId = active.id;
+    const overId = over.id;
 
-      return prev.map((v) => (v.id === id ? { ...v, order: newOrder } : v));
+    const activeCardIndex = findCardIndexByVariant(activeId);
+    const overCardIndex = parseCardId(overId) ?? findCardIndexByVariant(overId);
+
+    if (activeCardIndex === -1 || overCardIndex === -1) return;
+    if (activeCardIndex !== overCardIndex) return;
+
+    setCards((prev) => {
+      const card = prev[activeCardIndex];
+      const oldIndex = card.variants.findIndex((v) => v.id === activeId);
+      const newIndex = card.variants.findIndex((v) => v.id === overId);
+      if (oldIndex === -1 || newIndex === -1 || oldIndex === newIndex) {
+        return prev;
+      }
+
+      const next = [...prev];
+      next[activeCardIndex] = {
+        ...card,
+        variants: reassignOrders(arrayMove(card.variants, oldIndex, newIndex)),
+      };
+      return next;
     });
   };
 
   const handleDelete = (id: string) => {
-    setVariants((prev) => prev.filter((v) => v.id !== id));
+    setCards((prev) =>
+      prev.map((card) => ({
+        ...card,
+        variants: card.variants.filter((v) => v.id !== id),
+      })),
+    );
   };
 
-  // Validate all variants and return if any has errors
-  const getVariantErrors = (): boolean => {
-    if (variants.length === 0) return true;
+  const isVariantInvalid = (v: EditableVariant): boolean => {
+    switch (v.type) {
+      case 'title':
+      case 'text':
+        return !v.content.trim();
+      case 'image':
+      case 'video':
+        return !v.src || !!v.isUploading;
+      case 'link':
+        return !v.content.trim() || !v.link;
+      case 'download':
+        return !v.content.trim() || !v.fileUrl;
+      default:
+        return false;
+    }
+  };
 
-    return variants.some((v) => {
+  // A card is invalid when it has no variants or any variant has errors
+  const hasErrors =
+    cards.length === 0 ||
+    cards.some(
+      (card) =>
+        card.variants.length === 0 || card.variants.some(isVariantInvalid),
+    );
+
+  const hasAttachmentErrors = cards.some((card) =>
+    card.variants.some(isVariantInvalid),
+  );
+
+  const renderVariant = (variant: EditableVariant) => {
+    if (variant.type === 'title') {
+      return (
+        <TitleVariant
+          content={variant.content}
+          editable
+          maxLength={limits?.title_variant_max_length}
+          onChange={(value) => handleVariantChange(variant.id, value)}
+          onToggle={() => handleToggleVariant(variant.id)}
+          onDelete={() => handleDelete(variant.id)}
+        />
+      );
+    }
+
+    if (variant.type === 'image') {
+      return (
+        <ImageVariant
+          src={variant.src}
+          isEditing={true}
+          isUploading={variant.isUploading}
+          uploadError={variant.uploadError}
+          maxFileSize={limits?.image_size_limit}
+          onFileSelect={(file) => handleImageUpload(variant.id, file)}
+          onClearImage={() =>
+            updateVariant(variant.id, (v) => ({ ...v, src: undefined }))
+          }
+          onDelete={() => handleDelete(variant.id)}
+        />
+      );
+    }
+
+    if (variant.type === 'video') {
+      return (
+        <VideoVariant
+          src={variant.src}
+          isEditing={true}
+          isUploading={variant.isUploading}
+          uploadError={variant.uploadError}
+          maxFileSize={limits?.video_size_limit}
+          onFileSelect={(file) => handleVideoUpload(variant.id, file)}
+          onClearVideo={() =>
+            updateVariant(variant.id, (v) => ({ ...v, src: undefined }))
+          }
+          onDelete={() => handleDelete(variant.id)}
+        />
+      );
+    }
+
+    if (variant.type === 'link') {
+      return (
+        <LinkVariant
+          iconConfig={
+            variant.iconConfig || {
+              type: 'predefined',
+              icon: 'link',
+            }
+          }
+          content={variant.content}
+          link={variant.link || ''}
+          isEditing={true}
+          maxPreviewSize={limits?.image_size_limit}
+          onContentChange={(value) => handleVariantChange(variant.id, value)}
+          onLinkChange={(value) => handleLinkChange(variant.id, value)}
+          onIconConfigChange={(config) =>
+            updateVariant(variant.id, (v) => ({ ...v, iconConfig: config }))
+          }
+          onDelete={() => handleDelete(variant.id)}
+        />
+      );
+    }
+
+    if (variant.type === 'download') {
+      return (
+        <DownloadVariant
+          iconConfig={
+            variant.iconConfig || {
+              type: 'predefined',
+              icon: 'fileDown',
+            }
+          }
+          content={variant.content}
+          fileUrl={variant.fileUrl || ''}
+          fileName={variant.fileName || ''}
+          fileSize={variant.fileSize || 0}
+          isEditing={true}
+          maxFileSize={limits?.file_size_limit}
+          maxPreviewSize={limits?.image_size_limit}
+          onContentChange={(value) => handleVariantChange(variant.id, value)}
+          onFileChange={(fileName, fileUrl, fileSize) =>
+            handleFileChange(variant.id, fileName, fileUrl, fileSize)
+          }
+          onIconConfigChange={(config) =>
+            updateVariant(variant.id, (v) => ({ ...v, iconConfig: config }))
+          }
+          onDelete={() => handleDelete(variant.id)}
+        />
+      );
+    }
+
+    return (
+      <TextVariant
+        content={variant.content}
+        editable
+        maxLength={limits?.text_variant_max_length}
+        onChange={(value) => handleVariantChange(variant.id, value)}
+        onToggle={() => handleToggleVariant(variant.id)}
+        onDelete={() => handleDelete(variant.id)}
+      />
+    );
+  };
+
+  const buildVariantsPayload = (cardVariants: EditableVariant[]) =>
+    reassignOrders(cardVariants).map((v) => {
+      let config;
+
       switch (v.type) {
         case 'title':
+          config = { type: 'title' as const, content: v.content };
+          break;
         case 'text':
-          return !v.content.trim();
+          config = { type: 'text' as const, content: v.content };
+          break;
         case 'image':
+          config = { type: 'image' as const, src: v.src! };
+          break;
         case 'video':
-          return !v.src || v.isUploading;
+          config = { type: 'video' as const, src: v.src! };
+          break;
         case 'link':
-          return !v.content.trim() || !v.link;
+          config = {
+            type: 'link' as const,
+            content: v.content,
+            src: v.link!,
+            iconConfig: v.iconConfig || {
+              type: 'predefined' as const,
+              icon: 'link',
+            },
+          };
+          break;
         case 'download':
-          return !v.content.trim() || !v.fileUrl;
+          config = {
+            type: 'download' as const,
+            content: v.content,
+            src: v.fileUrl!,
+            iconConfig: v.iconConfig || {
+              type: 'predefined' as const,
+              icon: 'fileDown',
+            },
+            fileName: v.fileName!,
+            fileSize: v.fileSize!,
+          };
+          break;
         default:
-          return false;
+          throw new Error(`Unknown variant type: ${v.type}`);
       }
-    });
-  };
 
-  const hasErrors = getVariantErrors();
+      return { order: v.order, config };
+    });
+
+  const handleBack = () => {
+    const mural =
+      userMurals?.murals.find((m) => m.id === activeMuralId) ??
+      userMurals?.murals[0];
+
+    if (mural) {
+      router.push(`/${mural.name}`);
+    } else {
+      router.push('/dashboard');
+    }
+  };
 
   const handlePublish = async () => {
     if (hasErrors || isPublishing || !selectedCollectionId) return;
@@ -273,63 +639,46 @@ export default function CreateResourcePage() {
     setIsPublishing(true);
 
     try {
-      const variantsPayload = variants.map((v) => {
-        let config;
+      let result;
 
-        switch (v.type) {
-          case 'title':
-            config = { type: 'title' as const, content: v.content };
-            break;
-          case 'text':
-            config = { type: 'text' as const, content: v.content };
-            break;
-          case 'image':
-            config = { type: 'image' as const, src: v.src! };
-            break;
-          case 'video':
-            config = { type: 'video' as const, src: v.src! };
-            break;
-          case 'link':
-            config = {
-              type: 'link' as const,
-              content: v.content,
-              src: v.link!,
-              iconConfig: v.iconConfig || {
-                type: 'predefined' as const,
-                icon: 'link',
-              },
-            };
-            break;
-          case 'download':
-            config = {
-              type: 'download' as const,
-              content: v.content,
-              src: v.fileUrl!,
-              iconConfig: v.iconConfig || {
-                type: 'predefined' as const,
-                icon: 'fileDown',
-              },
-              fileName: v.fileName!,
-              fileSize: v.fileSize!,
-            };
-            break;
-          default:
-            throw new Error(`Unknown variant type: ${v.type}`);
-        }
+      if (cards.length > 1) {
+        let pinOrder = 'a0';
 
-        return { order: v.order, config };
-      });
+        const pins = cards.map((card, index) => {
+          if (index > 0) {
+            pinOrder = generateNextOrder(pinOrder);
+          }
 
-      const result = await apiClient.resources.createPinResource(
-        selectedCollectionId,
-        {
-          variants: variantsPayload,
-        },
-      );
+          return {
+            order: pinOrder,
+            variants: buildVariantsPayload(card.variants),
+          };
+        });
+
+        result = await apiClient.resources.createPinGroupResource(
+          selectedCollectionId,
+          {
+            groupName,
+            pins,
+          },
+        );
+      } else {
+        result = await apiClient.resources.createPinResource(
+          selectedCollectionId,
+          {
+            variants: buildVariantsPayload(cards[0]?.variants || []),
+          },
+        );
+      }
 
       if (result.success) {
-        console.log('Resource created successfully:', result.data);
-        // TODO: redirect to resource page or show success
+        const mural = userMurals?.murals.find((m) => m.id === activeMuralId);
+
+        if (mural) {
+          router.push(`/${mural.name}?coll=${selectedCollectionId}`);
+        } else {
+          router.push('/dashboard');
+        }
       } else {
         console.error('Failed to create resource:', result.message);
       }
@@ -341,7 +690,7 @@ export default function CreateResourcePage() {
   };
 
   return (
-    <AuthProvider>
+    <AuthGuard>
       <main className={styles['page-container']}>
         <div
           className={`${muralStyles['mural-container']} ${styles['mural-container-wrapper']}`}
@@ -350,6 +699,12 @@ export default function CreateResourcePage() {
             onPublish={handlePublish}
             isPublishing={isPublishing}
             hasErrors={hasErrors}
+            onBack={handleBack}
+            errorBanner={
+              hasAttachmentErrors ? (
+                <ErrorBanner message="Fix the errors below" />
+              ) : null
+            }
           />
           <div className={styles['editor-content']}>
             <div className={styles['coll-selector-container']}>
@@ -364,201 +719,80 @@ export default function CreateResourcePage() {
                 }}
               />
             </div>
-            <PinCard variants={[]}>
-              <AddElement label="Add content" onSelect={handleAddVariant} />
-              {[...variants]
-                .sort((a, b) => a.order.localeCompare(b.order))
-                .map((variant, index, sortedArray) => {
-                  const isFirst = index === 0;
-                  const isLast = index === sortedArray.length - 1;
-
-                  if (variant.type === 'title') {
-                    return (
-                      <TitleVariant
-                        key={variant.id}
-                        content={variant.content}
-                        editable
-                        maxLength={limits?.title_variant_max_length}
-                        canMoveUp={!isFirst}
-                        canMoveDown={!isLast}
-                        onChange={(value) =>
-                          handleVariantChange(variant.id, value)
-                        }
-                        onMoveUp={() => handleMoveUp(variant.id)}
-                        onMoveDown={() => handleMoveDown(variant.id)}
-                        onToggle={() => handleToggleVariant(variant.id)}
-                        onDelete={() => handleDelete(variant.id)}
+            <div className={styles['cards-group']}>
+              {cards.length > 1 && (
+                <div className={styles['group-header']}>
+                  <div className={styles['initial-line']}>
+                    <span className={styles['head']} />
+                    <span className={styles['line']} />
+                  </div>
+                  <div className={styles['group-name-container']}>
+                    {isEditingGroupName ? (
+                      <input
+                        className={styles['group-name-input']}
+                        value={groupNameDraft}
+                        onChange={(e) => setGroupNameDraft(e.target.value)}
+                        onBlur={commitGroupName}
+                        onKeyDown={handleGroupNameKeyDown}
+                        maxLength={GROUP_NAME_MAX_LENGTH}
+                        autoFocus
                       />
-                    );
-                  }
-
-                  if (variant.type === 'image') {
-                    return (
-                      <ImageVariant
-                        key={variant.id}
-                        src={variant.src}
-                        isEditing={true}
-                        isUploading={variant.isUploading}
-                        uploadError={variant.uploadError}
-                        maxFileSize={limits?.image_size_limit}
-                        canMoveUp={!isFirst}
-                        canMoveDown={!isLast}
-                        onFileSelect={(file) =>
-                          handleImageUpload(variant.id, file)
-                        }
-                        onClearImage={() =>
-                          setVariants((prev) =>
-                            prev.map((v) =>
-                              v.id === variant.id
-                                ? { ...v, src: undefined }
-                                : v,
-                            ),
-                          )
-                        }
-                        onMoveUp={() => handleMoveUp(variant.id)}
-                        onMoveDown={() => handleMoveDown(variant.id)}
-                        onDelete={() => handleDelete(variant.id)}
-                      />
-                    );
-                  }
-
-                  if (variant.type === 'video') {
-                    return (
-                      <VideoVariant
-                        key={variant.id}
-                        src={variant.src}
-                        isEditing={true}
-                        isUploading={variant.isUploading}
-                        uploadError={variant.uploadError}
-                        maxFileSize={limits?.video_size_limit}
-                        canMoveUp={!isFirst}
-                        canMoveDown={!isLast}
-                        onFileSelect={(file) =>
-                          handleVideoUpload(variant.id, file)
-                        }
-                        onClearVideo={() =>
-                          setVariants((prev) =>
-                            prev.map((v) =>
-                              v.id === variant.id
-                                ? { ...v, src: undefined }
-                                : v,
-                            ),
-                          )
-                        }
-                        onMoveUp={() => handleMoveUp(variant.id)}
-                        onMoveDown={() => handleMoveDown(variant.id)}
-                        onDelete={() => handleDelete(variant.id)}
-                      />
-                    );
-                  }
-
-                  if (variant.type === 'link') {
-                    return (
-                      <LinkVariant
-                        key={variant.id}
-                        iconConfig={
-                          variant.iconConfig || {
-                            type: 'predefined',
-                            icon: 'link',
+                    ) : (
+                      <button
+                        type="button"
+                        className={styles['group-name-button']}
+                        onClick={startEditingGroupName}
+                      >
+                        <span className={styles['group-name']}>
+                          {groupName}
+                        </span>
+                        <span className={styles['edit-icon']}>
+                          <IconRenderer
+                            config={{ type: 'predefined', icon: 'pencil' }}
+                            renderedSize={4}
+                          />
+                        </span>
+                      </button>
+                    )}
+                  </div>
+                </div>
+              )}
+              <DndContext
+                sensors={sensors}
+                collisionDetection={closestCorners}
+                measuring={{ droppable: { strategy: MeasuringStrategy.Always } }}
+                onDragOver={handleDragOver}
+                onDragEnd={handleDragEnd}
+              >
+                {cards.map((card, cardIndex) => (
+                  <Fragment key={cardIndex}>
+                    {cardIndex > 0 && <div className={styles['pin-line']} />}
+                    <SortableCard
+                      index={cardIndex}
+                      itemIds={card.variants.map((v) => v.id)}
+                    >
+                      <PinCard variants={[]}>
+                        <AddElement
+                          label="Add content"
+                          onSelect={(selection) =>
+                            handleAddVariant(cardIndex, selection)
                           }
-                        }
-                        content={variant.content}
-                        link={variant.link || ''}
-                        isEditing={true}
-                        maxPreviewSize={limits?.image_size_limit}
-                        canMoveUp={!isFirst}
-                        canMoveDown={!isLast}
-                        onContentChange={(value) =>
-                          handleVariantChange(variant.id, value)
-                        }
-                        onLinkChange={(value) =>
-                          handleLinkChange(variant.id, value)
-                        }
-                        onIconConfigChange={(config) =>
-                          setVariants((prev) =>
-                            prev.map((v) =>
-                              v.id === variant.id
-                                ? { ...v, iconConfig: config }
-                                : v,
-                            ),
-                          )
-                        }
-                        onMoveUp={() => handleMoveUp(variant.id)}
-                        onMoveDown={() => handleMoveDown(variant.id)}
-                        onDelete={() => handleDelete(variant.id)}
-                      />
-                    );
-                  }
-
-                  if (variant.type === 'download') {
-                    return (
-                      <DownloadVariant
-                        key={variant.id}
-                        iconConfig={
-                          variant.iconConfig || {
-                            type: 'predefined',
-                            icon: 'fileDown',
-                          }
-                        }
-                        content={variant.content}
-                        fileUrl={variant.fileUrl || ''}
-                        fileName={variant.fileName || ''}
-                        fileSize={variant.fileSize || 0}
-                        isEditing={true}
-                        maxFileSize={limits?.file_size_limit}
-                        maxPreviewSize={limits?.image_size_limit}
-                        canMoveUp={!isFirst}
-                        canMoveDown={!isLast}
-                        onContentChange={(value) =>
-                          handleVariantChange(variant.id, value)
-                        }
-                        onFileChange={(fileName, fileUrl, fileSize) =>
-                          handleFileChange(
-                            variant.id,
-                            fileName,
-                            fileUrl,
-                            fileSize,
-                          )
-                        }
-                        onIconConfigChange={(config) =>
-                          setVariants((prev) =>
-                            prev.map((v) =>
-                              v.id === variant.id
-                                ? { ...v, iconConfig: config }
-                                : v,
-                            ),
-                          )
-                        }
-                        onMoveUp={() => handleMoveUp(variant.id)}
-                        onMoveDown={() => handleMoveDown(variant.id)}
-                        onDelete={() => handleDelete(variant.id)}
-                      />
-                    );
-                  }
-
-                  return (
-                    <TextVariant
-                      key={variant.id}
-                      content={variant.content}
-                      editable
-                      maxLength={limits?.text_variant_max_length}
-                      canMoveUp={!isFirst}
-                      canMoveDown={!isLast}
-                      onChange={(value) =>
-                        handleVariantChange(variant.id, value)
-                      }
-                      onMoveUp={() => handleMoveUp(variant.id)}
-                      onMoveDown={() => handleMoveDown(variant.id)}
-                      onToggle={() => handleToggleVariant(variant.id)}
-                      onDelete={() => handleDelete(variant.id)}
-                    />
-                  );
-                })}
-            </PinCard>
-            <AddElement label="Add pin" />
+                        />
+                        {card.variants.map((variant) => (
+                          <SortableVariant key={variant.id} id={variant.id}>
+                            {renderVariant(variant)}
+                          </SortableVariant>
+                        ))}
+                      </PinCard>
+                    </SortableCard>
+                  </Fragment>
+                ))}
+              </DndContext>
+            </div>
+            <AddElement label="Add card" onAction={handleAddCard} />
           </div>
         </div>
       </main>
-    </AuthProvider>
+    </AuthGuard>
   );
 }

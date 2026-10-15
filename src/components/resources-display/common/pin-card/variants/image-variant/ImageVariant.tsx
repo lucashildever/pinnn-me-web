@@ -13,12 +13,8 @@ interface ImageVariantProps {
   isUploading?: boolean;
   uploadError?: string;
   maxFileSize?: number;
-  canMoveUp?: boolean;
-  canMoveDown?: boolean;
   onFileSelect?: (file: File) => void;
   onClearImage?: () => void;
-  onMoveUp?: () => void;
-  onMoveDown?: () => void;
   onDelete?: () => void;
 }
 
@@ -35,12 +31,8 @@ export default function ImageVariant({
   isUploading = false,
   uploadError,
   maxFileSize,
-  canMoveUp = true,
-  canMoveDown = true,
   onFileSelect,
   onClearImage,
-  onMoveUp,
-  onMoveDown,
   onDelete,
 }: ImageVariantProps) {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -172,11 +164,7 @@ export default function ImageVariant({
               transition={{ duration: 0.15 }}
             >
               <VariantToolbar
-                actions={['moveDown', 'moveUp', 'replaceImage']}
-                canMoveUp={canMoveUp}
-                canMoveDown={canMoveDown}
-                onMoveUp={onMoveUp}
-                onMoveDown={onMoveDown}
+                actions={['drag', 'replaceImage']}
                 onReplaceImage={() => inputRef.current?.click()}
                 onDelete={onDelete}
               />

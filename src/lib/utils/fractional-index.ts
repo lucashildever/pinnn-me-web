@@ -73,3 +73,18 @@ export function normalizeOrders<T extends { order: string }>(items: T[]): T[] {
       order: `${BASE_CHAR}${index}`,
     }));
 }
+
+/**
+ * Reassign clean sequential order keys (a0, a1, a2...) following the array's
+ * current position, WITHOUT re-sorting it.
+ * Useful after a drag reorder, where the array is already in the desired order
+ * (normalizeOrders cannot be used there, since it re-sorts by the old order).
+ * @param items Array of items with order property, already in the target order
+ * @returns Same items with clean order values
+ */
+export function reassignOrders<T extends { order: string }>(items: T[]): T[] {
+  return items.map((item, index) => ({
+    ...item,
+    order: `${BASE_CHAR}${index}`,
+  }));
+}

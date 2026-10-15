@@ -9,6 +9,7 @@ import {
   File,
   FileDown,
   Forward,
+  GripVertical,
   Heading,
   Image as ImageIcon,
   ImageUp,
@@ -194,6 +195,11 @@ export const iconLibrary: Record<string, Record<string, IconMetadata>> = {
       type: 'lucide',
       icon: Check,
       label: 'Check',
+    },
+    gripVertical: {
+      type: 'lucide',
+      icon: GripVertical,
+      label: 'Grip Vertical',
     },
   },
   navigation: {

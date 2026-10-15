@@ -42,6 +42,7 @@ interface IntegrationConfig {
 interface AddElementProps {
   label: string;
   onSelect?: (variant: VariantSelection) => void;
+  onAction?: () => void;
 }
 
 type SectionType = 'basics' | 'apps' | null;
@@ -108,7 +109,11 @@ const integrationVariants: IntegrationConfig[] = SUPPORTED_PLATFORMS.map(
   }),
 );
 
-export default function AddElement({ label, onSelect }: AddElementProps) {
+export default function AddElement({
+  label,
+  onSelect,
+  onAction,
+}: AddElementProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [expandedSection, setExpandedSection] = useState<SectionType>('basics');
   const [basicsScrolled, setBasicsScrolled] = useState(false);
@@ -125,6 +130,15 @@ export default function AddElement({ label, onSelect }: AddElementProps) {
     setAppsScrolled(false);
     setAppsScrolledEnd(false);
     setIsOpen(true);
+  };
+
+  const handleButtonClick = () => {
+    if (onAction) {
+      onAction();
+      return;
+    }
+
+    handleOpen();
   };
 
   const handleBasicClick = (variant: BasicVariantOption) => {
@@ -163,7 +177,10 @@ export default function AddElement({ label, onSelect }: AddElementProps) {
 
   return (
     <>
-      <button className={styles['add-element-button']} onClick={handleOpen}>
+      <button
+        className={styles['add-element-button']}
+        onClick={handleButtonClick}
+      >
         <IconRenderer
           config={{ type: 'predefined', icon: 'plus' }}
           renderedSize={4}
@@ -172,213 +189,218 @@ export default function AddElement({ label, onSelect }: AddElementProps) {
         {label}
       </button>
 
-      <Modal isOpen={isOpen} onClose={handleClose}>
-        <div className={styles['dropdown']}>
-          <div className={styles['modal-header']}>
-            <h2 className={styles['modal-title']}>Add Content</h2>
-            <button
-              className={styles['close-button']}
-              onClick={handleClose}
-              type="button"
-              aria-label="Fechar"
-            >
-              <IconRenderer
-                config={{ type: 'predefined', icon: 'close' }}
-                renderedSize={7}
-                style={{ opacity: 0.5 }}
-              />
-            </button>
-          </div>
-
-          <LayoutGroup>
-            {/* Basics Section */}
-            <div className={styles['section']}>
+      {onSelect && (
+        <Modal isOpen={isOpen} onClose={handleClose}>
+          <div className={styles['dropdown']}>
+            <div className={styles['modal-header']}>
+              <h2 className={styles['modal-title']}>Add Content</h2>
               <button
-                className={styles['dropdown-header']}
-                onClick={() => toggleSection('basics')}
+                className={styles['close-button']}
+                onClick={handleClose}
+                type="button"
+                aria-label="Fechar"
               >
-                Basics
+                <IconRenderer
+                  config={{ type: 'predefined', icon: 'close' }}
+                  renderedSize={7}
+                  style={{ opacity: 0.5 }}
+                />
               </button>
+            </div>
 
-              <motion.div
-                layout
-                className={
-                  expandedSection === 'basics'
-                    ? styles['section-content-expanded']
-                    : styles['section-collapsed']
-                }
-                transition={{ duration: 0.25, ease: 'easeInOut' }}
-              >
-                {expandedSection === 'basics' ? (
-                  <div
-                    className={`${styles['scroll-wrapper']} ${basicsScrolled ? styles['scrolled'] : ''} ${basicsScrolledEnd ? styles['scrolled-end'] : ''}`}
-                  >
+            <LayoutGroup>
+              {/* Basics Section */}
+              <div className={styles['section']}>
+                <button
+                  className={styles['dropdown-header']}
+                  onClick={() => toggleSection('basics')}
+                >
+                  Basics
+                </button>
+
+                <motion.div
+                  layout
+                  className={
+                    expandedSection === 'basics'
+                      ? styles['section-content-expanded']
+                      : styles['section-collapsed']
+                  }
+                  transition={{ duration: 0.25, ease: 'easeInOut' }}
+                >
+                  {expandedSection === 'basics' ? (
                     <div
-                      className={styles['section-scroll']}
-                      onScroll={handleBasicsScroll}
+                      className={`${styles['scroll-wrapper']} ${basicsScrolled ? styles['scrolled'] : ''} ${basicsScrolledEnd ? styles['scrolled-end'] : ''}`}
                     >
-                      {basicVariants.map((option) => (
-                        <motion.button
-                          key={option.type}
-                          layout
-                          className={styles['dropdown-item']}
-                          onClick={() => handleBasicClick(option.type)}
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          transition={{ duration: 0.15 }}
-                        >
-                          <div className={styles['icon-container']}>
+                      <div
+                        className={styles['section-scroll']}
+                        onScroll={handleBasicsScroll}
+                      >
+                        {basicVariants.map((option) => (
+                          <motion.button
+                            key={option.type}
+                            layout
+                            className={styles['dropdown-item']}
+                            onClick={() => handleBasicClick(option.type)}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.15 }}
+                          >
+                            <div className={styles['icon-container']}>
+                              <IconRenderer
+                                config={{
+                                  type: 'predefined',
+                                  icon: option.icon,
+                                }}
+                                renderedSize={8}
+                              />
+                            </div>
+                            <div className={styles['text-container']}>
+                              <span className={styles['item-label']}>
+                                {option.label}
+                              </span>
+                              <span className={styles['item-description']}>
+                                {option.description}
+                              </span>
+                            </div>
+                          </motion.button>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      {basicVariants
+                        .slice(0, COLLAPSED_VISIBLE_COUNT)
+                        .map((option) => (
+                          <motion.button
+                            key={option.type}
+                            layout
+                            className={styles['icon-container']}
+                            onClick={() => handleBasicClick(option.type)}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.15 }}
+                          >
                             <IconRenderer
                               config={{ type: 'predefined', icon: option.icon }}
                               renderedSize={8}
                             />
-                          </div>
-                          <div className={styles['text-container']}>
-                            <span className={styles['item-label']}>
-                              {option.label}
-                            </span>
-                            <span className={styles['item-description']}>
-                              {option.description}
-                            </span>
-                          </div>
-                        </motion.button>
-                      ))}
-                    </div>
-                  </div>
-                ) : (
-                  <>
-                    {basicVariants
-                      .slice(0, COLLAPSED_VISIBLE_COUNT)
-                      .map((option) => (
+                          </motion.button>
+                        ))}
+                      {basicsOverflowCount > 0 && (
                         <motion.button
-                          key={option.type}
                           layout
-                          className={styles['icon-container']}
-                          onClick={() => handleBasicClick(option.type)}
+                          className={styles['overflow-button']}
+                          onClick={() => toggleSection('basics')}
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           transition={{ duration: 0.15 }}
                         >
-                          <IconRenderer
-                            config={{ type: 'predefined', icon: option.icon }}
-                            renderedSize={8}
-                          />
+                          +{basicsOverflowCount}
                         </motion.button>
-                      ))}
-                    {basicsOverflowCount > 0 && (
-                      <motion.button
-                        layout
-                        className={styles['overflow-button']}
-                        onClick={() => toggleSection('basics')}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.15 }}
-                      >
-                        +{basicsOverflowCount}
-                      </motion.button>
-                    )}
-                  </>
-                )}
-              </motion.div>
-            </div>
+                      )}
+                    </>
+                  )}
+                </motion.div>
+              </div>
 
-            {/* Apps Section */}
-            <div className={styles['section']}>
-              <button
-                className={styles['dropdown-header']}
-                onClick={() => toggleSection('apps')}
-              >
-                Apps
-              </button>
+              {/* Apps Section */}
+              <div className={styles['section']}>
+                <button
+                  className={styles['dropdown-header']}
+                  onClick={() => toggleSection('apps')}
+                >
+                  Apps
+                </button>
 
-              <motion.div
-                layout
-                className={
-                  expandedSection === 'apps'
-                    ? styles['section-content-expanded']
-                    : styles['section-collapsed']
-                }
-                transition={{ duration: 0.25, ease: 'easeInOut' }}
-              >
-                {expandedSection === 'apps' ? (
-                  <div
-                    className={`${styles['scroll-wrapper']} ${appsScrolled ? styles['scrolled'] : ''} ${appsScrolledEnd ? styles['scrolled-end'] : ''}`}
-                  >
+                <motion.div
+                  layout
+                  className={
+                    expandedSection === 'apps'
+                      ? styles['section-content-expanded']
+                      : styles['section-collapsed']
+                  }
+                  transition={{ duration: 0.25, ease: 'easeInOut' }}
+                >
+                  {expandedSection === 'apps' ? (
                     <div
-                      className={styles['section-scroll']}
-                      onScroll={handleAppsScroll}
+                      className={`${styles['scroll-wrapper']} ${appsScrolled ? styles['scrolled'] : ''} ${appsScrolledEnd ? styles['scrolled-end'] : ''}`}
                     >
-                      {integrationVariants.map((option) => (
-                        <motion.button
-                          key={option.platform}
-                          layout
-                          className={styles['dropdown-item']}
-                          onClick={() =>
-                            handleIntegrationClick(option.platform)
-                          }
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          transition={{ duration: 0.15 }}
-                        >
-                          <div className={styles['icon-container']}>
+                      <div
+                        className={styles['section-scroll']}
+                        onScroll={handleAppsScroll}
+                      >
+                        {integrationVariants.map((option) => (
+                          <motion.button
+                            key={option.platform}
+                            layout
+                            className={styles['dropdown-item']}
+                            onClick={() =>
+                              handleIntegrationClick(option.platform)
+                            }
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.15 }}
+                          >
+                            <div className={styles['icon-container']}>
+                              <IconRenderer
+                                config={{ type: 'predefined', icon: 'puzzle' }}
+                                renderedSize={8}
+                              />
+                            </div>
+                            <div className={styles['text-container']}>
+                              <span className={styles['item-label']}>
+                                {option.label}
+                              </span>
+                              <span className={styles['item-description']}>
+                                {option.description}
+                              </span>
+                            </div>
+                          </motion.button>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      {integrationVariants
+                        .slice(0, COLLAPSED_VISIBLE_COUNT)
+                        .map((option) => (
+                          <motion.button
+                            key={option.platform}
+                            layout
+                            className={styles['icon-container']}
+                            onClick={() =>
+                              handleIntegrationClick(option.platform)
+                            }
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.15 }}
+                          >
                             <IconRenderer
                               config={{ type: 'predefined', icon: 'puzzle' }}
                               renderedSize={8}
                             />
-                          </div>
-                          <div className={styles['text-container']}>
-                            <span className={styles['item-label']}>
-                              {option.label}
-                            </span>
-                            <span className={styles['item-description']}>
-                              {option.description}
-                            </span>
-                          </div>
-                        </motion.button>
-                      ))}
-                    </div>
-                  </div>
-                ) : (
-                  <>
-                    {integrationVariants
-                      .slice(0, COLLAPSED_VISIBLE_COUNT)
-                      .map((option) => (
+                          </motion.button>
+                        ))}
+                      {appsOverflowCount > 0 && (
                         <motion.button
-                          key={option.platform}
                           layout
-                          className={styles['icon-container']}
-                          onClick={() =>
-                            handleIntegrationClick(option.platform)
-                          }
+                          className={styles['overflow-button']}
+                          onClick={() => toggleSection('apps')}
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           transition={{ duration: 0.15 }}
                         >
-                          <IconRenderer
-                            config={{ type: 'predefined', icon: 'puzzle' }}
-                            renderedSize={8}
-                          />
+                          +{appsOverflowCount}
                         </motion.button>
-                      ))}
-                    {appsOverflowCount > 0 && (
-                      <motion.button
-                        layout
-                        className={styles['overflow-button']}
-                        onClick={() => toggleSection('apps')}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.15 }}
-                      >
-                        +{appsOverflowCount}
-                      </motion.button>
-                    )}
-                  </>
-                )}
-              </motion.div>
-            </div>
-          </LayoutGroup>
-        </div>
-      </Modal>
+                      )}
+                    </>
+                  )}
+                </motion.div>
+              </div>
+            </LayoutGroup>
+          </div>
+        </Modal>
+      )}
     </>
   );
 }

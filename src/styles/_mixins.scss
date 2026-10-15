@@ -199,6 +199,6 @@
 }
 
 @mixin error-outline($offset: 4px) {
-  outline: 1px solid #e57373;
+  outline: 1px solid get-color('error');
   outline-offset: $offset;
 }

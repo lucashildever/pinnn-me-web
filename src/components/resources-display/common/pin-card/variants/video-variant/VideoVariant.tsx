@@ -12,12 +12,8 @@ interface VideoVariantProps {
   isUploading?: boolean;
   uploadError?: string;
   maxFileSize?: number;
-  canMoveUp?: boolean;
-  canMoveDown?: boolean;
   onFileSelect?: (file: File) => void;
   onClearVideo?: () => void;
-  onMoveUp?: () => void;
-  onMoveDown?: () => void;
   onDelete?: () => void;
 }
 
@@ -34,12 +30,8 @@ export default function VideoVariant({
   isUploading = false,
   uploadError,
   maxFileSize,
-  canMoveUp = true,
-  canMoveDown = true,
   onFileSelect,
   onClearVideo,
-  onMoveUp,
-  onMoveDown,
   onDelete,
 }: VideoVariantProps) {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -169,11 +161,7 @@ export default function VideoVariant({
               transition={{ duration: 0.15 }}
             >
               <VariantToolbar
-                actions={['moveDown', 'moveUp', 'replaceVideo']}
-                canMoveUp={canMoveUp}
-                canMoveDown={canMoveDown}
-                onMoveUp={onMoveUp}
-                onMoveDown={onMoveDown}
+                actions={['drag', 'replaceVideo']}
                 onReplaceVideo={() => inputRef.current?.click()}
                 onDelete={onDelete}
               />

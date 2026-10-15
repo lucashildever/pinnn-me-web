@@ -1,9 +1,9 @@
 'use client';
 
+import { ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import IconRenderer from '@/components/shared/icon-renderer/IconRenderer';
 import styles from './editor-header.module.scss';
-import { useAppSelector } from '@/lib/state/hooks';
 import Divider from '@/components/shared/divider/divider';
 
 interface EditorHeaderProps {
@@ -11,6 +11,8 @@ interface EditorHeaderProps {
   isPublishing?: boolean;
   hasErrors?: boolean;
   title?: string;
+  onBack?: () => void;
+  errorBanner?: ReactNode;
 }
 
 export default function EditorHeader({
@@ -18,10 +20,16 @@ export default function EditorHeader({
   isPublishing,
   hasErrors,
   title = 'Create Resource',
+  onBack,
+  errorBanner,
 }: EditorHeaderProps) {
   const router = useRouter();
 
   const handleBack = () => {
+    if (onBack) {
+      onBack();
+      return;
+    }
     router.back();
   };
 
@@ -63,6 +71,8 @@ export default function EditorHeader({
       </div>
 
       <Divider />
+
+      {errorBanner}
 
       <div className={styles['title-section']}>
         <h1 className={styles['main-title']}>{title}</h1>

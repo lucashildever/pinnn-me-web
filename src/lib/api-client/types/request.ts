@@ -67,3 +67,13 @@ export interface CreateVariantDto {
 export interface CreatePinResourceRequest {
   variants: CreateVariantDto[];
 }
+
+export interface CreateGroupPinRequest {
+  order: string;
+  variants: CreateVariantDto[];
+}
+
+export interface CreatePinGroupResourceRequest {
+  groupName: string;
+  pins: CreateGroupPinRequest[];
+}

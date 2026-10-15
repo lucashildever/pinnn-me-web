@@ -15,8 +15,99 @@
     @include flex(column, center, center, nowrap, 6);
 
     .coll-selector-container {
+      position: relative;
+      z-index: 200;
       width: 100%;
       @include flex(row, center, flex-start, nowrap, 2);
+    }
+
+    .cards-group {
+      width: 100%;
+
+      .pin-line {
+        @include pin-line-defs;
+      }
+
+      .group-header {
+        @include flex(row, flex-start, flex-start, nowrap, 0);
+        width: 100%;
+
+        .initial-line {
+          @include flex(column, center, center);
+          @include spacing(margin-right, 4);
+          flex-shrink: 0;
+
+          .head {
+            width: #{get-spacing(5) - 1}px;
+            height: #{get-spacing(5) - 1}px;
+            border-radius: 50%;
+            background-color: get-color('clearer-dark');
+            transform: translate(10px, 1px);
+            @include spacing(margin-top, 1);
+            flex-shrink: 0;
+          }
+
+          .line {
+            @include pin-line-defs;
+            @include spacing(height, 8);
+          }
+        }
+
+        .group-name-container {
+          @include flex(row, center, flex-start, nowrap, 2);
+          flex: 1;
+          min-width: 0;
+        }
+
+        .group-name-button {
+          @include flex(row, center, flex-start, nowrap, 2);
+          background: none;
+          border: none;
+          padding: 0;
+          margin: 0;
+          cursor: pointer;
+          color: get-color('light');
+          min-width: 0;
+
+          &:hover .edit-icon {
+            opacity: 0.9;
+          }
+        }
+
+        .group-name {
+          @include font-size('md');
+          font-weight: 550;
+          color: get-color('light');
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .edit-icon {
+          @include flex(row, center, center);
+          opacity: 0.5;
+          flex-shrink: 0;
+          transition: opacity 0.15s ease;
+        }
+
+        .group-name-input {
+          @include font-size('md');
+          font-weight: 550;
+          color: get-color('light');
+          background: transparent;
+          border: none;
+          border-bottom: 1px solid get-color('clearer-dark');
+          padding: 0;
+          margin: 0;
+          width: 100%;
+          min-width: 0;
+          outline: none;
+        }
+      }
+
+      .variant-item {
+        width: 100%;
+      }
     }
   }
 }

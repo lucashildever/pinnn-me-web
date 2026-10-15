@@ -10,6 +10,7 @@ import { fetcher } from './helpers/request';
 
 import {
   CreateCollectionRequest,
+  CreatePinGroupResourceRequest,
   CreatePinRequest,
   CreatePinResourceRequest,
 } from './types/request';
@@ -171,6 +172,25 @@ export const apiClient = {
       }
 
       return await fetcher(`/resources/create/pin/${collectionId}`, {
+        method: 'POST',
+        body: request,
+        token: token,
+      });
+    },
+    createPinGroupResource: async (
+      collectionId: string,
+      request: CreatePinGroupResourceRequest,
+    ): Promise<FetcherResponse> => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        return {
+          success: false,
+          error: 'unauthorized',
+          message: 'Authentication required',
+        };
+      }
+
+      return await fetcher(`/resources/create/pin-group/${collectionId}`, {
         method: 'POST',
         body: request,
         token: token,

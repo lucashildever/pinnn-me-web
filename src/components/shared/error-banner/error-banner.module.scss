@@ -1,0 +1,11 @@
+.error-banner {
+  box-sizing: border-box;
+  width: 100%;
+  background-color: get-color('error');
+  color: get-color('base-dark');
+  @include spacing(padding, 3, 4);
+  @include font-size('sm');
+  font-weight: 600;
+  font-style: italic;
+  text-align: center;
+}

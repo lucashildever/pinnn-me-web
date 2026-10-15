@@ -37,6 +37,7 @@ export const ICONS = {
   Pin: 'pin',
   ChevronLeft: 'chevronLeft',
   Check: 'check',
+  GripVertical: 'gripVertical',
 } as const;
 
 export type AppIcon = (typeof ICONS)[keyof typeof ICONS];
@@ -94,4 +95,5 @@ export const RESERVED_ICONS: AppIcon[] = [
   'forward',
   'title',
   'text',
+  'gripVertical',
 ];

@@ -1,6 +1,7 @@
 'use client';
 
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { motion } from 'motion/react';
 import styles from './variant-edit-form.module.scss';
 import IconRenderer from '@/components/shared/icon-renderer/IconRenderer';
@@ -70,6 +71,11 @@ export default function VariantEditForm({
   onClearPreviewError,
 }: VariantEditFormProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const handleFileClick = () => {
     fileInputRef.current?.click();
@@ -84,131 +90,145 @@ export default function VariantEditForm({
     e.target.value = '';
   };
 
-  return (
+  if (!isMounted) {
+    return null;
+  }
+
+  return createPortal(
     <motion.div
-      className={styles['edit-form']}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 20 }}
+      className={styles['edit-form-overlay']}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
     >
-      <div className={styles['edit-header']}>
-        <button
-          type="button"
-          className={styles['header-button']}
-          onMouseDown={(e) => {
-            e.preventDefault();
-            onBack();
-          }}
-        >
-          <IconRenderer
-            config={{ type: 'predefined', icon: 'arrowLeft' }}
-            renderedSize={7}
-          />
-        </button>
-        <span className={styles['header-title']}>{title}</span>
-        <button
-          type="button"
-          className={styles['header-button']}
-          onMouseDown={(e) => {
-            e.preventDefault();
-            onDelete();
-          }}
-        >
-          <IconRenderer
-            config={{ type: 'predefined', icon: 'trash' }}
-            renderedSize={5}
-            color="#e57373"
-          />
-        </button>
-      </div>
-
-      <div
-        className={`${styles['edit-input-row']} ${descriptionError ? styles['error'] : ''}`}
+      <motion.div
+        data-variant-edit-form=""
+        className={styles['edit-form']}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: 20 }}
+        transition={{ duration: 0.2 }}
       >
-        <IconRenderer
-          config={{ type: 'predefined', icon: 'pencil' }}
-          renderedSize={6}
-          style={{ opacity: 0.5 }}
-        />
-        <input
-          type="text"
-          className={styles['edit-input']}
-          placeholder={descriptionPlaceholder}
-          value={descriptionValue}
-          onChange={(e) => onDescriptionChange(e.target.value)}
-          onBlur={onDescriptionBlur}
-        />
-      </div>
-
-      {showFileInput ? (
-        <>
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept={fileAccept}
-            className={styles['file-input']}
-            onChange={handleFileChange}
-          />
-          <div
-            className={`${styles['edit-input-row']} ${styles['clickable']} ${srcError ? styles['error'] : ''}`}
-            onClick={handleFileClick}
+        <div className={styles['edit-header']}>
+          <button
+            type="button"
+            className={styles['header-button']}
+            onMouseDown={(e) => {
+              e.preventDefault();
+              onBack();
+            }}
           >
             <IconRenderer
-              config={{ type: 'predefined', icon: srcIcon }}
-              renderedSize={6}
-              style={{ opacity: 0.5 }}
+              config={{ type: 'predefined', icon: 'arrowLeft' }}
+              renderedSize={7}
             />
-            <span className={styles['file-label']}>
-              {isUploading ? 'Uploading...' : srcValue || srcPlaceholder}
-            </span>
-          </div>
-        </>
-      ) : (
+          </button>
+          <span className={styles['header-title']}>{title}</span>
+          <button
+            type="button"
+            className={styles['header-button']}
+            onMouseDown={(e) => {
+              e.preventDefault();
+              onDelete();
+            }}
+          >
+            <IconRenderer
+              config={{ type: 'predefined', icon: 'trash' }}
+              renderedSize={5}
+              color="#e57373"
+            />
+          </button>
+        </div>
+
         <div
-          className={`${styles['edit-input-row']} ${srcError ? styles['error'] : ''}`}
+          className={`${styles['edit-input-row']} ${descriptionError ? styles['error'] : ''}`}
         >
           <IconRenderer
-            config={{ type: 'predefined', icon: srcIcon }}
+            config={{ type: 'predefined', icon: 'pencil' }}
             renderedSize={6}
             style={{ opacity: 0.5 }}
           />
           <input
             type="text"
             className={styles['edit-input']}
-            placeholder={srcPlaceholder}
-            value={srcValue}
-            onChange={(e) => onSrcChange(e.target.value)}
+            placeholder={descriptionPlaceholder}
+            value={descriptionValue}
+            onChange={(e) => onDescriptionChange(e.target.value)}
+            onBlur={onDescriptionBlur}
           />
         </div>
-      )}
 
-      {showPreviewEditor &&
-        variantType &&
-        iconConfig &&
-        onIconConfigChange &&
-        onPreviewUpload && (
-          <PreviewEditor
-            variantType={variantType}
-            iconConfig={iconConfig}
-            onIconConfigChange={onIconConfigChange}
-            onCustomUpload={onPreviewUpload}
-            isUploading={isPreviewUploading}
-            uploadError={previewUploadError}
-            onClearError={onClearPreviewError}
-          />
+        {showFileInput ? (
+          <>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept={fileAccept}
+              className={styles['file-input']}
+              onChange={handleFileChange}
+            />
+            <div
+              className={`${styles['edit-input-row']} ${styles['clickable']} ${srcError ? styles['error'] : ''}`}
+              onClick={handleFileClick}
+            >
+              <IconRenderer
+                config={{ type: 'predefined', icon: srcIcon }}
+                renderedSize={6}
+                style={{ opacity: 0.5 }}
+              />
+              <span className={styles['file-label']}>
+                {isUploading ? 'Uploading...' : srcValue || srcPlaceholder}
+              </span>
+            </div>
+          </>
+        ) : (
+          <div
+            className={`${styles['edit-input-row']} ${srcError ? styles['error'] : ''}`}
+          >
+            <IconRenderer
+              config={{ type: 'predefined', icon: srcIcon }}
+              renderedSize={6}
+              style={{ opacity: 0.5 }}
+            />
+            <input
+              type="text"
+              className={styles['edit-input']}
+              placeholder={srcPlaceholder}
+              value={srcValue}
+              onChange={(e) => onSrcChange(e.target.value)}
+            />
+          </div>
         )}
 
-      <button
-        type="button"
-        className={styles['done-button']}
-        onMouseDown={(e) => {
-          e.preventDefault();
-          onDone();
-        }}
-      >
-        Done
-      </button>
-    </motion.div>
+        {showPreviewEditor &&
+          variantType &&
+          iconConfig &&
+          onIconConfigChange &&
+          onPreviewUpload && (
+            <PreviewEditor
+              variantType={variantType}
+              iconConfig={iconConfig}
+              onIconConfigChange={onIconConfigChange}
+              onCustomUpload={onPreviewUpload}
+              isUploading={isPreviewUploading}
+              uploadError={previewUploadError}
+              onClearError={onClearPreviewError}
+            />
+          )}
+
+        <button
+          type="button"
+          className={styles['done-button']}
+          onMouseDown={(e) => {
+            e.preventDefault();
+            onDone();
+          }}
+        >
+          Done
+        </button>
+      </motion.div>
+    </motion.div>,
+    document.body,
   );
 }

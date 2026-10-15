@@ -35,3 +35,12 @@
     @include error-outline;
   }
 }
+
+.drag-handle {
+  cursor: grab;
+  touch-action: none;
+
+  &:active {
+    cursor: grabbing;
+  }
+}

@@ -9,11 +9,7 @@ interface TextVariantProps {
   content: string;
   editable?: boolean;
   maxLength?: number;
-  canMoveUp?: boolean;
-  canMoveDown?: boolean;
   onChange?: (value: string) => void;
-  onMoveUp?: () => void;
-  onMoveDown?: () => void;
   onToggle?: () => void;
   onDelete?: () => void;
 }
@@ -22,11 +18,7 @@ export default function TextVariant({
   content,
   editable,
   maxLength,
-  canMoveUp = true,
-  canMoveDown = true,
   onChange,
-  onMoveUp,
-  onMoveDown,
   onToggle,
   onDelete,
 }: TextVariantProps) {
@@ -55,12 +47,8 @@ export default function TextVariant({
               transition={{ duration: 0.15 }}
             >
               <VariantToolbar
-                actions={['moveDown', 'moveUp', 'toggle']}
-                canMoveUp={canMoveUp}
-                canMoveDown={canMoveDown}
+                actions={['drag', 'toggle']}
                 variantType="text"
-                onMoveUp={onMoveUp}
-                onMoveDown={onMoveDown}
                 onToggle={onToggle}
                 onDelete={onDelete}
               />

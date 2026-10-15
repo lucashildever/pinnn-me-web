@@ -2,10 +2,10 @@
 
 import styles from './variant-toolbar.module.scss';
 import IconRenderer from '@/components/shared/icon-renderer/IconRenderer';
+import { useVariantDragHandle } from './variant-drag-context';
 
 export type ToolbarAction =
-  | 'moveUp'
-  | 'moveDown'
+  | 'drag'
   | 'settings'
   | 'toggle'
   | 'replaceImage'
@@ -15,12 +15,8 @@ export type VariantType = 'title' | 'text';
 
 interface VariantToolbarProps {
   actions: ToolbarAction[];
-  canMoveUp?: boolean;
-  canMoveDown?: boolean;
   variantType?: VariantType;
   hasSettingsError?: boolean;
-  onMoveUp?: () => void;
-  onMoveDown?: () => void;
   onSettings?: () => void;
   onToggle?: () => void;
   onReplaceImage?: () => void;
@@ -30,47 +26,31 @@ interface VariantToolbarProps {
 
 export default function VariantToolbar({
   actions,
-  canMoveUp = true,
-  canMoveDown = true,
   variantType,
   hasSettingsError = false,
-  onMoveUp,
-  onMoveDown,
   onSettings,
   onToggle,
   onReplaceImage,
   onReplaceVideo,
   onDelete,
 }: VariantToolbarProps) {
+  const dragHandle = useVariantDragHandle();
+
   return (
     <div className={styles['toolbar']}>
-      {actions.includes('moveDown') && (
+      {actions.includes('drag') && (
         <button
+          ref={dragHandle?.setActivatorNodeRef}
           type="button"
-          className={`${styles['toolbar-button']} ${!canMoveDown ? styles['disabled'] : ''}`}
-          onMouseDown={(e) => {
-            e.preventDefault();
-            if (canMoveDown) onMoveDown?.();
-          }}
+          className={`${styles['toolbar-button']} ${styles['drag-handle']}`}
+          aria-label="Reorder"
+          {...dragHandle?.listeners}
+          {...dragHandle?.attributes}
+          onMouseDown={(e) => e.preventDefault()}
         >
           <IconRenderer
-            config={{ type: 'predefined', icon: 'chevronDown' }}
-            renderedSize={8}
-          />
-        </button>
-      )}
-      {actions.includes('moveUp') && (
-        <button
-          type="button"
-          className={`${styles['toolbar-button']} ${!canMoveUp ? styles['disabled'] : ''}`}
-          onMouseDown={(e) => {
-            e.preventDefault();
-            if (canMoveUp) onMoveUp?.();
-          }}
-        >
-          <IconRenderer
-            config={{ type: 'predefined', icon: 'chevronUp' }}
-            renderedSize={8}
+            config={{ type: 'predefined', icon: 'gripVertical' }}
+            renderedSize={6}
           />
         </button>
       )}
