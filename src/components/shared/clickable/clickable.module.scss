@@ -8,12 +8,13 @@
 
 .collection-tab-clickable {
   @include tab-defs;
+  background-color: transparent;
   transition: 0.3s ease;
   cursor: pointer;
 
   &.active {
     cursor: default;
-    background-color: transparent;
+    background-color: get-color('clearer-dark');
     box-shadow: 1px 3px 11px rgba(0, 0, 0, 0);
   }
 }
@@ -53,6 +54,10 @@
       rgba(get-color('base-dark'), 0) 100%
     );
   }
+}
+
+.collection-tab-overlay-pill {
+  @include tab-defs;
 }
 
 .profile-cta {

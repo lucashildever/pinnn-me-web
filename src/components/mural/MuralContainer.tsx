@@ -141,15 +141,17 @@ export default function MuralContainer({
           <div className={styles['mural-topbar-divider']} />
         </div>
       </div>
-      <ResourcesDisplay
-        key={activeTabData.id}
-        mainCollectionResources={
-          activeTabData.id === collections.find((c) => c.isMain)?.id
-            ? mainCollectionResources
-            : undefined
-        }
-        currentCollectionId={activeTabData.id}
-      />
+      <div className={styles['mural-resources']}>
+        <ResourcesDisplay
+          key={activeTabData.id}
+          mainCollectionResources={
+            activeTabData.id === collections.find((c) => c.isMain)?.id
+              ? mainCollectionResources
+              : undefined
+          }
+          currentCollectionId={activeTabData.id}
+        />
+      </div>
     </div>
   );
 }

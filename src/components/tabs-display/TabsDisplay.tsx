@@ -33,6 +33,7 @@ export default function TabsDisplay({
       visible: false,
       position: 'left',
     });
+  const [hideFades, setHideFades] = useState({ left: true, right: true });
 
   const activeTabRef = useRef<HTMLDivElement>(null);
 

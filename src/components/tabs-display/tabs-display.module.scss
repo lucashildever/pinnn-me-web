@@ -23,18 +23,31 @@
     );
   }
 
-  &::after {
+&::after {
     right: 0;
     background: linear-gradient(
       to left,
-      rgba(34, 34, 34, 1),
-      rgba(34, 34, 34, 0)
+      rgba(34,34,34,1),
+      rgba(34,34,34,0)
     );
+  }
+
+  &::before,
+  &::after {
+    transition: opacity 0.2s ease;
+  }
+
+  &.hide-left-fade::before {
+    opacity: 0;
+  }
+
+  &.hide-right-fade::after {
+    opacity: 0;
   }
 
   .tabs-container {
     @include flex(row, flex-start, flex-start, nowrap, 2);
-    @include spacing(padding, 2, 5);
+    @include spacing(padding, 2, 0);
     overflow-x: hidden;
     overflow-y: clip;
     cursor: grab;

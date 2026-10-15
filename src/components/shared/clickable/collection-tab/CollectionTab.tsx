@@ -31,11 +31,13 @@ export function CollectionTab({
           ${styles[overlayConfig.displayConfig.position]}
         `}
       >
-        <IconRenderer
-          config={payload.iconConfig}
-          renderedSize={payload.iconConfig.type === 'custom' ? 6 : 4}
-        />
-        <p>{payload.content}</p>
+        <div className={styles['collection-tab-overlay-pill']}>
+          <IconRenderer
+            config={payload.iconConfig}
+            renderedSize={payload.iconConfig.type === 'custom' ? 6 : 4}
+          />
+          <p>{payload.content}</p>
+        </div>
       </div>
     );
   }

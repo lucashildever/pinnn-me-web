@@ -47,6 +47,7 @@
 
     .group-name {
       @include spacing(margin-bottom, 6);
+      font-weight: 550;
       max-width: 80%;
       word-wrap: break-word;
       word-break: break-word;
@@ -59,7 +60,8 @@
       align-self: stretch;
 
       .head {
-        @include size(5, 5);
+        width: #{get-spacing(5) - 1}px;
+        height: #{get-spacing(5) - 1}px;
         border-radius: 50%;
         background-color: get-color('clearer-dark');
         transform: translate(10px, 1px);
