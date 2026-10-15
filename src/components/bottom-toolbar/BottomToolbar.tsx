@@ -50,7 +50,10 @@ export default function BottomToolbar() {
     setIsCreateOpen(false);
   }, [pathname]);
 
-  if (!user) {
+  // Routes that live outside the main app shell (no bottom toolbar).
+  const isFullScreenRoute = pathname.startsWith('/create/resource');
+
+  if (!user || isFullScreenRoute) {
     return null;
   }
 
