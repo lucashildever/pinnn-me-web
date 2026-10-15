@@ -7,6 +7,7 @@ import IconRenderer from '../../icon-renderer/IconRenderer';
 import { useAppSelector } from '@/lib/state/hooks';
 import { selectActiveMuralId } from '@/lib/state/slices/muralSlice';
 import { useCollections } from '@/components/tabs-display/utils/useCollections';
+import { useUserMurals } from '@/components/mural/utils/useUserMurals';
 
 interface CollectionSelectorProps {
   selectedCollectionId: string;
@@ -20,8 +21,20 @@ export function CollectionSelector({
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const muralId = useAppSelector(selectActiveMuralId);
-  const { data: collections, isLoading } = useCollections(muralId);
+  const activeMuralId = useAppSelector(selectActiveMuralId);
+  const { data: userMurals, isLoading: isMuralsLoading } = useUserMurals();
+  // The user's activeMuralId can be null (e.g. never set), which would leave the
+  // collections query disabled forever. Fall back to the first mural.
+  const muralId =
+    activeMuralId ||
+    userMurals?.activeMuralId ||
+    userMurals?.murals[0]?.id ||
+    '';
+  const {
+    data: collections,
+    isLoading: isCollectionsLoading,
+    isError: isCollectionsError,
+  } = useCollections(muralId);
 
   useEffect(() => {
     if (collections && collections.length > 0 && !selectedCollectionId) {
@@ -30,12 +43,11 @@ export function CollectionSelector({
     }
   }, [collections, selectedCollectionId, onSelect]);
 
-  const selectedCollection = collections?.find(
-    (c) => c.id === selectedCollectionId,
-  );
+  const selectedCollection =
+    collections?.find((c) => c.id === selectedCollectionId) ?? collections?.[0];
 
   const otherCollections = collections?.filter(
-    (c) => c.id !== selectedCollectionId,
+    (c) => c.id !== selectedCollection?.id,
   );
 
   const toggleDropdown = () => setIsOpen(!isOpen);
@@ -64,10 +76,20 @@ export function CollectionSelector({
     };
   }, [isOpen]);
 
-  if (isLoading || !selectedCollection) {
+  if (isMuralsLoading || isCollectionsLoading) {
     return (
       <div className={styles['collection-selector']}>
         <span className={styles['loading']}>Loading...</span>
+      </div>
+    );
+  }
+
+  if (!selectedCollection) {
+    return (
+      <div className={styles['collection-selector']}>
+        <span className={styles['loading']}>
+          {isCollectionsError ? 'Failed to load collections' : 'No collections'}
+        </span>
       </div>
     );
   }

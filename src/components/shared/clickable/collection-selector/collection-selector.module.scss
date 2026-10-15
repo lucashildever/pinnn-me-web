@@ -2,6 +2,7 @@
   @include flex(row, center, center, nowrap, 2);
   position: relative;
   cursor: pointer;
+  transform: translateX(5px);
 
   .loading {
     color: var(--text-secondary);
