@@ -11,7 +11,7 @@ if (!API_BASE) {
 let isRefreshing = false;
 let refreshPromise: Promise<string | null> | null = null;
 
-export const mountEndpoint = (
+export const mountEndpoint: any = (
   path: string,
   queryParams?: Record<string, string | boolean>,
 ): string => {

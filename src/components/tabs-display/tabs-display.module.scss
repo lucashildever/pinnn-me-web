@@ -47,7 +47,7 @@
 
   .tabs-container {
     @include flex(row, flex-start, flex-start, nowrap, 2);
-    @include spacing(padding, 2, 0);
+    @include spacing(padding, 3, 0);
     overflow-x: hidden;
     overflow-y: clip;
     cursor: grab;

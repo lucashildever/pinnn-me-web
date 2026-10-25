@@ -33,9 +33,40 @@ export default function TabsDisplay({
       visible: false,
       position: 'left',
     });
-  const [hideFades, setHideFades] = useState({ left: true, right: true });
+  const [hideFades, setHideFades] = useState({ left: false, right: false });
 
   const activeTabRef = useRef<HTMLDivElement>(null);
+  const activeTabIndex = collectionTabs.findIndex(
+    (tab) => tab.id === activeTabData.id,
+  );
+  const isFirstTab = activeTabIndex === 0;
+  const isLastTab = activeTabIndex === collectionTabs.length - 1;
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const updateFades = () => {
+      const isAtStart = container.scrollLeft <= 0;
+      const isAtEnd =
+        Math.ceil(container.scrollLeft + container.clientWidth) >=
+        container.scrollWidth;
+
+      setHideFades({
+        left: isAtStart && isFirstTab,
+        right: isAtEnd && isLastTab,
+      });
+    };
+
+    updateFades();
+    container.addEventListener('scroll', updateFades);
+    window.addEventListener('resize', updateFades);
+
+    return () => {
+      container.removeEventListener('scroll', updateFades);
+      window.removeEventListener('resize', updateFades);
+    };
+  }, [containerRef, activeTabData.id, isFirstTab, isLastTab, collectionTabs.length]);
 
   useEffect(() => {
     let observer: IntersectionObserver | null = null;
@@ -58,7 +89,6 @@ export default function TabsDisplay({
       observer = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
-            // Detects when it starts to go off container
             if (entry.intersectionRatio < 1 && entry.isIntersecting) {
               const containerRect =
                 containerRef.current!.getBoundingClientRect();
@@ -77,7 +107,6 @@ export default function TabsDisplay({
               }
             }
 
-            // Detects when it's 100% visible
             if (entry.intersectionRatio === 1) {
               setOverlayTabDisplayConfig((prevState) => ({
                 ...prevState,
@@ -107,18 +136,27 @@ export default function TabsDisplay({
   }, [activeTabData.id]);
 
   const handleTabClick = (tabData: ActiveTabData) => {
-    // Only execute the click if there is no movement
     if (!hasMoved.current) {
       handleTabChange(tabData);
     }
-    // Reset after a small delay
     setTimeout(() => {
       hasMoved.current = false;
     }, 10);
   };
 
+  const fadeClasses = [
+    hideFades.left ? styles['hide-left-fade'] : '',
+    hideFades.right ? styles['hide-right-fade'] : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
+
   return (
-    <div className={`${styles['tabs-display']}`} {...dragEvents} style={style}>
+    <div
+      className={`${styles['tabs-display']} ${fadeClasses}`}
+      {...dragEvents}
+      style={style}
+    >
       <Clickable
         payload={activeTabData.displayElement}
         config={{
