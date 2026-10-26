@@ -1,4 +1,9 @@
 .tabs-display {
+  // Visible fade inside the strip + a bleed that extends past the clipped
+  // edge, so no tab pixel can peek through while the list is being dragged.
+  $fade-width: 20px;
+  $fade-bleed: 2px;
+
   @include size(100%, fit-content);
   position: relative;
   z-index: 2;
@@ -9,32 +14,28 @@
     position: absolute;
     top: 0;
     bottom: 0;
-    width: 20px;
+    width: $fade-width + $fade-bleed;
     pointer-events: none;
     z-index: 1;
+    transition: opacity 0.2s ease;
   }
 
   &::before {
-    left: 0;
+    left: -$fade-bleed;
     background: linear-gradient(
       to right,
-      rgba(34, 34, 34, 1),
-      rgba(34, 34, 34, 0)
+      rgba(get-color('base-dark'), 1) $fade-bleed,
+      rgba(get-color('base-dark'), 0) 100%
     );
   }
 
-&::after {
-    right: 0;
+  &::after {
+    right: -$fade-bleed;
     background: linear-gradient(
       to left,
-      rgba(34,34,34,1),
-      rgba(34,34,34,0)
+      rgba(get-color('base-dark'), 1) $fade-bleed,
+      rgba(get-color('base-dark'), 0) 100%
     );
-  }
-
-  &::before,
-  &::after {
-    transition: opacity 0.2s ease;
   }
 
   &.hide-left-fade::before {

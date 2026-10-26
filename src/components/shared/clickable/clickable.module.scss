@@ -24,13 +24,23 @@
   @include size(fit-content, 100%);
   border-radius: 0px;
   position: absolute;
-  display: none;
+  display: flex;
+  opacity: 0;
+  visibility: hidden;
   z-index: 2;
   padding: 0;
   background-color: get-color('base-dark');
+  // Keep the duration in sync with OVERLAY_FADE_DURATION_MS in TabsDisplay.tsx.
+  transition:
+    opacity 0.35s ease,
+    visibility 0s linear 0.35s;
 
   &.visible {
-    display: flex;
+    opacity: 1;
+    visibility: visible;
+    transition:
+      opacity 0.35s ease,
+      visibility 0s;
   }
 
   &.left {

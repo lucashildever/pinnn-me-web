@@ -1,18 +1,38 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import Clickable from '@/components/shared/clickable/Clickable';
 
-import {
-  OverlayTabDisplayConfig,
-  TabClick,
-} from '@/components/shared/clickable/types/clickableConfig';
+import { TabClick } from '@/components/shared/clickable/types/clickableConfig';
+import type { Clickable as ClickableData } from '@/components/shared/clickable/types/clickable';
 import { ActiveTabData, CollectionTab } from './types/collectionTab';
 
 import { useTabsDragger } from './utils/useTabsDragger';
 
 import styles from './tabs-display.module.scss';
+
+// How much of the active tab may stay visible before the overlay shows up
+// (i.e. the overlay appears when 80% of the tab is out of view).
+const OVERLAY_VISIBLE_RATIO = 0.2;
+
+// Tolerance for the subpixel rounding of scrollLeft/scrollWidth.
+const SCROLL_EDGE_TOLERANCE = 1;
+
+// Must match the opacity transition of .collection-tab-overlay.
+const OVERLAY_FADE_DURATION_MS = 350;
+
+type OverlayPosition = 'left' | 'right';
+
+interface OverlayRequest {
+  position: OverlayPosition;
+  tabId: string;
+  displayElement: ClickableData;
+}
+
+interface OverlayTabState extends OverlayRequest {
+  visible: boolean;
+}
 
 interface TabsDisplayProps {
   handleTabChange: TabClick;
@@ -28,48 +48,119 @@ export default function TabsDisplay({
   style,
 }: TabsDisplayProps) {
   const { containerRef, dragEvents, hasMoved } = useTabsDragger();
-  const [overlayTabDisplayConfig, setOverlayTabDisplayConfig] =
-    useState<OverlayTabDisplayConfig>({
-      visible: false,
-      position: 'left',
-    });
-  const [hideFades, setHideFades] = useState({ left: false, right: false });
+  const [overlayTab, setOverlayTabState] = useState<OverlayTabState>({
+    visible: false,
+    position: 'left',
+    tabId: activeTabData.id,
+    displayElement: activeTabData.displayElement,
+  });
+  const [hideFades, setHideFades] = useState({ left: true, right: false });
 
   const activeTabRef = useRef<HTMLDivElement>(null);
-  const activeTabIndex = collectionTabs.findIndex(
-    (tab) => tab.id === activeTabData.id,
+  const overlayTabRef = useRef(overlayTab);
+  const activeTabIdRef = useRef(activeTabData.id);
+  const pendingOverlayRef = useRef<OverlayRequest | null>(null);
+  const fadeOutTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const isFadingOutRef = useRef(false);
+
+  // Keeps the ref in sync with the state so the callbacks below never read a
+  // stale overlay.
+  const setOverlayTab = useCallback((next: OverlayTabState) => {
+    overlayTabRef.current = next;
+    setOverlayTabState(next);
+  }, []);
+
+  const clearFadeOutTimeout = useCallback(() => {
+    if (fadeOutTimeoutRef.current !== null) {
+      clearTimeout(fadeOutTimeoutRef.current);
+      fadeOutTimeoutRef.current = null;
+    }
+  }, []);
+
+  // Fades the current overlay out, keeping its (frozen) content on screen.
+  // Only once it is fully gone the queued request may be applied.
+  const hideOverlay = useCallback(() => {
+    const current = overlayTabRef.current;
+
+    if (!current.visible) {
+      return;
+    }
+
+    setOverlayTab({ ...current, visible: false });
+    isFadingOutRef.current = true;
+
+    clearFadeOutTimeout();
+
+    fadeOutTimeoutRef.current = setTimeout(() => {
+      fadeOutTimeoutRef.current = null;
+      isFadingOutRef.current = false;
+
+      const pending = pendingOverlayRef.current;
+      pendingOverlayRef.current = null;
+
+      if (pending && pending.tabId === activeTabIdRef.current) {
+        setOverlayTab({ ...pending, visible: true });
+      }
+    }, OVERLAY_FADE_DURATION_MS);
+  }, [clearFadeOutTimeout, setOverlayTab]);
+
+  const requestOverlay = useCallback(
+    (request: OverlayRequest | null) => {
+      const current = overlayTabRef.current;
+
+      if (!request) {
+        pendingOverlayRef.current = null;
+        hideOverlay();
+        return;
+      }
+
+      // Already showing exactly this overlay: only its content may have
+      // changed (e.g. the active tab was renamed), which needs no fade.
+      if (
+        current.visible &&
+        current.tabId === request.tabId &&
+        current.position === request.position
+      ) {
+        pendingOverlayRef.current = null;
+
+        if (current.displayElement !== request.displayElement) {
+          setOverlayTab({ ...request, visible: true });
+        }
+
+        return;
+      }
+
+      // Either an overlay is on screen or still fading out: wait for it to be
+      // gone before swapping the content/side, so both are never shown at
+      // once and the visible one keeps its own data until it disappears.
+      if (current.visible || isFadingOutRef.current) {
+        pendingOverlayRef.current = request;
+        hideOverlay();
+        return;
+      }
+
+      setOverlayTab({ ...request, visible: true });
+    },
+    [hideOverlay, setOverlayTab],
   );
-  const isFirstTab = activeTabIndex === 0;
-  const isLastTab = activeTabIndex === collectionTabs.length - 1;
+
+  // Switching tabs invalidates the overlay content: hide it right away (with
+  // the old data) and let the observer of the new tab request it again.
+  useEffect(() => {
+    activeTabIdRef.current = activeTabData.id;
+    pendingOverlayRef.current = null;
+    hideOverlay();
+  }, [activeTabData.id, hideOverlay]);
 
   useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    const updateFades = () => {
-      const isAtStart = container.scrollLeft <= 0;
-      const isAtEnd =
-        Math.ceil(container.scrollLeft + container.clientWidth) >=
-        container.scrollWidth;
-
-      setHideFades({
-        left: isAtStart && isFirstTab,
-        right: isAtEnd && isLastTab,
-      });
-    };
-
-    updateFades();
-    container.addEventListener('scroll', updateFades);
-    window.addEventListener('resize', updateFades);
-
     return () => {
-      container.removeEventListener('scroll', updateFades);
-      window.removeEventListener('resize', updateFades);
+      clearFadeOutTimeout();
     };
-  }, [containerRef, activeTabData.id, isFirstTab, isLastTab, collectionTabs.length]);
+  }, [clearFadeOutTimeout]);
 
   useEffect(() => {
     let observer: IntersectionObserver | null = null;
+    const observedTabId = activeTabData.id;
 
     const setupObserver = () => {
       if (!containerRef.current || !activeTabRef.current) {
@@ -89,35 +180,40 @@ export default function TabsDisplay({
       observer = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
-            if (entry.intersectionRatio < 1 && entry.isIntersecting) {
-              const containerRect =
-                containerRef.current!.getBoundingClientRect();
-              const targetRect = entry.target.getBoundingClientRect();
-
-              if (targetRect.left < containerRect.left) {
-                setOverlayTabDisplayConfig({
-                  visible: true,
-                  position: 'left',
-                });
-              } else if (targetRect.right > containerRect.right) {
-                setOverlayTabDisplayConfig({
-                  visible: true,
-                  position: 'right',
-                });
-              }
+            if (observedTabId !== activeTabIdRef.current) {
+              return;
             }
 
-            if (entry.intersectionRatio === 1) {
-              setOverlayTabDisplayConfig((prevState) => ({
-                ...prevState,
-                visible: false,
-              }));
+            // More than 20% of the active tab is still visible: hide it.
+            if (entry.intersectionRatio > OVERLAY_VISIBLE_RATIO) {
+              requestOverlay(null);
+
+              return;
+            }
+
+            // 20% or less of the active tab is visible: reveal the overlay
+            // on the side the tab is leaving. This also covers a tab that is
+            // already (fully) out of view when it becomes active — e.g. a
+            // reload with a far-away tab selected — where the threshold is
+            // never crossed.
+            const containerRect = containerRef.current!.getBoundingClientRect();
+            const targetRect = entry.target.getBoundingClientRect();
+
+            const request = {
+              tabId: observedTabId,
+              displayElement: activeTabData.displayElement,
+            };
+
+            if (targetRect.left < containerRect.left) {
+              requestOverlay({ ...request, position: 'left' });
+            } else if (targetRect.right > containerRect.right) {
+              requestOverlay({ ...request, position: 'right' });
             }
           });
         },
         {
           root: containerRef.current,
-          threshold: [0, 1],
+          threshold: [0, OVERLAY_VISIBLE_RATIO, 1],
           rootMargin: '0px',
         },
       );
@@ -133,18 +229,54 @@ export default function TabsDisplay({
         observer.disconnect();
       }
     };
-  }, [activeTabData.id]);
+  }, [activeTabData, containerRef, requestOverlay]);
+
+  useEffect(() => {
+    const container = containerRef.current;
+
+    if (!container) {
+      return;
+    }
+
+    const updateFadeVisibility = () => {
+      const { scrollLeft, scrollWidth, clientWidth } = container;
+      const isAtStart = scrollLeft <= SCROLL_EDGE_TOLERANCE;
+      const isAtEnd =
+        scrollLeft + clientWidth >= scrollWidth - SCROLL_EDGE_TOLERANCE;
+
+      setHideFades((prev) =>
+        prev.left === isAtStart && prev.right === isAtEnd
+          ? prev
+          : { left: isAtStart, right: isAtEnd },
+      );
+    };
+
+    updateFadeVisibility();
+
+    container.addEventListener('scroll', updateFadeVisibility, {
+      passive: true,
+    });
+    window.addEventListener('resize', updateFadeVisibility);
+
+    return () => {
+      container.removeEventListener('scroll', updateFadeVisibility);
+      window.removeEventListener('resize', updateFadeVisibility);
+    };
+  }, [collectionTabs, containerRef]);
 
   const handleTabClick = (tabData: ActiveTabData) => {
+    // Only execute the click if there is no movement
     if (!hasMoved.current) {
       handleTabChange(tabData);
     }
+    // Reset after a small delay
     setTimeout(() => {
       hasMoved.current = false;
     }, 10);
   };
 
-  const fadeClasses = [
+  const tabsDisplayClassName = [
+    styles['tabs-display'],
     hideFades.left ? styles['hide-left-fade'] : '',
     hideFades.right ? styles['hide-right-fade'] : '',
   ]
@@ -152,16 +284,15 @@ export default function TabsDisplay({
     .join(' ');
 
   return (
-    <div
-      className={`${styles['tabs-display']} ${fadeClasses}`}
-      {...dragEvents}
-      style={style}
-    >
+    <div className={tabsDisplayClassName} {...dragEvents} style={style}>
       <Clickable
-        payload={activeTabData.displayElement}
+        payload={overlayTab.displayElement}
         config={{
           clickableType: 'collection-tab-overlay',
-          displayConfig: overlayTabDisplayConfig,
+          displayConfig: {
+            visible: overlayTab.visible,
+            position: overlayTab.position,
+          },
         }}
       />
       <div className={styles['tabs-container']} ref={containerRef}>
